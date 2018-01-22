@@ -30,7 +30,9 @@ Running the experiment:
 ---- Runs apt-get update, installs python, docker, & OVS. Builds snort containers for this emonstration (docker_containers/*). Disables GRO, and sets up a bridge (br0) between the NIC connected to Device 1 (enp6s0f0) and the NIC connected to Device 3 (enps6s0f1).
 
 ---- NOTE: at this point, Device 1 and Device 3 should be able to send packets (i.e. ping) between each other. However, the IP addresses associated with Device 2's NICs will no longer be usable.
+
 2. Ensure that desired JSON policy is specified (policy/*).
+
 3. Turn on the "simple controller" (simple-controller.py -B br0 -P policy/policy0.json).
 
 -- Once the controller starts up, it parses the policy, and sets up routing for the initial middlebox (docker_container/snort_icmp_alert)
