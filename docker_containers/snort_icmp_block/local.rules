@@ -1,0 +1,1 @@
+drop icmp any any -> 10.1.1.2 any (msg:"ICMP Packet"; sid:10000002; rev:1;)
