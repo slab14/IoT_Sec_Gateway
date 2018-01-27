@@ -59,9 +59,9 @@ def Get_FSM_DAG(fd):
     return dev_policy
 
 #Name mboxes
-def find_name(name, number):
+def find_name(state, name, number):
     regex = re.compile('[^a-zA-Z]')
-    new_name=regex.sub('',name)+str(number)
+    new_name=regex.sub('',state)+regex.sub('',name)+str(number)
     return new_name
 
 #Start-up NF Container
@@ -108,7 +108,7 @@ def install_route(bridge, flow, name, in_ip, out_ip):
         of_ports += [find_of_port(bridge, name, interface) for interface in interfaces]
     else:
         for i in range(0,len(flow[name])):
-            mbox_name=find_name(flow[name][i],str(i))
+            mbox_name=find_name(name, flow[name][i],str(i))
             of_ports += [find_of_port(bridge, mbox_name, interface) for interface in interfaces]
     of_ports = [1] + of_ports + [2]
 
@@ -146,7 +146,7 @@ def setup_flow(name, flow, in_ip, out_ip, bridge):
         install_route(bridge, flow, name, in_ip, out_ip)
     else:
         for i in range(0,len(flow[name])):
-            mbox_name=find_name(flow[name][i],str(i))
+            mbox_name=find_name(name, flow[name][i],str(i))
             start_nf_container(flow[name][i], mbox_name)
             add_nf_flow(bridge, mbox_name, interfaces)
         install_route(bridge, flow, name, in_ip, out_ip)
@@ -162,7 +162,7 @@ def stop_flow(flow, name, bridge):
         
     else:
         for i in range(0,len(flow[name])):
-            mbox_name=find_name(flow[name][i],str(i))
+            mbox_name=find_name(name, flow[name][i],str(i))
             cmd='/usr/bin/sudo /usr/bin/ovs-docker del-ports {} {}'
             cmd=cmd.format(bridge, mbox_name)
             subprocess.check_call(shlex.split(cmd))
@@ -180,11 +180,11 @@ def alert_monitor(flow, name):
         mbox_name = name
     else:
         for i in range(0, len(flow[name])):
-            if re.search("snort", flow[name]):
-                mbox_name=find_name(flow[name][i],str(i))
+            if re.search("snort", flow[name][i]):
+                mbox_name=find_name(name, flow[name][i],str(i))
 
     cmd='/usr/bin/sudo /usr/bin/docker cp {}:/var/log/snort/alert /tmp/'
-    cmd=cmd.format(name)
+    cmd=cmd.format(mbox_name)
     subprocess.call(shlex.split(cmd))
 
     if os.path.isfile('/tmp/alert'):
