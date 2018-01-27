@@ -167,6 +167,7 @@ def stop_flow(flow, name, bridge):
             cmd=cmd.format(bridge, mbox_name)
             subprocess.check_call(shlex.split(cmd))
             cmd='/usr/bin/sudo /usr/bin/docker kill {}'.format(mbox_name)
+            subprocess.check_call(shlex.split(cmd))
         
     cmd='/usr/bin/sudo /usr/bin/ovs-ofctl del-flows {}'.format(bridge)
     subprocess.check_call(shlex.split(cmd))
