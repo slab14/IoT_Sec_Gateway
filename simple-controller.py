@@ -53,8 +53,7 @@ def Get_FSM_DAG(fd):
         dev_policy[i]['DAG'] = policy[device]['DAG']
         dev_policy[i]['flow'] = {}
         for k in dev_policy[i]['states']:
-            dev_policy[i]['flow'][k] = DAG_defs[dev_policy[i]['DAG']][k]
-            print(dev_policy[i]['flow'][k])
+            dev_policy[i]['flow'][k] = DAG_defs[dev_policy[i]['DAG']][k].split()
         i += 1
 
     return dev_policy
@@ -97,10 +96,15 @@ def pairwise(iterable):
     return itertools.izip(a,a)
 
 
-def install_route(bridge, name, interfaces, in_ip, out_ip):
+def install_route(bridge, flow, name, in_ip, out_ip):
     interfaces = ('eth0', 'eth1')
     of_ports = []
-    of_ports += [find_of_port(bridge, name, interface) for interface in interfaces]
+    if(len(flow[name])<2):
+        of_ports += [find_of_port(bridge, name, interface) for interface in interfaces]
+    else:
+        for i in range(0,len(flow[name])):
+            mbox_name=flow[name][i]+str(i)
+            of_ports += [find_of_port(bridge, mbox_name, interface) for interface in interfaces]
     of_ports = [1] + of_ports + [2]
 
     # From device to mbox to outside
@@ -130,26 +134,44 @@ def install_route(bridge, name, interfaces, in_ip, out_ip):
 # -- input is output of Get-FSM_DAG (or the variable that it creates).
 def setup_flow(name, flow, in_ip, out_ip, bridge):
     interfaces = ('eth0', 'eth1')
-    init_mbox = flow[name]
-    start_nf_container(init_mbox, name)
-    add_nf_flow(bridge, name, interfaces)
-    install_route(bridge, name, interfaces, in_ip, out_ip)
+    if(len(flow[name]))<2:
+        init_mbox = flow[name]
+        start_nf_container(init_mbox, name)
+        add_nf_flow(bridge, name, interfaces)
+        install_route(bridge, flow, name, in_ip, out_ip)
+    else:
+        for i in range(0,len(flow[name])):
+            mbox_name=flow[name][i]+str(i)
+            start_nf_container(flow[name][i], mbox_name)
+            add_nf_flow(bridge, name, mbox_name)
+        install_route(bridge, flow, name, in_ip, out_ip)
 
 # Turn off flow
-def stop_flow(name, bridge):
+def stop_flow(flow, name, bridge):
     interfaces=('eth0', 'eth1')
-    cmd='/usr/bin/sudo /usr/bin/ovs-docker del-ports {} {}'
-    cmd=cmd.format(bridge, name)
-    subprocess.check_call(shlex.split(cmd))
-
+    if len(flow[name])<2:
+        cmd='/usr/bin/sudo /usr/bin/ovs-docker del-ports {} {}'
+        cmd=cmd.format(bridge, name)
+        subprocess.check_call(shlex.split(cmd))
+        cmd='/usr/bin/sudo /usr/bin/docker kill {}'.format(name)
+        
+    else:
+        for i in range(0,len(flow[name])):
+            mbox_name=flow[name][i]+str(i)
+            cmd='/usr/bin/sudo /usr/bin/ovs-docker del-ports {} {}'
+            cmd=cmd.format(bridge, mbox_name)
+            subprocess.check_call(shlex.split(cmd))
+            cmd='/usr/bin/sudo /usr/bin/docker kill {}'.format(mbox_name)
+        
     cmd='/usr/bin/sudo /usr/bin/ovs-ofctl del-flows {}'.format(bridge)
     subprocess.check_call(shlex.split(cmd))
 
     cmd='/usr/bin/sudo /bin/rm -f -- /tmp/alert'
     subprocess.check_call(shlex.split(cmd))
-    
+        
 # Alert monitor
-def alert_monitor(name):
+def alert_monitor(flow, name):
+    
     cmd='/usr/bin/sudo /usr/bin/docker cp {}:/var/log/snort/alert /tmp/'
     cmd=cmd.format(name)
     subprocess.call(shlex.split(cmd))
@@ -197,10 +219,10 @@ def main():
     var = 1
     while var == 1:
         for i in range(0, policy['n_devices']):
-            if alert_monitor(policy[i]['states'][current_state]):
+            if alert_monitor(policy[i]['flow'], policy[i]['states'][current_state]):
                 next_state = find_next_state(policy, i, current_state)
                 if next_state != current_state:
-                    stop_flow(policy[i]['states'][current_state], args.bridge)
+                    stop_flow(policy[i]['flow'], policy[i]['states'][current_state], args.bridge)
                     current_state = next_state
                     setup_flow(policy[i]['states'][current_state],
                            policy[i]['flow'], policy['in_ip'],
