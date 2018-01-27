@@ -18,18 +18,7 @@ import time
 import re
 import os.path
 
-# TODO:
-# - Setup-flow
-# -- Take output from Get-FSM_DAG, create corresponding dataplane
-# - Transition
-# -- tear down existing flow, setup new flow based upon transition in FSM
-# - Clean-up
-# -- Clear flows setup
-
-
 ## Future Updates
-# - Rx_Container
-# -- Process messages from containers (to call transitions)
 # - Update-FSM_DAG
 # -- recognize updates to "policy" and update accordingly
 # - Verify
@@ -65,6 +54,7 @@ def Get_FSM_DAG(fd):
         dev_policy[i]['flow'] = {}
         for k in dev_policy[i]['states']:
             dev_policy[i]['flow'][k] = DAG_defs[dev_policy[i]['DAG']][k]
+            print(dev_policy[i]['flow'][k])
         i += 1
 
     return dev_policy
