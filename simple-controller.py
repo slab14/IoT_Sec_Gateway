@@ -148,7 +148,7 @@ def setup_flow(name, flow, in_ip, out_ip, bridge):
         for i in range(0,len(flow[name])):
             mbox_name=find_name(flow[name][i],str(i))
             start_nf_container(flow[name][i], mbox_name)
-            add_nf_flow(bridge, name, mbox_name)
+            add_nf_flow(bridge, mbox_name, interfaces)
         install_route(bridge, flow, name, in_ip, out_ip)
 
 # Turn off flow
