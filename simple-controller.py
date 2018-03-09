@@ -140,14 +140,15 @@ def install_route(bridge, flow, name, in_ip, out_ip):
 def setup_flow(name, flow, in_ip, out_ip, bridge):
     interfaces = ('eth0', 'eth1')
     if(len(flow[name]))<2:
-        init_mbox = flow[name]
+        init_mbox = flow[name][0].encode('utf-8')
         start_nf_container(init_mbox, name)
         add_nf_flow(bridge, name, interfaces)
         install_route(bridge, flow, name, in_ip, out_ip)
     else:
         for i in range(0,len(flow[name])):
             mbox_name=find_name(name, flow[name][i],str(i))
-            start_nf_container(flow[name][i], mbox_name)
+            mbox = flow[name][i].encode('utf-8')
+            start_nf_container(mbox, mbox_name)
             add_nf_flow(bridge, mbox_name, interfaces)
         install_route(bridge, flow, name, in_ip, out_ip)
 
