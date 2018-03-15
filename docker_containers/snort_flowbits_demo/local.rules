@@ -1,6 +1,9 @@
-alert tcp any any -> any any (msg:"SYN Packet - Do not alert"; flow:not_established,to_server; flags:S ;flowbits:set,tcp_syn,three_way_handshake; flowbits:noalert; sid:1; rev:1;)
+# Let A send TCP packet with value 1, block others
+#alert tcp any any -> $HOME_NET $HOME_PORT (msg:"Detected attack"; flowbits:isnotset,state_0; content:"attack"; nocase; flowbits:set,state_0; flowbits:noalert; sid:1000001; rev:1;)
+alert tcp any any -> any any (msg: "Detected attack"; flowbits:isnotset, state_0; content: "attack"; nocase; flowbits: set, state_0; flowbits:noalert; sid: 1000001; rev: 1;)
 
-alert tcp any any -> any any (msg:"SYN+ACK Packet - Do not alert"; flow:not_established,from_server; flags:SA; flowbits:set,tcp_synack,three_way_handshake; flowbits:noalert; sid:2;rev:1;)
+block tcp any any -> $HOME_NET $HOME_PORT (msg:"Detected not attack"; flowbits:isnotset, state_0; content:!"attack"; nocase; sid:1000002; rev:1;)
+##alert tcp any any -> any any (msg:"Detected not attack"; flowbits:isnotset,state_0; content:!"attack"; nocase; sid:1000002; rev:1;)
 
-alert tcp any any -> any any (msg:"TCP Connection Established - Alert"; flowbits:isset,all,three_way_handshake; flow:to_server; flags:A; flowbits:unset,all,three_way_handshake; sid:3; rev:1;)
-
+alert tcp any any -> any any (msg: "State_0 is set!"; content: "bbbb"; nocase; flowbits: isset, state_0; sid: 1000003; rev: 1;)
+#alert tcp any any -> $HOME_NET $HOME_PORT (msg:"State_0 is set!"; content:"bbbb"; nocase; flowbits:isset,state_0; sid:1000003; rev:1;)
