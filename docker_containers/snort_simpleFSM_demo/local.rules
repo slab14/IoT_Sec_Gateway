@@ -1,0 +1,28 @@
+# State S0 bad request (i.e. non-GET)
+block tcp any any -> $HOME_NET $HOME_PORT (msg:"Blocking non-GET request in state S0"; content:!"GET"; nocase; pcre:!"/GET.*\htm/i"; flowbits:isnotset, S0&S1; sid:1000001; rev:1;) 
+
+# Initial state (valid request)
+alert tcp any any -> $HOME_NET $HOME_PORT (msg:"GET request in state S0"; content:"GET"; nocase; pcre:"/GET.*\htm/i"; flowbits:isnotset, S0&S1; flowbits:set, S0; flowbits: noalert; sid:1000002; rev:1;)
+
+# State S0 bad response (i.e. non-401)
+block tcp $HOME_NET $HOME_PORT -> any any (msg:"Blocking non-401 response in state S0"; content:!"401"; nocase; pcre:!"/401.*\htm/i"; flowbits:isset, S0; sid:1000003; rev:1;)
+
+# Initial state transition (valid response from prior state)
+alert tcp $HOME_NET $HOME_PORT -> any any (msg:"401 response to GET request in state S0"; content:"401"; nocase; pcre:"/401.*\htm/i"; flowbits:isset, S0; flowbits:set, S1; flowbits:unset, S0; flowbits:noalert; sid:1000004; rev:1;)
+
+# State S1 bad request (i.e. non-GET/POST)
+#block tcp any any -> $HOME_NET $HOME_PORT (msg:"Blocking non-GET request in state S1"; content:!"GET"; nocase; pcre:!"/GET.*\htm/i"; flowbits:isset, S1; sid:1000005; rev:1;)
+#block tcp any any -> $HOME_NET $HOME_PORT (msg:"Blocking non-GET request in state S1"; content:!"POST"; nocase; pcre:!"/POST.*\htm/i"; flowbits:isset, S1; sid:1000006; rev:1;)
+block tcp any any -> $HOME_NET $HOME_PORT (msg:"Blocking non-GET request in state S1"; content:!"T"; nocase; pcre:!"/GET.*\htm|POST.*\htm/i"; flowbits:isset, S1; sid: 1000005; rev:1;)
+
+# Valid Request in State S1
+alert tcp any any -> $HOME_NET $HOME_PORT (msg:"GET request in state S1"; content:"GET"; nocase; pcre:"/GET.*\htm/i"; flowbits:isset, S1; flowbits:set, S1I; flowbits:unset, S1; flowbits: noalert; sid:1000007; rev:1;)
+alert tcp any any -> $HOME_NET $HOME_PORT (msg:"POST request in state S1"; content:"POST"; nocase; pcre:"/POST.*\htm/i"; flowbits:isset, S1; flowbits:set, S1I; flowbits:unset, S1; flowbits: noalert; sid:1000008; rev:1;)
+#alert tcp any any -> $HOME_NET $HOME_PORT (msg:"GET/POST request in state S1"; content:"T"; nocase; pcre:"/GET.*\htm|POST.*\htm/i"; flowbits:isset, S1; flowbits:set,S1I; flowbits:unset, S1; flowbits: noalert; sid:1000007; rev:1;)
+
+# State S1 bad response
+block tcp $HOME_NET $HOME_PORT -> any any (msg:"Blocking non-200 response in state S1"; content:!"200"; nocase; pcre:!"/200.*\htm/i"; flowbits:isset, S1I; sid:1000009; rev:1;)
+
+# State S1 transition (valid response)
+block tcp $HOME_NET $HOME_PORT -> any any (msg:"200 response in state S1"; content:"200"; nocase; pcre:"/200.*\htm/i"; flowbits:isset, S1I; flowbits:unset, S1I; flowbits:set, S1; sid:1000010; rev:1;)
+
