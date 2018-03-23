@@ -39,13 +39,13 @@ RUN cd ~/snort_src && \
     tar -xvzf boost_1_65_1.tar.gz 
 
 # -Hyperscan
-RUN cd ~/snort_src && \
-    wget https://github.com/intel/hyperscan/archive/v4.6.0.tar.gz && \
-    tar -xvzf v4.6.0.tar.gz && \
-    mkdir -p ~/snort_src/hyperscan-4.6.0-build && \
-    cd ~/snort_src/hyperscan-4.6.0-build/ && \
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DBOOST_ROOT=~/snort_src/boost_1_65_1/ ../hyperscan-4.6.0 && \
-    make && make install
+#RUN cd ~/snort_src && \
+#    wget https://github.com/intel/hyperscan/archive/v4.6.0.tar.gz && \
+#    tar -xvzf v4.6.0.tar.gz && \
+#    mkdir -p ~/snort_src/hyperscan-4.6.0-build && \
+#    cd ~/snort_src/hyperscan-4.6.0-build/ && \
+#    cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DBOOST_ROOT=~/snort_src/boost_1_65_1/ ../hyperscan-4.6.0 && \
+#    make && make install
 
 # -flatbuffers
 RUN cd ~/snort_src && \
