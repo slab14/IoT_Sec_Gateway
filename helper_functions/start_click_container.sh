@@ -1,3 +1,3 @@
 NAME=$1
 
-sudo docker run -itd --rm --network=none --name $NAME jhelt/click-bridge
+sudo docker run -itd --rm --network=none --name $NAME docker_click
