@@ -1,0 +1,240 @@
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.912 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.296 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.232 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.232/0.480/0.912/0.306 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.230 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.293 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.241 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+rtt min/avg/max/mdev = 0.230/0.254/0.293/0.033 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.232 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.161 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.259 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.260 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.241 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.232/0.244/0.259/0.011 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.226 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.161/0.215/0.260/0.044 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.140 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.206 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.232 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.205 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.081 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.230 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.227 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.209 ms
+
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1998ms
+rtt min/avg/max/mdev = 0.081/0.171/0.227/0.065 ms
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1999ms
+rtt min/avg/max/mdev = 0.140/0.184/0.209/0.035 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.220 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.222 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.222/0.228/0.232/0.004 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.201 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.242 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.214 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.232 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.239 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.218 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.258 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.197 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.197/0.216/0.232/0.018 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.201 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.201/0.213/0.239/0.024 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.207 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2001ms
+rtt min/avg/max/mdev = 0.207/0.222/0.242/0.019 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.227 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.233 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.214/0.235/0.258/0.018 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.259 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.211 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2004ms
+rtt min/avg/max/mdev = 0.211/0.232/0.259/0.023 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.215 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.239 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.199 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.259 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.287 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.240 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.237 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1999ms
+rtt min/avg/max/mdev = 0.215/0.237/0.259/0.017 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.246 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.239/0.257/0.287/0.024 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.226 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1998ms
+rtt min/avg/max/mdev = 0.199/0.221/0.240/0.024 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.250 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.248 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.242 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.246 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.253 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.216 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.189 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.189/0.228/0.250/0.030 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.175 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.175/0.225/0.253/0.037 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.182 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1998ms
+rtt min/avg/max/mdev = 0.182/0.213/0.242/0.027 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.202 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.259 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.218 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.202/0.226/0.259/0.026 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.210 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.233 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.225 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1999ms
+rtt min/avg/max/mdev = 0.210/0.222/0.233/0.019 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.247 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.201 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.207 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.201/0.218/0.247/0.023 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.179 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.207 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.266 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.206 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.220 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1999ms
+rtt min/avg/max/mdev = 0.179/0.221/0.266/0.039 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.206 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.215 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1998ms
+rtt min/avg/max/mdev = 0.206/0.209/0.215/0.012 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.232 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.260 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.290 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.216 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1998ms
+rtt min/avg/max/mdev = 0.206/0.227/0.260/0.026 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.249 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.277 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.232/0.266/0.290/0.028 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.265 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.283 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.242 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.219 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.219/0.250/0.283/0.029 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.223 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1999ms
+rtt min/avg/max/mdev = 0.223/0.243/0.265/0.021 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.252 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.283 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.211 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.254 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2000ms
+rtt min/avg/max/mdev = 0.252/0.263/0.283/0.014 ms
+PING 10.1.1.22 (10.1.1.22) 56(84) bytes of data.
+64 bytes from 10.1.1.22: icmp_seq=1 ttl=64 time=0.232 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.275 ms
+64 bytes from 10.1.1.22: icmp_seq=2 ttl=64 time=0.251 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.288 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1999ms
+rtt min/avg/max/mdev = 0.211/0.258/0.288/0.033 ms
+64 bytes from 10.1.1.22: icmp_seq=3 ttl=64 time=0.221 ms
+
+--- 10.1.1.22 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 1998ms
+rtt min/avg/max/mdev = 0.221/0.234/0.251/0.021 ms
