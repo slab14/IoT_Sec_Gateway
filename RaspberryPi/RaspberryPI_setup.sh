@@ -48,23 +48,25 @@ subnet 192.168.42.0 netmask 255.255.255.0 {
   default-lease-time 600;
   max-lease-time 7200;
   option domain-name \"local\";
-  option domain-name-server 8.8.8.8, 8.8.4.4; 
 }" > /etc/dhcp/dhcpd.conf-gateway'
 
 
     sudo touch /etc/hostapd/hostapd.conf-gateway
     sudo sh -c 'echo "interface=wlan0
+driver=nl80211
 ssid=Pi3_AP
 country_code=US
 hw_mode=g
 channel=6
 ieee80211n=1
-wmm_enabled=1
+wmm_enabled=0
 macaddr_acl=0
 ignore_broadcast_ssid=0
 auth_algs=1
 wpa=2
 wpa_passphrase=raspberry
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP
 rsn_pairwise=CCMP" > /etc/hostapd/hostapd.conf-gateway'
     
 fi
@@ -83,6 +85,10 @@ if [ $1 == 3 ]; then
     sudo adduser $USER wireshark
 
     curl -sSL https://get.docker.com | sh
+
+    cd /usr/bin
+    sudo wget https://raw.githubusercontent.com/openvswitch/ovs/master/utilities/ovs-docker
+    sudo chmod a+rwx ovs-docker
     
     sudo systemctl enable ssh
     sudo systemctl start ssh
@@ -99,7 +105,8 @@ if [ $1 == 4 ]; then
     sudo ip link set wlan0 down
     sudo ip link set wlan0 up
     sudo touch /etc/default/isc-dhcp-server-adhoc
-    sudo sh -c 'echo "INTERFACESv4=\"wlan0\"">/etc/default/isc-dhcp-server-adhoc'
+    sudo sh -c 'echo "INTERFACESv4=\"wlan0\"
+INTERFACESv6=\"\"">/etc/default/isc-dhcp-server-adhoc'
     sudo cp /etc/default/isc-dhcp-server /etc/default/isc-dhcp-server-orig
     sudo cp /etc/default/isc-dhcp-server-adhoc /etc/default/isc-dhcp-server
     sudo service isc-dhcp-server restart
