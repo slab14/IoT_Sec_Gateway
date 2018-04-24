@@ -430,7 +430,7 @@ int Gateway::configure(Vector<String> &conf, ErrorHandler *errh){
 
 void Gateway::push(int port, Packet* p){
     
-    assert(p->has_network_header());
+  //assert(p->has_network_header());
     
     const click_ip *iph = p->ip_header();
     const click_udp *udph = p->udp_header();

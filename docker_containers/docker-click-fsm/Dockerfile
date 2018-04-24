@@ -14,7 +14,7 @@ RUN apt-get install -y \
 
 RUN git clone https://github.com/krishna95/18731_click.git
 #    mkdir 18731_click/elements/gateway
-#COPY gateway.cc 18731_click/elements/gateway/gateway.cc
+COPY gateway.cc 18731_click/elements/gateway/gateway.cc
 #COPY gateway.hh 18731_click/elements/gateway/gateway.hh
 
 RUN cd 18731_click && \
