@@ -549,7 +549,6 @@ output unified2: filename snort.log, limit 128, nostamp, mpls_event_types, vlan_
 # metadata reference data.  do not modify these lines
 #include classification.config
 #include reference.config
-## I couldn't find these files to include
 
 
 ###################################################
@@ -734,5 +733,4 @@ include $RULE_PATH/local.rules
 # include $SO_RULE_PATH/web-misc.rules
 
 # Event thresholding or suppression commands. See threshold.conf 
-#include threshold.conf
-## I couldn't find this file
+include threshold.conf
