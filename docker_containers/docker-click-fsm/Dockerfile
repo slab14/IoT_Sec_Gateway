@@ -1,0 +1,32 @@
+FROM ubuntu:xenial
+
+RUN apt-get update && apt-get clean
+
+# Install dependencies
+RUN apt-get install -y \
+        build-essential \
+        git \
+        autoconf \
+        install-info \
+        libpcap0.8-dev \
+        libpcap0.8-dbg \
+        && apt-get clean
+
+RUN git clone https://github.com/krishna95/18731_click.git
+#    mkdir 18731_click/elements/gateway
+COPY gateway.cc 18731_click/elements/gateway/gateway.cc
+#COPY gateway.hh 18731_click/elements/gateway/gateway.hh
+
+RUN cd 18731_click && \
+    ./configure --disable-linuxmodule --enable-all-elements && make && \
+    make install && cd ..
+
+COPY cisco-ios-snmp-1280.pcap cisco-ios-snmp-1280.pcap
+COPY fsm_gateway.click fsm_gateway.click
+COPY snmp_fsm.txt snmp_fsm.txt
+COPY run.sh run.sh
+
+# Run bridge application
+CMD ["eth0", "eth1"]
+ENTRYPOINT ["/run.sh"]
+
