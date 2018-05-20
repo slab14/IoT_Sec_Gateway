@@ -1,0 +1,264 @@
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=1.997 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.306 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=3.834 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=2.093 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=2.555 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=1.872 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=5.576 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=6.014 ms
+
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=6.025 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.997/3.526/6.025/1.782 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.093/3.471/6.014/1.800 ms
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.872/3.761/5.576/1.513 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=8.807 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=1.573 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=12.718 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.573/7.699/12.718/4.617 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=1.918 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=1.898 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=143.900 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=147.132 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=87.713 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.898/77.837/143.900/58.391 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=93.681 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.918/80.910/147.132/59.967 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.768 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=3.021 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=2.056 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=2.599 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=2.144 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.056/2.323/2.768/0.317 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=2.440 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.440/2.687/3.021/0.245 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=20.047 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=2.102 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=2.005 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.005/8.051/20.047/8.482 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.004 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=2.808 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=1.931 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.931/2.248/2.808/0.397 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.024 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=1.813 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=1.876 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.813/1.904/2.024/0.088 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.197 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=11.722 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=7.203 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.197/7.041/11.722/3.890 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=3.829 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=1.794 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=1.913 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.794/2.512/3.829/0.933 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.815 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=24.713 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=2.067 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.067/9.865/24.713/10.504 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.123 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=2.198 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=2.120 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.120/2.147/2.198/0.036 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=1.957 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.028 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=7.110 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=3.088 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=7.380 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.957/5.482/7.380/2.495 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=5.523 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.028/3.546/5.523/1.463 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.158 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=5.416 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=21.351 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.158/9.642/21.351/8.386 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.314 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=2.016 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=3.178 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.016/2.503/3.178/0.493 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.110 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=2.541 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=1.746 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.746/2.132/2.541/0.325 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=1.917 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=1.920 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=1.939 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.917/1.925/1.939/0.010 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=3.309 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=2.291 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=2.209 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.209/2.603/3.309/0.500 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.198 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=7.066 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=7.522 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.198/5.595/7.522/2.409 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=23.491 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=7.766 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=21.652 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 7.766/17.636/23.491/7.020 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.370 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=8.507 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=7.177 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.370/6.018/8.507/2.636 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=1.971 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=7.379 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=7.086 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.971/5.479/7.379/2.483 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=14.037 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=7.241 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=3.697 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 3.697/8.325/14.037/4.290 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.110 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.429 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=6.872 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=2.668 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=6.995 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.110/5.326/6.995/2.274 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=2.416 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.416/2.504/2.668/0.116 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=2.004 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=8.371 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=4.470 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.004/4.948/8.371/2.621 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=4.075 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=1.928 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=2.235 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.928/2.746/4.075/0.948 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=11.853 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=1.720 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=2.008 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.720/5.194/11.853/4.710 ms
+PING 10.1.1.4 (10.1.1.4): 56 data bytes
+64 bytes from 10.1.1.4: icmp_seq=0 ttl=64 time=1.862 ms
+64 bytes from 10.1.1.4: icmp_seq=1 ttl=64 time=1.836 ms
+64 bytes from 10.1.1.4: icmp_seq=2 ttl=64 time=5.028 ms
+
+--- 10.1.1.4 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.836/2.909/5.028/1.499 ms

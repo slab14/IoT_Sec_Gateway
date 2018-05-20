@@ -1,0 +1,246 @@
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=4.742 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=7.247 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=7.143 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 4.742/6.377/7.247/1.157 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=23.615 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=3.007 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=2.109 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.109/9.577/23.615/9.933 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=2.327 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=7.129 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=15.069 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.327/8.175/15.069/5.254 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=1.718 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=11.943 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=1.806 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.718/5.156/11.943/4.800 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=6.314 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=5.979 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=7.545 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 5.979/6.613/7.545/0.673 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=2.351 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=500.116 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=4.818 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.351/169.095/500.116/234.069 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=1.668 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=7.778 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=26.598 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.668/12.015/26.598/10.609 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=1.840 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=1.894 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=6.029 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=1.983 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=6.144 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.840/4.671/6.144/2.002 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=1.959 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.894/1.945/1.983/0.038 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+Request timeout for icmp_seq 0
+Request timeout for icmp_seq 1
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 0 packets received, 100.0% packet loss
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=7.975 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=6.961 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=2.029 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.029/5.655/7.975/2.597 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=19.650 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=6.751 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=6.849 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 6.751/11.083/19.650/6.058 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=2.353 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=6.826 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=6.934 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.353/5.371/6.934/2.135 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=1.972 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=1.594 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=2.019 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.594/1.862/2.019/0.190 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=2.090 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=1.882 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=6.205 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=1.806 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=1.985 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.985/3.427/6.205/1.965 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=2.133 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.806/1.940/2.133/0.140 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=2.151 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=6.800 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=8.117 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.151/5.689/8.117/2.559 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=2.393 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=7.176 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=36.175 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.393/15.248/36.175/14.926 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=2.519 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=22.410 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=1.874 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.874/8.934/22.410/9.532 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=1.774 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=2.518 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=16.019 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.774/6.770/16.019/6.547 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=1.767 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=1.837 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=2.516 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.767/2.040/2.516/0.338 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=1.921 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=2.839 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=3.720 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.921/2.827/3.720/0.734 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=1.933 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=7.555 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=22.838 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.933/10.775/22.838/8.833 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=10.005 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=2.160 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=7.496 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.160/6.554/10.005/3.271 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=1.936 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=32.427 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=6.919 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.936/13.761/32.427/13.355 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=2.407 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=1.871 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=7.045 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.871/3.774/7.045/2.323 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=2.583 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=1.982 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=12.881 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.982/5.815/12.881/5.002 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=1.992 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=1.696 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=1.913 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.696/1.867/1.992/0.125 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=2.275 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=2.180 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=3.831 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.180/2.762/3.831/0.757 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=3.979 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=1.778 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=2.105 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.778/2.621/3.979/0.970 ms
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=2.063 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=1.934 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=6.875 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.934/3.624/6.875/2.299 ms

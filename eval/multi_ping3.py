@@ -14,7 +14,7 @@ NUM_PINGS=3200
 
 def get_ip_range(base_ip, num):
     try:
-        base_ip = ipaddress.ip_address(unicode(base_ip))
+        base_ip = ipaddress.ip_address(base_ip)
     except:
         print('Invalid ip address: {}'.format(base_ip))
     ips = [base_ip + i for i in range(num)]
@@ -43,7 +43,7 @@ def determine_args(ip_list, num):
 def format_test_cmd(folder, ip_list, num):
     variables=determine_args(ip_list, num)
     out_file=setup_output_files(folder, num)
-    cmd='/usr/bin/fping -R -p 20 -b 20 -s -C {} -g {} {} >> {} 2>&1'
+    cmd='/usr/local/bin/fping -R -p 20 -b 20 -s -C {} -g {} {} >> {} 2>&1'
     cmd=cmd.format(variables[0], variables[1], variables[2], out_file)
     return cmd
 

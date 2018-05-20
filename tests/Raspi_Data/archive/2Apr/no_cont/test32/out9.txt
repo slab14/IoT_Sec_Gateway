@@ -1,0 +1,25 @@
+PING 10.1.1.9 (10.1.1.9): 56 data bytes
+64 bytes from 10.1.1.9: icmp_seq=0 ttl=64 time=2.207 ms
+64 bytes from 10.1.1.9: icmp_seq=1 ttl=64 time=7.010 ms
+64 bytes from 10.1.1.9: icmp_seq=2 ttl=64 time=7.218 ms
+64 bytes from 10.1.1.9: icmp_seq=3 ttl=64 time=7.082 ms
+64 bytes from 10.1.1.9: icmp_seq=4 ttl=64 time=10.618 ms
+64 bytes from 10.1.1.9: icmp_seq=5 ttl=64 time=7.662 ms
+64 bytes from 10.1.1.9: icmp_seq=6 ttl=64 time=9.190 ms
+64 bytes from 10.1.1.9: icmp_seq=7 ttl=64 time=7.277 ms
+64 bytes from 10.1.1.9: icmp_seq=8 ttl=64 time=7.718 ms
+64 bytes from 10.1.1.9: icmp_seq=9 ttl=64 time=9.313 ms
+64 bytes from 10.1.1.9: icmp_seq=10 ttl=64 time=8.400 ms
+64 bytes from 10.1.1.9: icmp_seq=11 ttl=64 time=10.177 ms
+64 bytes from 10.1.1.9: icmp_seq=12 ttl=64 time=8.316 ms
+64 bytes from 10.1.1.9: icmp_seq=13 ttl=64 time=8.614 ms
+64 bytes from 10.1.1.9: icmp_seq=14 ttl=64 time=8.579 ms
+64 bytes from 10.1.1.9: icmp_seq=15 ttl=64 time=6.453 ms
+64 bytes from 10.1.1.9: icmp_seq=16 ttl=64 time=7.563 ms
+64 bytes from 10.1.1.9: icmp_seq=17 ttl=64 time=9.062 ms
+64 bytes from 10.1.1.9: icmp_seq=18 ttl=64 time=8.813 ms
+64 bytes from 10.1.1.9: icmp_seq=19 ttl=64 time=8.763 ms
+
+--- 10.1.1.9 ping statistics ---
+20 packets transmitted, 20 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 2.207/8.002/10.618/1.694 ms

@@ -1,0 +1,8 @@
+PING 10.1.1.32 (10.1.1.32): 56 data bytes
+64 bytes from 10.1.1.32: icmp_seq=0 ttl=64 time=7.711 ms
+64 bytes from 10.1.1.32: icmp_seq=1 ttl=64 time=7.015 ms
+64 bytes from 10.1.1.32: icmp_seq=2 ttl=64 time=6.857 ms
+
+--- 10.1.1.32 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 6.857/7.194/7.711/0.371 ms

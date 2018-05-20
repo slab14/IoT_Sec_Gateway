@@ -1,0 +1,8 @@
+PING 10.1.1.18 (10.1.1.18): 56 data bytes
+64 bytes from 10.1.1.18: icmp_seq=0 ttl=64 time=4.325 ms
+64 bytes from 10.1.1.18: icmp_seq=1 ttl=64 time=7.003 ms
+64 bytes from 10.1.1.18: icmp_seq=2 ttl=64 time=50.240 ms
+
+--- 10.1.1.18 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 4.325/20.523/50.240/21.042 ms

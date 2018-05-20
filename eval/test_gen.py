@@ -5,7 +5,7 @@ import shlex
 import subprocess
 
 #CON_NUMS=[1, 2, 4, 8, 16, 32, 64, 128, 200, 250]
-CON_NUMS=[1,2,4,8,16,32,64,128,200]
+CON_NUMS=[1,2,4,8,16,32,64]
 
 def run_test(number,output):
     cmd='python multi_ping3.py -n {} -o {}'

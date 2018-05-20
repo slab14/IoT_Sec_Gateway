@@ -1,0 +1,8 @@
+PING 10.1.1.19 (10.1.1.19): 56 data bytes
+64 bytes from 10.1.1.19: icmp_seq=0 ttl=64 time=18.440 ms
+64 bytes from 10.1.1.19: icmp_seq=1 ttl=64 time=6.873 ms
+64 bytes from 10.1.1.19: icmp_seq=2 ttl=64 time=5.850 ms
+
+--- 10.1.1.19 ping statistics ---
+3 packets transmitted, 3 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 5.850/10.388/18.440/5.709 ms

@@ -38,31 +38,27 @@ def pairwise(iterable):
     a = iter(iterable)
     return itertools.izip(a,a)
 
-def connect_container(bridge, client_ip, server_ip, container_name, direction):
+def connect_container(bridge, client_ip, server_ip, container_name):
     interfaces=('eth0', 'eth1')
     of_ports = find_container_ports(bridge, container_name)
     of_ports = [1] + of_ports + [2]
     # Connect client to server (direction = 1 (only client to server) or 3)
-    if (direction == 1) or (direction == 3):
-        for in_port,out_port in pairwise(of_ports):
-            cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
-            cmd=cmd.format(bridge, in_port, client_ip, server_ip, out_port)
-            subprocess.check_call(shlex.split(cmd))
+    for in_port,out_port in pairwise(of_ports):
+        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        cmd=cmd.format(bridge, in_port, client_ip, server_ip, out_port)
+        subprocess.check_call(shlex.split(cmd))
     # Connect server to client (direction=2 (only server to client) or 3)
-    if (direction == 2) or (direction == 3):
-        for in_port,out_port in pairwise(reversed(of_ports)):
-            cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
-            cmd=cmd.format(bridge, in_port, server_ip, client_ip, out_port)
-	    subprocess.check_call(shlex.split(cmd))
+    for in_port,out_port in pairwise(reversed(of_ports)):
+        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        cmd=cmd.format(bridge, in_port, server_ip, client_ip, out_port)
+        subprocess.check_call(shlex.split(cmd))
 
 def main():
     parser=argparse.ArgumentParser(description='Connect container to vswitch')
-    parser.add_argument('--bridge', '-B', required=True, type=str)
     parser.add_argument('--name', '-N', required=True, type=str)
-    parser.add_argument('--direction', '-D', required=True, type=int)
     args=parser.parse_args()
     attach_container(args.bridge, args.name)
-    connect_container(args.bridge, NODE_0, NODE_1, args.name, args.direction)
+    connect_container(BRIDGE, NODE_0, NODE_1, args.name, args.direction)
 
 if __name__ == '__main__':
     main()
