@@ -57,8 +57,8 @@ def main():
     parser=argparse.ArgumentParser(description='Connect container to vswitch')
     parser.add_argument('--name', '-N', required=True, type=str)
     args=parser.parse_args()
-    attach_container(args.bridge, args.name)
-    connect_container(BRIDGE, NODE_0, NODE_1, args.name, args.direction)
+    attach_container(BRIDGE, args.name)
+    connect_container(BRIDGE, NODE_0, NODE_1, args.name)
 
 if __name__ == '__main__':
     main()

@@ -17,7 +17,9 @@ CLIENT_IP='10.10.1.3'
 SERVER_IFACE='enp6s0f1'
 SERVER_IP='10.10.2.2'
 PROXY_IMAGE='squid_proxy'
+#PROXY_IMAGE='ping_box'
 SNORT_IMAGE='snort_direct_block'
+#SNORT_IMAGE='click_bridge'
 
 def start_squid_proxy(image_name):
     cmd=('/usr/bin/sudo /usr/bin/docker run -itd --rm ' +
@@ -35,6 +37,8 @@ def add_ovs_bridge(bridge):
     cmd='/usr/bin/sudo /usr/bin/ovs-vsctl --may-exist add-br {}'
     cmd=cmd.format(bridge)
     subprocess.check_call(shlex.split(cmd))
+    cmd='/usr/bin/sudo /sbin/ip link set {} up'.format(bridge)
+    subprocess.check_call(shlex.split(cmd))
 
 def gateway_iface2port(bridge):
     #Client Side
@@ -42,12 +46,18 @@ def gateway_iface2port(bridge):
          '-- set Interface {} ofport_request=1')
     cmd=cmd.format(bridge, CLIENT_IFACE, CLIENT_IFACE)
     subprocess.check_call(shlex.split(cmd))
+    cmd='/usr/bin/sudo /usr/bin/ovs-ofctl mod-port {} {} up'
+    cmd=cmd.format(bridge, CLIENT_IFACE)
+    subprocess.check_call(shlex.split(cmd))
 
     #Server Side
     cmd=('/usr/bin/sudo /usr/bin/ovs-vsctl --may-exist add-port {} {} ' +
          '-- set Interface {} ofport_request=2')
     cmd=cmd.format(bridge, SERVER_IFACE, SERVER_IFACE)
     subprocess.check_call(shlex.split(cmd))
+    cmd='/usr/bin/sudo /usr/bin/ovs-ofctl mod-port {} {} up'
+    cmd=cmd.format(bridge, SERVER_IFACE)
+    subprocess.check_call(shlex.split(cmd))    
 
 def container_ovsport_ip(bridge, name, addr):
     cmd=('/usr/bin/sudo /usr/bin/ovs-docker add-port {} eth0 {} ' +
@@ -61,6 +71,7 @@ def container_2x_ovsports(bridge, name):
         cmd=('/usr/bin/sudo /usr/bin/ovs-docker add-port {} {} {} ')
         cmd=cmd.format(bridge, interface, name)
         subprocess.check_call(shlex.split(cmd))
+    
 
 def container_add_ip_route(name):
     cmd=('/usr/bin/sudo /usr/bin/docker inspect --format '+
@@ -70,16 +81,13 @@ def container_add_ip_route(name):
     ip1 = ipaddress.ip_network(unicode("{}/16".format(CLIENT_IP)), strict=False)
     ip2 = ipaddress.ip_network(unicode("{}/16".format(SERVER_IP)), strict=False)
     cmd='/usr/bin/sudo /usr/bin/nsenter -t {} -n ip route add {} dev eth0'
-    #cmd=cmd.format(container_pid, CLIENT_IP)
-    # fix, make more robust for IP ranges
-    #cmd=cmd.format(container_pid, '192.1.0.0')
     cmd=cmd.format(container_pid, ip1)
     subprocess.call(shlex.split(cmd))
     cmd='/usr/bin/sudo /usr/bin/nsenter -t {} -n ip route add {} dev eth0'
-    #cmd=cmd.format(container_pid, SERVER_IP)
-    # fix, make more robust for IP ranges
-    #cmd=cmd.format(container_pid, '10.1.0.0')
     cmd=cmd.format(container_pid, ip2)    
+    subprocess.call(shlex.split(cmd))
+    cmd='/usr/bin/sudo /usr/bin/nsenter -t {} -n ethtool -K eth0 tx off rx off'
+    cmd=cmd.format(container_pid)    
     subprocess.call(shlex.split(cmd))
 
 def add_gateway_iface_routes(bridge):
@@ -227,19 +235,6 @@ def add_routes(bridge, addr):
         cmd=cmd.format(bridge, in_port, SERVER_IP, CLIENT_IP, out_port)
         subprocess.check_call(shlex.split(cmd))        
 
-    '''
-    #Setup ARP routes
-    arp_rtes = [1]+[proxy_port]+[2]
-    for i in range(0, len(arp_rtes)):
-        arp_rte=[x for j,x in enumerate(arp_rtes) if j != i]
-        formatted_list = ['{}' for item in arp_rte]
-        s=','.join(formatted_list)
-        cmd=('/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 arp ' +
-             'in_port={} actions=output:{}"')
-        cmd=cmd.format(bridge, arp_rtes[i], s.format(*arp_rte))
-        subprocess.check_call(shlex.split(cmd))        
-    '''
-
 def teardown(bridge):
     cmd='/usr/bin/sudo /usr/bin/ovs-docker del-ports {} {}'
     cmd=cmd.format(bridge, PROXY_NAME)
@@ -254,9 +249,6 @@ def teardown(bridge):
 
     cmd='/usr/bin/sudo /usr/bin/docker kill {}'.format(SNORT_NAME)
     subprocess.call(shlex.split(cmd))
-
-#    cmd='/usr/bin/sudo /usr/bin/docker rm {}'.format(PROXY_NAME)
-#    subprocess.check_call(shlex.split(cmd))
 
     cmd='/usr/bin/sudo /usr/bin/ovs-ofctl del-flows {}'.format(bridge)
     subprocess.check_call(shlex.split(cmd))

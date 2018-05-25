@@ -4,8 +4,8 @@ import subprocess
 import itertools
 import ipaddress
 
-NODE_0='192.1.1.2'
-NODE_1='10.1.1.2'
+NODE_0='10.10.1.3'
+NODE_1='10.10.2.2'
 BRIDGE='br0'
 
 # Syntax: python connect_container.py -B br0 -N click0 -D 3

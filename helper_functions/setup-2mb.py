@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 ## Invocation Example:
-## python setup-proxy.py -A 2 -I 10.1.2.2
+## python setup-pwd-protect.py -A 2 -I 10.1.2.2
 
 import argparse
 import ipaddress
@@ -11,17 +11,26 @@ import itertools
 
 BRIDGE='ovs-br0'
 PROXY_NAME='squid_cont'
+SNORT1_NAME='snort_cont1'
+SNORT2_NAME='snort_cont2'
 CLIENT_IFACE='enp6s0f0'
 CLIENT_IP='10.10.1.3'
 SERVER_IFACE='enp6s0f1'
 SERVER_IP='10.10.2.2'
 PROXY_IMAGE='squid_proxy'
-#PROXY_IMAGE='ping_box'
+#SNORT_IMAGE='snort_direct_block'
+SNORT_IMAGE='docker_click_bridge_delay'
 
 def start_squid_proxy(image_name):
     cmd=('/usr/bin/sudo /usr/bin/docker run -itd --rm ' +
          '--network=none --name={} {}')
     cmd=cmd.format(PROXY_NAME, image_name)
+    subprocess.check_call(shlex.split(cmd))
+
+def start_snort(image_name, name):
+    cmd=('/usr/bin/sudo /usr/bin/docker run -itd --rm ' +
+         '--network=none --name={} {}')
+    cmd=cmd.format(name, image_name)
     subprocess.check_call(shlex.split(cmd))
 
 def add_ovs_bridge(bridge):
@@ -48,20 +57,31 @@ def container_ovsport_ip(bridge, name, addr):
     cmd=cmd.format(bridge, name, addr)
     subprocess.check_call(shlex.split(cmd))
 
-def container_add_route(name):
+def container_2x_ovsports(bridge, name):
+    interfaces=('eth0', 'eth1')
+    for interface in interfaces:
+        cmd=('/usr/bin/sudo /usr/bin/ovs-docker add-port {} {} {} ')
+        cmd=cmd.format(bridge, interface, name)
+        subprocess.check_call(shlex.split(cmd))
+
+def container_add_ip_route(name):
     cmd=('/usr/bin/sudo /usr/bin/docker inspect --format '+
          '"{{ .State.Pid }}" ' + '{}'.format(name))
     container_pid=subprocess.check_output(shlex.split(cmd))
-                  
-    cmd='/usr/bin/sudo /usr/bin/nsenter -t {} -n ip route add {}/16 dev eth0'
+        
+    ip1 = ipaddress.ip_network(unicode("{}/16".format(CLIENT_IP)), strict=False)
+    ip2 = ipaddress.ip_network(unicode("{}/16".format(SERVER_IP)), strict=False)
+    cmd='/usr/bin/sudo /usr/bin/nsenter -t {} -n ip route add {} dev eth0'
     #cmd=cmd.format(container_pid, CLIENT_IP)
     # fix, make more robust for IP ranges
-    cmd=cmd.format(container_pid, '10.10.0.0')
+    #cmd=cmd.format(container_pid, '192.1.0.0')
+    cmd=cmd.format(container_pid, ip1)
     subprocess.call(shlex.split(cmd))
-    cmd='/usr/bin/sudo /usr/bin/nsenter -t {} -n ip route add {}/16 dev eth0'
+    cmd='/usr/bin/sudo /usr/bin/nsenter -t {} -n ip route add {} dev eth0'
     #cmd=cmd.format(container_pid, SERVER_IP)
     # fix, make more robust for IP ranges
-    cmd=cmd.format(container_pid, '10.10.0.0')    
+    #cmd=cmd.format(container_pid, '10.1.0.0')
+    cmd=cmd.format(container_pid, ip2)    
     subprocess.call(shlex.split(cmd))
 
 def add_gateway_iface_routes(bridge):
@@ -75,8 +95,7 @@ def add_gateway_iface_routes(bridge):
     cmd=cmd.format(bridge, SERVER_IP, CLIENT_IP)
     subprocess.check_call(shlex.split(cmd))    
 
-def find_of_port(bridge, name):
-    interface='eth0'
+def find_of_port(bridge, name, interface):
     cmd = '/usr/bin/sudo '
     cmd += '/usr/bin/ovs-vsctl --data=bare --no-heading --columns=name find \
     interface external_ids:container_id={} external_ids:container_iface={}'
@@ -91,57 +110,58 @@ def find_of_port(bridge, name):
     of_port = of_port.strip()
 
     return of_port
+
+def pairwise(iterable):
+    's -> (s0, s1), (s2, s3), (s4, s5), ...'
+    a = iter(iterable)
+    return itertools.izip(a, a)
     
-def add_proxy_routes(bridge, addr):
-    proxy_port=find_of_port(bridge, PROXY_NAME)
-    #Routes between proxy & Client
-    cmd=('/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip ' +
-         'in_port=1 nw_src={} nw_dst={} actions=output:{}"')
-    cmd=cmd.format(bridge, CLIENT_IP, addr, proxy_port)
-    subprocess.check_call(shlex.split(cmd))
+def add_routes(bridge, addr):
+    #Sets up a fixed route client <--> Snort <--> Snort <--> Device 
+    interfaces=['eth0', 'eth1']
+    #proxy_port=find_of_port(bridge, PROXY_NAME, interfaces[0])
+    snort1_ports=[]
+    snort1_ports+=[find_of_port(bridge, SNORT1_NAME, interface) for interface in interfaces]
+    snort2_ports=[]
+    snort2_ports+=[find_of_port(bridge, SNORT2_NAME, interface) for interface in interfaces]
 
-    cmd=('/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip ' +
-         'in_port={} nw_src={} nw_dst={} actions=output:1"')
-    cmd=cmd.format(bridge, proxy_port, addr, CLIENT_IP)
-    subprocess.check_call(shlex.split(cmd))
+    rte=[1]+snort1_ports+snort2_ports+[2]
 
-    #Routes between proxy & server
-    cmd=('/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip ' +
-         'in_port=2 nw_src={} nw_dst={} actions=output:{}"')
-    cmd=cmd.format(bridge, SERVER_IP, addr, proxy_port)
-    subprocess.check_call(shlex.split(cmd))
 
-    cmd=('/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip ' +
-         'in_port={} nw_src={} nw_dst={} actions=output:2"')
-    cmd=cmd.format(bridge, proxy_port, addr, SERVER_IP)
-    subprocess.check_call(shlex.split(cmd))
-
-    #Setup ARP routes
-    cmd=('/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 arp ' +
-         'in_port=1 actions=output:2,{}"')
-    cmd=cmd.format(bridge, proxy_port)
-    subprocess.check_call(shlex.split(cmd))
-
-    cmd=('/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 arp ' +
-         'in_port=2 actions=output:1,{}"')
-    cmd=cmd.format(bridge, proxy_port)
-    subprocess.check_call(shlex.split(cmd))
-
-    cmd=('/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 arp ' +
-         'in_port={} actions=output:1,2"')
-    cmd=cmd.format(bridge, proxy_port)
-    subprocess.check_call(shlex.split(cmd))    
+    # IP client to server
+    for in_port,out_port in pairwise(rte):
+        cmd=('/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip ' +
+             'in_port={} nw_src={} nw_dst={} actions=output:{}"')
+        cmd=cmd.format(bridge, in_port, CLIENT_IP, SERVER_IP, out_port)        
+        subprocess.check_call(shlex.split(cmd))
+        cmd=('/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 arp ' +
+             'in_port={} nw_src={} nw_dst={} actions=output:{}"')
+        cmd=cmd.format(bridge, in_port, CLIENT_IP, SERVER_IP, out_port)        
+        subprocess.check_call(shlex.split(cmd))
+    for in_port,out_port in pairwise(reversed(rte)):
+        cmd=('/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip ' +
+             'in_port={} nw_src={} nw_dst={} actions=output:{}"')
+        cmd=cmd.format(bridge, in_port, SERVER_IP, CLIENT_IP, out_port)        
+        subprocess.check_call(shlex.split(cmd))
+        cmd=('/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 arp ' +
+             'in_port={} nw_src={} nw_dst={} actions=output:{}"')
+        cmd=cmd.format(bridge, in_port, SERVER_IP, CLIENT_IP, out_port)        
+        subprocess.check_call(shlex.split(cmd))        
 
 def teardown(bridge):
     cmd='/usr/bin/sudo /usr/bin/ovs-docker del-ports {} {}'
-    cmd=cmd.format(bridge, PROXY_NAME)
+    cmd=cmd.format(bridge, SNORT1_NAME)
+    subprocess.call(shlex.split(cmd))
+
+    cmd='/usr/bin/sudo /usr/bin/ovs-docker del-ports {} {}'
+    cmd=cmd.format(bridge, SNORT2_NAME)
     subprocess.call(shlex.split(cmd))
     
-    cmd='/usr/bin/sudo /usr/bin/docker kill {}'.format(PROXY_NAME)
+    cmd='/usr/bin/sudo /usr/bin/docker kill {}'.format(SNORT1_NAME)
     subprocess.check_call(shlex.split(cmd))
 
-#    cmd='/usr/bin/sudo /usr/bin/docker rm {}'.format(PROXY_NAME)
-#    subprocess.check_call(shlex.split(cmd))
+    cmd='/usr/bin/sudo /usr/bin/docker kill {}'.format(SNORT2_NAME)
+    subprocess.call(shlex.split(cmd))
 
     cmd='/usr/bin/sudo /usr/bin/ovs-ofctl del-flows {}'.format(bridge)
     subprocess.check_call(shlex.split(cmd))
@@ -159,14 +179,13 @@ def main():
         #Connect Gateway Interfaces to Bridge
         gateway_iface2port(BRIDGE)
         #Add Container
-        start_squid_proxy(PROXY_IMAGE)
+        start_snort(SNORT_IMAGE, SNORT1_NAME)
+        start_snort(SNORT_IMAGE, SNORT2_NAME)        
         #Add OVS port for Container & Container IP Address
-        container_ovsport_ip(BRIDGE, PROXY_NAME, args.address)
-        #Add IP route to container for both client & server
-        container_add_route(PROXY_NAME)
+        container_2x_ovsports(BRIDGE, SNORT1_NAME)
+        container_2x_ovsports(BRIDGE, SNORT2_NAME)
         #Add routing table rules
-        add_gateway_iface_routes(BRIDGE)
-        add_proxy_routes(BRIDGE, args.address)
+        add_routes(BRIDGE, args.address)
 
     # Teardown
     elif args.action == 2:
