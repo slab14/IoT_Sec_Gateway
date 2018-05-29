@@ -1,1 +1,0 @@
-alert tcp any any -> 10.10.2.2 any (msg:"Attempted Direct Access"; sid:10000009; rev:1;)
