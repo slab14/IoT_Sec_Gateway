@@ -1,0 +1,26 @@
+{
+    "description": "v0 - 1 device, 1 snort container, ping demo",
+    "nf_platform": "docker",
+    "in_ip": "10.10.1.3",
+    "out_ip": "10.10.2.2",
+    "n_devices": 1,
+    "policy": {
+	"device_0": {
+	    "state_machine": "binary",
+	    "DAG": "binary_chain"
+	}
+    }, 
+    "FSM_defs": {
+	"binary": {
+	    "0": "ping_detect",
+	    "1": "ping_block",
+	    "n": "2"
+	}
+    },
+    "DAG_defs": {
+	"binary_chain":  {
+	    "ping_detect": "click_bridge click_bridge",
+	    "ping_block": "click_bridge click_bridge"
+	}
+    } 
+}

@@ -1,0 +1,9 @@
+FROM ubuntu:xenial
+
+# Install Dependencies
+RUN apt-get update && \
+    apt-get install -yqq apt-utils iputils-ping netcat-openbsd ethtool
+
+CMD bash
+
+
