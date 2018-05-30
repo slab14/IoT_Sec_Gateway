@@ -86,7 +86,8 @@ def container_add_ip_route(name):
     cmd='/usr/bin/sudo /usr/bin/nsenter -t {} -n ip route add {} dev eth0'
     cmd=cmd.format(container_pid, ip2)    
     subprocess.call(shlex.split(cmd))
-    cmd='/usr/bin/sudo /usr/bin/nsenter -t {} -n ethtool -K eth0 tx off rx off'
+    cmd='/usr/bin/sudo /usr/bin/nsenter -t {} -n ethtool --offload eth0 tx off rx off'
+#    cmd='/usr/bin/sudo /usr/bin/nsenter -t {} -n ethtool -K eth0 tx off' # works
     cmd=cmd.format(container_pid)    
     subprocess.call(shlex.split(cmd))
 
