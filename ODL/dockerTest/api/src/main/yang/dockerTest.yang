@@ -1,0 +1,22 @@
+module dockerTest {
+    yang-version 1;
+    namespace "edu:cmu:slab:yang:dockerTest";
+    prefix "dockerTest";
+
+    revision "2018-06-06" {
+        description "Updated version to spin up Docker containers";
+    }
+    container dockerTest {
+        presence "Indicates which docker container to start";
+	description "Top-level container for docker container database objects.";
+	leaf name {
+	    type string;
+	    config true;
+	    default 1;
+	    description "name variable for docker container";
+	}
+    }
+    notification dockerTestDone {
+        description "Container is Spun up";
+    }
+}
