@@ -1,15 +1,17 @@
-FROM python:2.7
+FROM python:2-slim
 
 COPY requirements.txt /
 
 RUN pip install -r /requirements.txt
 
+COPY run.sh /
+
 WORKDIR /usr/local/bin
 
 COPY includes/ ./includes
 
-COPY sample.pcapng .
-
 COPY demoKitScapy.py .
 
-CMD ["demoKitScapy.py",  "-ieth0 -oeth1"]
+CMD ["demoKitScapy.py",  "-i", "eth0",  "-o", "eth1"]
+
+ENTRYPOINT ["/run.sh"]

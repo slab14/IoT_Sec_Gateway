@@ -87,9 +87,12 @@ def packet_callback(iface1, iface2):
             if RMSE>threshold:
                 threshold=RMSE
         if(RMSE < 1.001*threshold):
-            return True
+            val=0
+            if(packet.sniffed_on==iface1):
+                sendp(packet, iface=iface2)
+            else: sendp(packet, iface=iface1)
         else: 
-            return False
+            val=1 #potentially bad packet, drop
     return packet_process
     
 
@@ -99,9 +102,9 @@ def main():
     parser.add_argument('--out_interface', '-o', required=True, type=str)    
     args=parser.parse_args()
     global out_iface
+    out_iface=args.out_interface
     while True:
-        #sniff(prn=packet_callback(args.in_interface, args.out_interface), iface=[args.in_interface, args.out_interface], store=0)
-        bridge_and_sniff(args.in_interface, args.out_interface, prn=packet_callback(args.in_interface, args.out_interface))
+        sniff(prn=packet_callback(args.in_interface, args.out_interface), iface=[args.in_interface, args.out_interface], store=0)
         #sniff(offline=args.in_interface, prn=packet_callback, store=0)
 
 
