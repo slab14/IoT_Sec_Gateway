@@ -1,0 +1,5 @@
+## OVS-VSCTL remote commands
+# must include --db=tcp:$IP:$port [cmd]
+#example ovs-vsctl show (for host at $IP, with $port setup to listen for remote requests; and ovs installed)
+ovs-vsctl --db=tcp:$IP:$port show
+

@@ -1,0 +1,45 @@
+## equivalent to docker ps -a
+curl http://$IP:$port/containers/json
+
+## equivalent to docker run is a set of 2 commands: 1) create container, 2) start container
+## Note: there is no REST API version of the [-d] option, being remote, there is no notion of forground/background
+# Create Container
+curl -H "Content-Type: application/json" -d '{"Image":"alpine", "Cmd": ["echo", "Hello World!"]}' -X POST http://$IP:$port/v1.37/containers/create?name=$NAME
+# Start Container
+curl -X POST http://$IP:$port/v1.37/containers/$NAME/start
+
+## Stop Container
+curl -X POST http://$IP:$port/v1.37/containers/$NAME/stop
+
+## Kill Container equivalent to docker kill
+curl -X POST http://$IP:$port/v1.37/containers/$NAME/kill
+
+## Remove Container equivalent to docker rm
+curl -X DELETE http://$IP:$port/containers/$NAME
+
+## Equivalent to docker run -d --rm --network none --name $NAME $IMAGE
+# First create
+curl -X POST -H "Content-Type: application/json" -d '{"Image": $IMAGE, "NetworkDisabled": true, "HostConfig": {"AutoRemove": true}}' http://$IP:$port/v1.37/containers/create?=$NAME
+# Second start
+curl -X POST http://$IP:$port/v1.37/containers/$NAME/start
+
+# Pretty JSON display:
+{JSON data} | python -m json.tool
+# or
+jq '.' or jq -r '.<key>'
+
+## Equivalent to docker exec -it $NAME
+# Create Exec Cmd
+EXEC_ID=curl -X POST -H "Content-Type: application/json" -d '{"AttachStdout": true, "Tty": true, "Cmd": ["ip", "addr"]}' http://$IP:$port/containers/$NAME/exec
+# Run Exec Cmd
+curl -X POST -H "Content-Type: application/json" -d '{"Detach": false, "Tty": true}' http://$IP:$port/exec/$EXEC_ID/start
+
+# Create a docker bridge network
+curl -s -X POST http://192.1.1.1:4243/networks/create -H "Content-Type: application/json" -d '{"Name": "docker_br", "Driver": "bridge", "IPAM": {"Config": [{"Subnet": "10.1.0.0/16"}]}}' | jq '.'
+
+# Create a docker container using a specified network & with a specific IP address
+curl -X POST http://192.1.1.1:4243/containers/create?name=demo_cont -H "Content-Type: application/json" -d '{"Image": "busybox", "HostConfig": {"AutoRemove": true}, "NetworkingConfig": {"EndpointsConfig": {"IPAMConfig": {"NetworkID": "docker_br", "IPAddress": "10.1.4.1"}}}, "Cmd": ["/bin/sh"], "Tty": true}'
+
+# Connect container to network and give IP address
+curl -X POST http://192.1.1.1:4243/networks/741b9921e45a/connect -H "Content-Type: application/json" -d '{"Container": "demo_cont2", "EndpointConfig": {"IPAMConfig": {"IPAddress": "10.1.5.1"}}}'
+

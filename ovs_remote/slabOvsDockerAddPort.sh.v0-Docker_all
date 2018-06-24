@@ -1,0 +1,75 @@
+#!/bin/bash
+
+BRIDGE="$1"
+INTERFACE="$2"
+CONTAINER="$3"
+IP=$4
+OVS_PORT=$5
+DOCKER_PORT=$6
+
+if [ -z "$BRIDGE" ] || [ -z "$INTERFACE" ] || [ -z "$CONTAINER" ]; then
+    echo >&2 "Not enough arguments"
+    exit 1
+fi
+
+#Check if a port is already attached for a given container & interface
+PORT=sudo ovs-vsctl --db=tcp:$IP:$OVS_PORT --data=bare --no-heading --columns=name find interface \
+    external_ids:container_id="$CONTAINER" external_ids:container_iface="$INTERFACE"
+
+if [ -n "$PORT" ]; then
+    echo >&2 "Port already attached"
+    exit 1
+fi
+
+if sudo ovs-vsctl --db=tcp:$IP:$OVS_PORT br-exists "$BRIDGE" || sudo ovs-vsctl --db=tcp:$IP:$OVS_PORT add-br "$BRIDGE"; then :; else
+    echo >&2 "Failed to create $BRIDGE"
+    exit 1
+fi
+
+if PID=`curl -s -X GET -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/json | jq -r '.State.Pid'`; then :; else
+    echo >&2 "Failed to get the PID of the container"
+    exit 1
+fi
+
+# create netns link
+EXEC_ID=`curl -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/exec -d '{"AttachStdout": true, "Tty": true, "Cmd": ["mkdir", "-p", "/var/run/netns"]}' | jq -r '.Id'`
+curl -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/exec/$EXEC_ID/start -d '{"Detach": false, "Tty": true }'
+
+EXEC_ID=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/exec -d '{"AttachStdout": true, "Tty": true, "Cmd": ["sh", "-c", "test -e /var/run/netns/'"$PID"'; echo $?"]}' | jq -r '.Id'`
+OUT=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/exec/$EXEC_ID/start -d '{"Detach": false, "Tty": true }'`
+
+OUT=${OUT%$'\r'}
+
+if [ $OUT -eq 1 ]; then
+    EXEC_ID=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/exec -d '{"AttachStdout": true, "Tty": true, "Privileged": true, "Cmd": ["ln", "-s", "/proc/'"$PID"'/ns/net", "var/run/netns/'"$PID"'"]}' | jq -r '.Id'`
+    curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/exec/$EXEC_ID/start -d '{"Detach": false, "Tty": true }'
+fi
+
+# Create a weth pair
+ID=`uuidgen | sed 's/-//g'`
+PORTNAME="${ID:0:13}"
+
+EXEC_ID=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/exec -d '{"AttachStdout": true, "Tty": true, "Privileged": true, "Cmd": ["ip", "link", "add", "'"${PORTNAME}"'_l", "type", "veth", "peer", "name", "'"${PORTNAME}"'_c"]}' | jq -r '.Id'`
+OUT=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/exec/$EXEC_ID/start -d '{"Detach": false, "Tty": true }'`
+
+# Add one end of veth to OVS bridge
+if sudo ovs-vsctl --db=tcp:$IP:$OVS_PORT --may-exist add-port "$BRIDGE" "${PORTNAME}_l" -- set interface \
+	"${PORTNAME}_l" external_ids:container_id="$CONTAINER" external_ids:container_iface="$INTERFACE"; then :; else
+    echo "Failed to add "${PORTNAME}_l" port to bridge $BRIDGE"
+    EXEC_ID=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/exec -d '{"AttachStdout": true, "Tty": true, "Privileged": true, "Cmd": ["ip", "link", "delete", "'"${PORTNAME}"'_l"]}' | jq -r '.Id'`
+    OUT=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/exec/$EXEC_ID/start -d '{"Detach": false, "Tty": true }'`
+    exit 1
+fi
+
+EXEC_ID=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/exec -d '{"AttachStdout": true, "Tty": true, "Privileged": true, "Cmd": ["ip", "link", "set", "'"${PORTNAME}"'_l", "up"]}' | jq -r '.Id'`
+OUT=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/exec/$EXEC_ID/start -d '{"Detach": false, "Tty": true }'`
+
+# Move "${PORTNAME}_c" inside the container and change its name
+EXEC_ID=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/exec -d '{"AttachStdout": true, "Tty": true, "Privileged": true, "Cmd": ["ip", "link", "set", "'"${PORTNAME}"'_c", "netns", "'"$PID"'"]}' | jq -r '.Id'`
+OUT=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/exec/$EXEC_ID/start -d '{"Detach": false, "Tty": true }'`
+
+EXEC_ID=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/exec -d '{"AttachStdout": true, "Tty": true, "Privileged": true, "Cmd": ["ip", "netns", "exec", "'"$PID"'", "ip", "link", "set", "dev", "'"${PORTNAME}"'_c", "name", "'"$INTERFACE"'"]}' | jq -r '.Id'`
+OUT=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/exec/$EXEC_ID/start -d '{"Detach": false, "Tty": true }'`
+
+EXEC_ID=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/exec -d '{"AttachStdout": true, "Tty": true, "Privileged": true, "Cmd": ["ip", "netns", "exec", "'"$PID"'", "ip", "link", "set", "'"$INTERFACE"'", "up"]}' | jq -r '.Id'`
+OUT=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/exec/$EXEC_ID/start -d '{"Detach": false, "Tty": true }'`

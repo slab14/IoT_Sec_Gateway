@@ -1,0 +1,32 @@
+FROM ubuntu:xenial
+
+RUN apt-get update && apt-get install -y python python-pip
+
+RUN apt-get update && apt-get install -yqq libpcap0.8-dev python-libpcap
+
+RUN apt-get update && apt-get install -yqq libdnet-dev python-dumbnet
+
+RUN apt-get update && \
+    apt-get install -yqq tcpdump graphviz imagemagick python-gnuplot python-cryptography python-pyx git wget unzip
+
+COPY requirements.txt /
+
+RUN pip install --upgrade pip
+
+RUN pip install -r /requirements.txt
+
+RUN cd /tmp && \
+    wget --trust-server-names https://github.com/secdev/scapy/archive/master.zip && \
+    unzip master && cd scapy-master && python setup.py install && cd ../..
+
+COPY run.sh /
+
+WORKDIR /usr/local/bin
+
+COPY includes/ ./includes
+
+COPY demoKitScapy.py .
+
+CMD ["demoKitScapy.py",  "-i", "eth0",  "-o", "eth1"]
+
+ENTRYPOINT ["/run.sh"]

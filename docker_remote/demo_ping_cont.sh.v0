@@ -1,0 +1,34 @@
+
+# Create the container (one that will spin)
+curl -X POST -H "Content-Type: application/json" -d '{"Image": "ubuntu:xenial", "Cmd": ["/bin/bash"], "NetworkDisabled": true, "HostConfig": {"AutoRemove": true}, "Tty": true}' http://192.1.1.1:4243/v1.37/containers/create?name=demo2
+
+# Start the container
+curl -X POST http://192.1.1.1:4243/v1.37/containers/demo2/start
+
+# Add OVS Bridge
+sudo ovs-vsctl --db=tcp:192.1.1.1:6677 --may-exist add-br ovs_br0
+
+# Add port to dataplane external interface
+sudo ovs-vsctl --db=tcp:192.1.1.1:6677 --may-exist add-port ovs_br0 enp6s0f1 -- set Interface enp6s0f1 ofport_request=1
+
+# Add port to docker container interface
+./ovs-docker-remote add-port ovs_br0 eth0 demo2 192.1.1.1 6677 4243 slab
+
+## Need to update ovs-docker-remote to include ability to set ipaddresses, macaddress, gateway, and mtu
+# temp fix
+## Get PID: curl -s -X GET -H "Content-Type: application/json" http://192.1.1.1:4243/v1.37/containers/demo2/json | jq -r '.State.Pid'
+## Add IP address:
+#ssh slab@192.1.1.1 sudo ln -s /proc/16729/ns/net /var/run/netns/16729
+#ssh slab@192.1.1.1 'sudo ip netns exec 16729 ip addr add 10.1.2.1 dev eth0'
+#ssh slab@192.1.1.1 'trap `sudo rm -f /var/run/netns/16729` 0'
+
+# Add route for container
+ssh slab@192.1.1.1 sudo nsenter -t 16729 -n ip route add 10.1.0.0/16 dev eth0
+
+# Add OVS routes
+## Make switch listen for remote commands
+sudo ovs-vsctl --db=tcp:192.1.1.1:6677 set-controller ovs_br0 ptcp:6633
+## Add flow rules
+sudo ovs-ofctl add-flow tcp:192.1.1.1:6633 "priority=100 ip in_port=1 nw_src=10.1.1.2 nw_dst=10.1.2.1 actions=output:2"
+sudo ovs-ofctl add-flow tcp:192.1.1.1:6633 "priority=100 ip in_port=2 nw_src=10.1.2.1 nw_dst=10.1.1.2 actions=output:1"
+

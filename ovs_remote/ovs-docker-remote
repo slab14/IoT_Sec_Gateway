@@ -1,0 +1,193 @@
+#!/bin/bash                                                                                                       
+
+add_port () {
+         BRIDGE="$1"
+         INTERFACE="$2"
+         CONTAINER="$3"
+         IP=$4
+         OVS_PORT=$5
+         DOCKER_PORT=$6
+
+        if [  -z "$BRIDGE" ] || [ -z "$INTERFACE" ] || [ -z "$CONTAINER" ]; then
+           echo >&2 "Not enough arguments"
+           exit 1
+        fi
+
+	shift 6
+	while [ $# -ne 0 ]; do
+	    case $1 in
+		--ipaddress=*)
+		    ADDRESS=`expr X"$1" : 'X[^=]*=\(.*\)'`
+		    shift
+		    ;;
+		--macaddress=*)
+		    MACADDRESS=`expr X"$1" : 'X[^=]*=\(.*\)'`
+		    shift
+		    ;;
+		--gateway=*)
+		    GATEWAY=`expr X"$1" : 'X[^=]*=\(.*\)'`
+		    shift
+		    ;;
+		--mtu=*)
+		    MTU=`expr X"$1" : 'X[^=]*=\(.*\)'`
+		    shift
+		    ;;
+		*)
+		    echo >&2 "$UTIL add-port: unknown option"
+		    exit 1
+		    ;;
+	    esac
+	done
+	
+
+        #Check if a port is already attached for a given container & interface
+        PORT=`sudo ovs-vsctl --db=tcp:$IP:$OVS_PORT --data=bare --no-heading --columns=name find interface external_ids:container_id="$CONTAINER" external_ids:container_iface="$INTERFACE"`
+
+        if [ -n "$PORT" ]; then
+            echo >&2 "Port already attached"
+            exit 1
+        fi
+
+        if sudo ovs-vsctl --db=tcp:$IP:$OVS_PORT br-exists "$BRIDGE" || sudo ovs-vsctl --db=tcp:$IP:$OVS_PORT add-br "$BRIDGE"; then :; else
+            echo >&2 "Failed to create $BRIDGE"
+            exit 1
+        fi
+
+        if PID=`curl -s -X GET -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/json | jq -r '.State.Pid'`; then :; else
+            echo >&2 "Failed to get the PID of the container"
+            exit 1
+        fi
+
+        # Create docker network id
+        TEMP=`uuidgen | sed 's/-//g'`
+        NET_NAME="${TEMP:0:13}"
+
+	# Create a docker network
+	ID=`curl -s -X POST http://$IP:$DOCKER_PORT/networks/create -H "Content-Type: application/json" -d '{"Name": "'$NET_NAME'", "Driver": "bridge"}' | jq '.Id'`
+	NET_ID="${ID:1:12}"
+
+        # Add one end of veth to OVS bridge                 
+        if sudo ovs-vsctl --db=tcp:$IP:$OVS_PORT --may-exist add-port "$BRIDGE" "br-${NET_ID}" -- set interface "br-${NET_ID}" external_ids:container_id="$CONTAINER" external_ids:container_iface="$INTERFACE"; then :; else
+            echo "Failed to add br-""${NET_ID}"" port to bridge $BRIDGE"
+            #ssh $USERNAME@$IP sudo ip link delete "${PORTNAME}_l"
+	    curl -s -X DELETE http://$IP:$DOCKER_PORT/v1.37/networks/$NET_ID
+            exit 1
+	fi
+
+	# Connect docker network to container
+	curl -s -X POST http://$IP:$DOCKER_PORT/networks/$NET_ID/connect -H "Content-Type: application/json" -d '{"Container": "'"$CONTAINER"'", "EndpointConfig": {"IPAMConfig": {"IPAddress": "10.1.2.1"}}}'
+	
+	if [ -n "$MTU" ]; then
+    	    EXEC_ID=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/exec -d '{"AttachStdout": true, "Tty": true, "Privileged": true, "Cmd": ["ip", "link", "set", "dev", "'"$INTERFACE"'", "mtu", "'"$MTU"'"]}' | jq -r '.Id'`
+	    curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/exec/$EXEC_ID/start -d '{"Detach": false, "Tty": true }'
+	fi
+
+	if [ -n "$ADDRESS" ]; then
+	    EXEC_ID=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/exec -d '{"AttachStdout": true, "Tty": true, "Privileged": true, "Cmd": ["ip", "addr", "add", "'"$ADDRESS"'", "dev", "'"$INTERFACE"'"]}' | jq -r '.Id'`
+	    curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/exec/$EXEC_ID/start -d '{"Detach": false, "Tty": true }'
+	fi
+
+	if [ -n "$MACADDRESS" ]; then
+	    EXEC_ID=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/exec -d '{"AttachStdout": true, "Tty": true, "Privileged": true, "Cmd": ["ip", "link", "set", "dev", "'"$INTERFACE"'", "address", "'"$MACADDRESS"'"]}' | jq -r '.Id'`
+	    curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/exec/$EXEC_ID/start -d '{"Detach": false, "Tty": true }'	    
+	fi
+
+	if [ -n "$GATEWAY" ]; then
+	    EXEC_ID=`curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/containers/$CONTAINER/exec -d '{"AttachStdout": true, "Tty": true, "Privileged": true, "Cmd": ["ip", "route", "add", "default", "via", "'"$GATEWAY"'"]}' | jq -r '.Id'`
+	    curl -s -X POST -H "Content-Type: application/json" http://$IP:$DOCKER_PORT/v1.37/exec/$EXEC_ID/start -d '{"Detach": false, "Tty": true }'	    
+	fi
+	
+}
+
+del_port () {
+         BRIDGE=$1
+         INTERFACE=$2
+         CONTAINER=$3
+         IP=$4
+         OVS_PORT=$5
+	 DOCKER_PORT=$6
+
+         PORT=`sudo ovs-vsctl --db=tcp:$IP:$OVS_PORT --data=bare --no-heading --columns=name find interface external_ids:container_id="$CONTAINER" external_ids:container_iface="$INTERFACE"`
+
+         if [ -z "$PORT" ]; then
+             exit 1
+         fi
+
+         sudo ovs-vsctl --db=tcp:$IP:$OVS_PORT --if-exists del-port "$PORT"
+
+	 NET_ID=${PORT:3}
+	 curl -s -X DELETE http://$IP:$DOCKER_PORT/networks/"$NET_ID"
+	 
+}
+
+del_ports () {
+          BRIDGE=$1
+          CONTAINER=$2
+          IP=$3
+          OVS_PORT=$4
+	  DOCKER_PORT=$5
+
+	  PORTS=`sudo ovs-vsctl --db=tcp:$IP:$OVS_PORT --data=bare --no-heading --columns=name find interface external_ids:container_id="$CONTAINER"`
+
+          if [ -z "$PORTS" ]; then
+              exit 1
+          fi
+
+          for PORT in $PORTS; do
+              sudo ovs-vsctl --db=tcp:$IP:$OVS_PORT --if-exists del-port "$PORT"
+	      NET_ID=${PORT:3}
+	      echo "$NET_ID"
+	      curl -s -X DELETE http://$IP:$DOCKER_PORT/networks/"$NET_ID" 
+          done
+}
+
+search_path () {
+    save_IFS=$IFS
+    IFS=:
+    for dir in $PATH; do
+        IFS=$save_IFS
+	if test -x "$dir/$1"; then
+            return 0
+	fi
+    done
+    IFS=$save_IFS
+    echo >&2 "$0: $1 not found in \$PATH, please install and try again"
+    exit 1
+}
+
+UTIL=$(basename $0)
+search_path ovs-vsctl
+search_path uuidgen
+search_path jq
+
+if (ip netns) > /dev/null 2>&1; then :; else
+   echo >&2 "$UTIL: ip utility not found (or it does not support netns), cannot proceed"
+   exit 1
+fi
+
+if [ $# -eq 0 ]; then
+   exit 0
+fi
+
+case $1 in
+     "add-port")
+        shift
+        add_port "$@"
+        exit 0
+        ;;
+     "del-port")
+        shift
+        del_port "$@"
+        exit 0
+	;;
+     "del-ports")
+	 shift
+	 del_ports "$@"
+	 exit 0
+         ;;
+     *)
+        echo >&2 "$UTIL: unknown command"
+        exit 1
+        ;;
+esac
+

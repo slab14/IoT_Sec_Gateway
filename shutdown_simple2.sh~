@@ -1,9 +1,0 @@
-#!/bin/bash
-
-sudo ovs-docker del-ports br0 pingdetectclickbridge0
-sudo ovs-docker del-ports br0 pingdetectclickbridge1
-
-sudo docker kill pingdetectclickbridge0 pingdetectclickbridge1
-
-sudo ovs-vsctl del-br br0
-sudo ovs-vsctl add-br br0
