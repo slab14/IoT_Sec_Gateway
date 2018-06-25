@@ -92,11 +92,14 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 		String newVal = newObj.getName();
 		boolean usedPreviously = inList(containerNames, newVal);
 		if(!usedPreviously) {
+		    startContainer(newVal, busybox);
+		    /*
 		    String cmd = String.format("/usr/bin/sudo /usr/bin/docker run -itd --name %s ubuntu", newVal);
 		    ExecShellCmd obj = new ExecShellCmd();
 		    String output=obj.exeCmd(cmd);
 		    containerNames.add(newVal);
 		    System.out.println("New Container Started "+newVal);
+		    */
 		}
 	    }
 	    else if(rootNode.getModificationType()==DataObjectModification.ModificationType.DELETE) {
@@ -111,4 +114,49 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 	else
 	    return false;
     }
+
+    private void startContainer(String name, String image) {
+	String cmd = String.format("/usr/bin/sudo /usr/bin/docker run -itd --name %s %s", name, image);
+	ExecShellCmd obj = new ExecShellCmd();
+	String output=obj.exeCmd(cmd);
+	containerNames.add(name);
+	System.out.println("New Container Started "+name);
+    }
+
+    private void addContainerPorts(String bridge, String name, String iface) {
+	String cmd = String.format("/usr/bin/sudo /usr/bin/ovs-docker add-port %s %s %s", bridge, iface, name);
+	ExecShellCmd obj = new ExecShellCmd();
+	String output = obj.exeCmd(cmd);
+	System.out.println("Added interface "+iface+"to container "+name);
+    }
+
+    private String findContOfPort(String bridge, String name, String iface) {
+	String cmd = String.format("/usr/bin/sudo /usr/bin/ovs-vsctl --data=bare --no-heading --columns=name find interface external_ids:container_id=%s externa_ids:container_iface=%s", name, iface);
+	ExecShellCmd obj = new ExecShellCmd();
+	String ovsPort=obj.exeCmd(cmd);
+	System.out.println("OVS Port: "+ovsPort);
+
+	cmd=String.format("/usr/bin/sudo /usr/bin/ovs-ofctl show %s | grep %s | awk -F '(' '{ print $1 }' | sed 's/ //g'", bridge, ovsPort);
+	String[] pipeCmd={"/bin/sh", "-c", cmd};
+	String ofPort=obj.exeCmd(pipeCmd);
+	System.out.println("OF Port: "+ofPort);
+	return ofPort;
+    }
+
+    private String findExternalOfPort(String bridge, String iface) {
+	String cmd=String.format("/usr/bin/sudo /usr/bin/ovs-ofctl show %s | grep %s | awk -F '(' '{ print $1 }' | sed 's/ //g'", bridge, iface);
+	String[] pipeCmd={"/bin/sh", "-c", cmd};
+	ExecShellCmd obj = new ExecShellCmd();
+	String ofPort=obj.exeCmd(pipeCmd);
+	System.out.println("OF Port: "+ofPort);
+	return ofPort;
+    }
+
+    private void addFlow(String bridge, String port1, String port2) {
+	String cmd=String.format("/usr/bin/sudo /usr/bin/ovs-ofctl add-flow %s 'priority=100 in_port=%s actions=output:%s'", bridge, port1, port2);
+	ExecShellCmd obj = new ExecShellCmd();
+	String output = obj.exeCmd(cmd);
+	System.out.println("Added flow "+port1+" to "+port2);
+    }
+								     
 }

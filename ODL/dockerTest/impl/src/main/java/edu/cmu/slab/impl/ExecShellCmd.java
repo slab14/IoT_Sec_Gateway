@@ -28,4 +28,22 @@ public class ExecShellCmd {
 	}
 	return output.toString();
     }
+
+    public String exeCmd(String[] cmd) {
+	StringBuffer output = new StringBuffer();
+	Process p;
+	try {
+	    p = Runtime.getRuntime().exec(cmd);
+	    p.waitFor();
+	    BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+	    String line = "";
+	    while((line=reader.readLine())!=null) {
+		output.append(line+"\n");
+	    }
+	    p.destroy();
+	} catch(Exception e) {
+	    e.printStackTrace();
+	}
+	return output.toString();
+    }    
 }
