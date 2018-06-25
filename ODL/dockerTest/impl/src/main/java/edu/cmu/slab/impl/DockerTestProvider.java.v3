@@ -25,7 +25,6 @@ import org.opendaylight.yangtools.concepts.ListenerRegistration;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.io.IOException;
 
 public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
     private List containerNames = new ArrayList();
@@ -46,9 +45,6 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
     
     private String bridge_name="ovs_br1";
     private String external_iface="enp6s0f1";
-    private String dataplaneIPAddr="192.1.1.1";
-    private String dockerPort="4243";
-    private String ovsPort="6677";
 
     
     /**
@@ -74,16 +70,28 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 	System.out.println("Shutting down");
 	for(int x=0; x<containerNames.size(); x++) {
 	    System.out.println(containerNames.get(x));
-	    shutdownContainer((String) containerNames.get(x));
+	    String cmd1 = String.format("/usr/bin/sudo /usr/bin/docker kill %s", containerNames.get(x));
+	    String cmd2 = String.format("/usr/bin/sudo /usr/bin/docker rm %s", containerNames.get(x));
+	    String cmd3 = String.format("/usr/bin/sudo /usr/bin/ovs-docker del-ports %s %s", bridge_name, containerNames.get(x));
+	    for(int i=0; i<3; i++) {
+		String cmd;
+		if(i==0)
+		    cmd = cmd1;
+		else if(i==1)
+		    cmd=cmd2;
+		else if(i==2)
+		    cmd=cmd3;
+		else
+		    cmd="";
+		ExecShellCmd obj = new ExecShellCmd();
+		String output=obj.exeCmd(cmd); 
+	    }
 	}
-	removeBridges();
-	/*
 	String cmd4 = String.format("/usr/bin/sudo /usr/bin/ovs-ofctl del-flows %s", bridge_name);
 	String cmd5 = String.format("/usr/bin/sudo /usr/bin/ovs-vsctl --if-exists del-br %s", bridge_name);
 	ExecShellCmd obj = new ExecShellCmd();
 	String output=obj.exeCmd(cmd4);
 	output=obj.exeCmd(cmd5);
-	*/
 	System.out.println("Good-bye");
 	LOG.info("DockerTestProvider Closed");
     }
@@ -100,17 +108,6 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 		if(!usedPreviously) {
 		    String cont_image="busybox";
 		    String cont_iface="eth1";
-		    String bridge_port="6633";
-		    remoteStartContainer(dataplaneIPAddr, dockerPort, newVal, cont_image);
-		    remoteInstallOVSBridge(dataplaneIPAddr, ovsPort, bridge_name);
-		    remoteAddExternalPort(dataplaneIPAddr, ovsPort, bridge_name, external_iface);
-		    remoteAddContainerPort(bridge_name, newVal, cont_iface, dataplaneIPAddr, ovsPort, dockerPort, new String("10.1.6.1/16"));
-		    setupRemoteSwitch(dataplaneIPAddr, ovsPort, bridge_name, bridge_port);
-		    String extOFPort=remoteFindExternalOfPort(dataplaneIPAddr, bridge_port, external_iface);
-		    String contOFPort=remoteFindContOfPort(dataplaneIPAddr, ovsPort, bridge_port, newVal, cont_iface);
-		    remoteAddFlow2D(dataplaneIPAddr, bridge_port, extOFPort, contOFPort);
-		    /*
-		    //Local Version
 		    startContainer(newVal, cont_image);
 		    installOVSBridge(bridge_name);
 		    addExternalPort(bridge_name, external_iface);
@@ -118,7 +115,6 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 		    String extOFPort=findExternalOfPort(bridge_name, external_iface);
 		    String contOFPort=findContOfPort(bridge_name, newVal, cont_iface);
 		    addFlow2D(bridge_name, extOFPort, contOFPort);
-		    */
 		}
 	    }
 	    else if(rootNode.getModificationType()==DataObjectModification.ModificationType.DELETE) {
@@ -142,35 +138,12 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 	System.out.println("New Container Started "+name);
     }
 
-    private void remoteStartContainer(String ip, String docker_port, String cont_name, String container_image) {
-	String cmd = String.format("/usr/bin/curl -s -X POST -H \"Content-Type: application/json\" http://%s:%s/v1.37/containers/create?name=%s -d \'{\"Image\": \"%s\", \"Cmd\": [\"/bin/sh\"], \"HostConfig\": {\"AutoRemove\": true}, \"Tty\": true}\'", ip, docker_port, cont_name, container_image);
-	String[] newCmd = {"/bin/sh", "-c", cmd};
-	ExecShellCmd obj = new ExecShellCmd();
-	String output=obj.exeCmd(newCmd);
-	System.out.println(output);
-	
-	cmd=String.format("/usr/bin/curl -s -X POST http://%s:%s/v1.37/containers/%s/start", ip, docker_port, cont_name);
-	String[] newCmd2={"/bin/sh", "-c", cmd};
-	output=obj.exeCmd(newCmd2);
-	System.out.println(output);
-
-	containerNames.add(cont_name);
-	System.out.println("New Container Started "+cont_name);
-    }    
-
     private void installOVSBridge(String name){
 	String cmd=String.format("/usr/bin/sudo /usr/bin/ovs-vsctl --may-exist add-br %s", name);
 	ExecShellCmd obj = new ExecShellCmd();
 	String output=obj.exeCmd(cmd);
 	System.out.println("Added Bridge "+name);
     }
-
-    private void remoteInstallOVSBridge(String ip, String ovs_port, String name){
-	String cmd=String.format("/usr/bin/sudo /usr/bin/ovs-vsctl --db=tcp:%s:%s --may-exist add-br %s", ip, ovs_port, name);
-	ExecShellCmd obj = new ExecShellCmd();
-	String output=obj.exeCmd(cmd);
-	System.out.println("Added Bridge "+name);
-    }    
 
     private void addExternalPort(String bridge, String iface){
 	String cmd=String.format("/usr/bin/sudo /usr/bin/ovs-vsctl --may-exist add-port %s %s -- set Interface %s ofport_request=1", bridge, iface, iface);
@@ -179,31 +152,10 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 	System.out.println("Added port: to bridge "+bridge+" for interface "+iface);
     }
 
-    private void remoteAddExternalPort(String ip, String ovs_port, String bridge, String iface){
-	String cmd=String.format("/usr/bin/sudo /usr/bin/ovs-vsctl --db=tcp:%s:%s --may-exist add-port %s %s -- set Interface %s ofport_request=1", ip, ovs_port, bridge, iface, iface);
-	ExecShellCmd obj = new ExecShellCmd();
-	String output=obj.exeCmd(cmd);
-	System.out.println("Added port: to bridge "+bridge+" for interface "+iface);
-    }    
-
     private void addContainerPort(String bridge, String name, String iface) {
 	String cmd = String.format("/usr/bin/sudo /usr/bin/ovs-docker add-port %s %s %s", bridge, iface, name);
 	ExecShellCmd obj = new ExecShellCmd();
 	String output = obj.exeCmd(cmd);
-	System.out.println("Added interface "+iface+" to container "+name);
-    }
-
-    private void remoteAddContainerPort(String bridge, String name, String iface, String ip, String ovs_port, String docker_port, String cont_ip) {
-	String ip_arg=String.format("--ipaddress=%s", cont_ip);
-	try {
-	    ProcessBuilder pb = new ProcessBuilder("/users/slab/IoT_Sec_Gateway/ovs_remote/ovs-docker-remote", "add-port", bridge, iface, name, ip, ovs_port, docker_port, ip_arg);
-	    Process p = pb.start();
-	    int errCode=p.waitFor();
-	} catch (InterruptedException e) {
-	    e.printStackTrace();
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
 	System.out.println("Added interface "+iface+" to container "+name);
     }
 
@@ -213,20 +165,6 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 	String output = obj.exeCmd(cmd);
 	System.out.println("Added interface "+iface+" to container "+name);
     }    
-
-    private void remoteAddContainerPort(String bridge, String name, String iface, String ip, String ovs_port, String docker_port) {
-	try {
-	    ProcessBuilder pb = new ProcessBuilder("/users/slab/IoT_Sec_Gateway/ovs_remote/ovs-docker-remote", "add-port", bridge, iface, name, ip, ovs_port, docker_port);
-	    Process p = pb.start();
-	    int errCode=p.waitFor();
-	} catch (InterruptedException e) {
-	    e.printStackTrace();
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}	
-	System.out.println("Added interface "+iface+" to container "+name);
-    }    
-    
 
     private String findContOfPort(String bridge, String name, String iface) {
 	String cmd = String.format("/usr/bin/sudo /usr/bin/ovs-vsctl --data=bare --no-heading --columns=name find interface external_ids:container_id=%s external_ids:container_iface=%s", name, iface);
@@ -243,22 +181,6 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 	return ofPort;
     }
 
-
-    private String remoteFindContOfPort(String ip, String ovs_port, String bridge_remote_port, String name, String iface) {
-	String cmd = String.format("/usr/bin/sudo /usr/bin/ovs-vsctl --db=tcp:%s:%s --data=bare --no-heading --columns=name find interface external_ids:container_id=%s external_ids:container_iface=%s", ip, ovs_port, name, iface);
-	ExecShellCmd obj = new ExecShellCmd();
-	String ovsPort=obj.exeCmd(cmd);
-	ovsPort=ovsPort.replaceAll("\n","");
-	System.out.println("OVS Port: "+ovsPort);
-
-	cmd=String.format("/usr/bin/sudo /usr/bin/ovs-ofctl show tcp:%s:%s | grep %s | awk -F '(' '{ print $1 }' | sed 's/ //g'", ip, bridge_remote_port, ovsPort);
-	String[] pipeCmd={"/bin/sh", "-c", cmd};
-	String ofPort=obj.exeCmd(pipeCmd);
-	ofPort=ofPort.replaceAll("\n","");
-	System.out.println("OF Port: "+ofPort);
-	return ofPort;
-    }
-    
     private String findExternalOfPort(String bridge, String iface) {
 	String cmd=String.format("/usr/bin/sudo /usr/bin/ovs-ofctl show %s | grep %s | awk -F '(' '{ print $1 }' | sed 's/ //g'", bridge, iface);
 	String[] pipeCmd={"/bin/sh", "-c", cmd};
@@ -269,30 +191,13 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 	return ofPort;
     }
 
-	private String remoteFindExternalOfPort(String ip, String bridge_remote_port, String iface) {
-	String cmd=String.format("/usr/bin/sudo /usr/bin/ovs-ofctl show tpc:%s:%s | grep %s | awk -F '(' '{ print $1 }' | sed 's/ //g'", ip, bridge_remote_port, iface);
-	String[] pipeCmd={"/bin/sh", "-c", cmd};
-	ExecShellCmd obj = new ExecShellCmd();
-	String ofPort=obj.exeCmd(pipeCmd);
-	ofPort=ofPort.replaceAll("\n","");
-	System.out.println("OF Port: "+ofPort);
-	return ofPort;
-    }    
-
     private void addFlow(String bridge, String in_port, String out_port) {
 	String cmd=String.format("/usr/bin/sudo /usr/bin/ovs-ofctl add-flow %s 'priority=100 in_port=%s actions=output:%s'", bridge, in_port, out_port);
 	ExecShellCmd obj = new ExecShellCmd();
 	String output = obj.exeCmd(cmd);
 	System.out.println("Added flow "+in_port+" to "+out_port);
     }
-    
-    private void remoteAddFlow(String ip, String remote_bridge_port, String in_port, String out_port) {
-	String cmd=String.format("/usr/bin/sudo /usr/bin/ovs-ofctl add-flow tcp:%s:%s 'priority=100 in_port=%s actions=output:%s'", ip, remote_bridge_port, in_port, out_port);
-	ExecShellCmd obj = new ExecShellCmd();
-	String output = obj.exeCmd(cmd);
-	System.out.println("Added flow "+in_port+" to "+out_port);
-    }
-    
+
     private void addFlow2D(String bridge, String port1, String port2) {
 	String cmd=String.format("/usr/bin/sudo /usr/bin/ovs-ofctl add-flow %s 'priority=100 in_port=%s actions=output:%s'", bridge, port1, port2);
 	ExecShellCmd obj = new ExecShellCmd();
@@ -300,40 +205,6 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 	cmd=String.format("/usr/bin/sudo /usr/bin/ovs-ofctl add-flow %s 'priority=100 in_port=%s actions=output:%s'", bridge, port2, port1);
 	output = obj.exeCmd(cmd);
 	System.out.println("Added flow "+port1+" <==> "+port2);
-    }
-
-    private void remoteAddFlow2D(String ip, String remote_bridge_port, String port1, String port2) {
-	String cmd=String.format("/usr/bin/sudo /usr/bin/ovs-ofctl add-flow tcp:%s:%s 'priority=100 in_port=%s actions=output:%s'", ip, remote_bridge_port, port1, port2);
-	ExecShellCmd obj = new ExecShellCmd();
-	String output = obj.exeCmd(cmd);
-	cmd=String.format("/usr/bin/sudo /usr/bin/ovs-ofctl add-flow tcp:%s:%s 'priority=100 in_port=%s actions=output:%s'", ip, remote_bridge_port, port2, port1);
-	output = obj.exeCmd(cmd);
-	System.out.println("Added flow "+port1+" <==> "+port2);
     }    
-
-    private void setupRemoteSwitch(String ip, String ovs_port, String bridge, String remote_bridge_port) {
-	String cmd=String.format("/usr/bin/sudo /usr/bin/ovs-vsctl --db=tcp:%s:%s set-controller %s ptcp:%s");
-	ExecShellCmd obj = new ExecShellCmd();
-	String output = obj.exeCmd(cmd);
-	System.out.println("Setup bridge "+bridge+" for remote operation, listening on port "+remote_bridge_port);
-    }
-
-    private void shutdownContainer(String name) {
-	ExecShellCmd obj = new ExecShellCmd();
-	String cmd = String.format("/usr/bin/sudo /usr/bin/docker kill %s", name);
-	String output=obj.exeCmd(cmd);
-	cmd = String.format("/usr/bin/sudo /usr/bin/docker rm %s", name);
-	output=obj.exeCmd(cmd);
-	cmd = String.format("/usr/bin/sudo /usr/bin/ovs-docker del-ports %s %s", bridge_name, name);
-	output=obj.exeCmd(cmd);
-    }
-
-    private void removeBridges() {
-	String cmd = String.format("/usr/bin/sudo /usr/bin/ovs-ofctl del-flows %s", bridge_name);
-	ExecShellCmd obj = new ExecShellCmd();
-	String output=obj.exeCmd(cmd);
-	cmd = String.format("/usr/bin/sudo /usr/bin/ovs-vsctl --if-exists del-br %s", bridge_name);
-	output=obj.exeCmd(cmd);
-    }
-    
+								     
 }
