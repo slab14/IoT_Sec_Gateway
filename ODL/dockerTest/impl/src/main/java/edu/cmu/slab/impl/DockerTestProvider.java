@@ -49,7 +49,7 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
     private String dataplaneIPAddr="192.1.1.1";
     private String dockerPort="4243";
     private String ovsPort="6677";
-
+    private String bridge_port="6633";
     
     /**
      * Method called when the blueprint container is created.
@@ -74,16 +74,13 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 	System.out.println("Shutting down");
 	for(int x=0; x<containerNames.size(); x++) {
 	    System.out.println(containerNames.get(x));
-	    shutdownContainer((String) containerNames.get(x));
+	    remoteShutdownContainer(dataplaneIPAddr, dockerPort, (String) containerNames.get(x), bridge_name, ovsPort);
+	    //Local Version
+	    //shutdownContainer((String) containerNames.get(x));
 	}
-	removeBridges();
-	/*
-	String cmd4 = String.format("/usr/bin/sudo /usr/bin/ovs-ofctl del-flows %s", bridge_name);
-	String cmd5 = String.format("/usr/bin/sudo /usr/bin/ovs-vsctl --if-exists del-br %s", bridge_name);
-	ExecShellCmd obj = new ExecShellCmd();
-	String output=obj.exeCmd(cmd4);
-	output=obj.exeCmd(cmd5);
-	*/
+	remoteRemoveBridges(dataplaneIPAddr, bridge_port, bridge_name, ovsPort);
+	//Local Version
+	//removeBridges();
 	System.out.println("Good-bye");
 	LOG.info("DockerTestProvider Closed");
     }
@@ -100,7 +97,7 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 		if(!usedPreviously) {
 		    String cont_image="busybox";
 		    String cont_iface="eth1";
-		    String bridge_port="6633";
+		    //String bridge_port="6633";
 		    remoteStartContainer(dataplaneIPAddr, dockerPort, newVal, cont_image);
 		    remoteInstallOVSBridge(dataplaneIPAddr, ovsPort, bridge_name);
 		    remoteAddExternalPort(dataplaneIPAddr, ovsPort, bridge_name, external_iface);
@@ -328,6 +325,22 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 	output=obj.exeCmd(cmd);
     }
 
+    private void remoteShutdownContainer(String ip, String docker_port, String name, String bridge, String ovs_port) {
+	ExecShellCmd obj = new ExecShellCmd();
+	String cmd = String.format("/usr/bin/curl -s -X POST http://%s:%s/v1.37/containers/%s/kill", ip, docker_port,  name);
+	String[] newCmd = {"/bin/bash", "-c", cmd};
+	String output=obj.exeCmd(newCmd);
+	try {
+	    ProcessBuilder pb = new ProcessBuilder("/users/slab/IoT_Sec_Gateway/ovs_remote/ovs-docker-remote", "del-ports", bridge, name, ip, ovs_port, docker_port);
+	    Process p = pb.start();
+	    int errCode=p.waitFor();
+	} catch (InterruptedException e) {
+	    e.printStackTrace();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+    }    
+
     private void removeBridges() {
 	String cmd = String.format("/usr/bin/sudo /usr/bin/ovs-ofctl del-flows %s", bridge_name);
 	ExecShellCmd obj = new ExecShellCmd();
@@ -335,5 +348,13 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 	cmd = String.format("/usr/bin/sudo /usr/bin/ovs-vsctl --if-exists del-br %s", bridge_name);
 	output=obj.exeCmd(cmd);
     }
+
+    private void remoteRemoveBridges(String ip, String remote_bridge_port, String bridge, String ovs_port) {
+	String cmd = String.format("/usr/bin/sudo /usr/bin/ovs-ofctl del-flows tcp:%s:%s", ip, remote_bridge_port);
+	ExecShellCmd obj = new ExecShellCmd();
+	String output=obj.exeCmd(cmd);
+	cmd = String.format("/usr/bin/sudo /usr/bin/ovs-vsctl --db=tcp:%s:%s --if-exists del-br %s", ip, ovs_port, bridge);
+	output=obj.exeCmd(cmd);
+    }    
     
 }
