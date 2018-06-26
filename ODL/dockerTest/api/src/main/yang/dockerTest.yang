@@ -9,12 +9,24 @@ module dockerTest {
     container dockerTest {
         presence "Indicates which docker container to start";
 	description "Top-level container for docker container database objects.";
+	leaf action {
+	     type string;
+	     config true;
+	     default 1;
+	     description "action to be performed <add | remove>";
+	}
 	leaf name {
 	    type string;
-	    config true;
+	    config true; //Config data, not operational data
 	    default 1;
 	    description "name variable for docker container";
 	}
+	leaf address {
+	     type string;
+	     config true; //Config data, not operational data
+	     default 1;
+	     description "ip address for the new container";
+        }
     }
     notification dockerTestDone {
         description "Container is Spun up";

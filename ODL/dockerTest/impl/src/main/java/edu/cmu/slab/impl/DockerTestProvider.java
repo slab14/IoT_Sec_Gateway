@@ -29,6 +29,16 @@ import java.io.IOException;
 
 public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
     private List containerNames = new ArrayList();
+    private String bridge_name="ovs_br1";
+    private String external_iface="enp6s0f1";
+    private String dataplaneIPAddr="192.1.1.1";
+    private String dockerPort="4243";
+    private String ovsPort="6677";
+    private String bridge_port="6633";
+
+    private int initContIP = 2;
+    
+    private boolean initComplete=false;
     
     private static final Logger LOG = LoggerFactory.getLogger(DockerTestProvider.class);
 
@@ -44,34 +54,28 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 
     }
     
-    private String bridge_name="ovs_br1";
-    private String external_iface="enp6s0f1";
-    private String dataplaneIPAddr="192.1.1.1";
-    private String dockerPort="4243";
-    private String ovsPort="6677";
-    private String bridge_port="6633";
-    
     /**
      * Method called when the blueprint container is created.
      */
     public void init() {
 	dataTreeChangeListenerRegistration = dataBroker.registerDataTreeChangeListener(new DataTreeIdentifier<>(CONFIGURATION, DOCKER_TEST_IID), this);
         LOG.info("DockerTestProvider Session Initiated");
-	String cmd = "/usr/bin/sudo /usr/bin/docker ps --format '{{.Names}}'";
-	ExecShellCmd obj = new ExecShellCmd();
-	String output=obj.exeCmd(cmd);
+	String output = remoteFindExistingContainers(dataplaneIPAddr, dockerPort);
+	//Local Version
+	//String output = findExistingContainers();
 	Iterable<String> sc = () -> new Scanner(output).useDelimiter("\n");
 	for(String line:sc) {
 	    String val = line.replace("\'", "");
-	    containerNames.add(val);
+	    if (!val.equals(""))
+		containerNames.add(val);
 	}
+	initComplete=true;
     }
 
     /**
      * Method called when the blueprint container is destroyed.
      */
     public void close() {
-	System.out.println("Shutting down");
 	for(int x=0; x<containerNames.size(); x++) {
 	    System.out.println(containerNames.get(x));
 	    remoteShutdownContainer(dataplaneIPAddr, dockerPort, (String) containerNames.get(x), bridge_name, ovsPort);
@@ -81,48 +85,84 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 	remoteRemoveBridges(dataplaneIPAddr, bridge_port, bridge_name, ovsPort);
 	//Local Version
 	//removeBridges();
-	System.out.println("Good-bye");
-	LOG.info("DockerTestProvider Closed");
+	containerNames.clear();
+	LOG.info("DockerTestProvider Deleted");
     }
 
     @Override
     public void onDataTreeChanged(Collection<DataTreeModification<DockerTest>> changes) {
-	for(DataTreeModification<DockerTest> change: changes) {
-	    DataObjectModification<DockerTest> rootNode = change.getRootNode();
-	    if(rootNode.getModificationType()==DataObjectModification.ModificationType.WRITE) {
-		System.out.println("Got a new input");
-		DockerTest newObj = rootNode.getDataAfter();
-		String newVal = newObj.getName();
-		boolean usedPreviously = inList(containerNames, newVal);
-		if(!usedPreviously) {
-		    String cont_image="busybox";
-		    String cont_iface="eth1";
-		    //String bridge_port="6633";
-		    remoteStartContainer(dataplaneIPAddr, dockerPort, newVal, cont_image);
-		    remoteInstallOVSBridge(dataplaneIPAddr, ovsPort, bridge_name);
-		    remoteAddExternalPort(dataplaneIPAddr, ovsPort, bridge_name, external_iface);
-		    remoteAddContainerPort(bridge_name, newVal, cont_iface, dataplaneIPAddr, ovsPort, dockerPort, new String("10.1.6.1/16"));
-		    setupRemoteSwitch(dataplaneIPAddr, ovsPort, bridge_name, bridge_port);
-		    String extOFPort=remoteFindExternalOfPort(dataplaneIPAddr, bridge_port, external_iface);
-		    String contOFPort=remoteFindContOfPort(dataplaneIPAddr, ovsPort, bridge_port, newVal, cont_iface);
-		    remoteAddFlow2D(dataplaneIPAddr, bridge_port, extOFPort, contOFPort);
-		    /*
-		    //Local Version
-		    startContainer(newVal, cont_image);
-		    installOVSBridge(bridge_name);
-		    addExternalPort(bridge_name, external_iface);
-		    addContainerPort(bridge_name, newVal, cont_iface, new String("10.1.3.1/16"));
-		    String extOFPort=findExternalOfPort(bridge_name, external_iface);
-		    String contOFPort=findContOfPort(bridge_name, newVal, cont_iface);
-		    addFlow2D(bridge_name, extOFPort, contOFPort);
-		    */
+	if(initComplete){
+	    for(DataTreeModification<DockerTest> change: changes) {
+		DataObjectModification<DockerTest> rootNode = change.getRootNode();
+		if(rootNode.getModificationType()==DataObjectModification.ModificationType.WRITE) {
+		    System.out.println("Got a new input");
+		    DockerTest newObj = rootNode.getDataAfter();
+		    String contName = newObj.getName();
+		    boolean usedPreviously = inList(containerNames, contName);
+		    String action = newObj.getAction();
+		    if (action.equals("add")) {
+			if(!usedPreviously) {
+			    String cont_image="busybox";
+			    String cont_iface="eth1";
+			    String containerIPAddress;
+			    String contIP=newObj.getAddress();
+			    if (contIP.equals("1") || contIP.equals("")) {
+				++initContIP;
+				containerIPAddress="10.1.1."+Integer.toString(initContIP)+"/16";
+			    } else {
+				containerIPAddress = contIP+"/16";
+			    }
+			    remoteStartContainer(dataplaneIPAddr, dockerPort, contName, cont_image);
+			    remoteInstallOVSBridge(dataplaneIPAddr, ovsPort, bridge_name);
+			    remoteAddExternalPort(dataplaneIPAddr, ovsPort, bridge_name, external_iface);
+			    remoteAddContainerPort(bridge_name, contName, cont_iface, dataplaneIPAddr, ovsPort, dockerPort, containerIPAddress);
+			    setupRemoteSwitch(dataplaneIPAddr, ovsPort, bridge_name, bridge_port);
+			    String extOFPort=remoteFindExternalOfPort(dataplaneIPAddr, bridge_port, external_iface);
+			    String contOFPort=remoteFindContOfPort(dataplaneIPAddr, ovsPort, bridge_port, contName, cont_iface);
+			    remoteAddFlow2D(dataplaneIPAddr, bridge_port, extOFPort, contOFPort);
+			    /*
+			    //Local Version
+			    startContainer(contName, cont_image);
+			    installOVSBridge(bridge_name);
+			    addExternalPort(bridge_name, external_iface);
+			    addContainerPort(bridge_name, contName, cont_iface, new String("10.1.3.1/16"));
+			    String extOFPort=findExternalOfPort(bridge_name, external_iface);
+			    String contOFPort=findContOfPort(bridge_name, contName, cont_iface);
+			    addFlow2D(bridge_name, extOFPort, contOFPort);
+			    */
+			}
+		    } else if (action.equals("del")) {
+			if (usedPreviously) {
+			    System.out.println("Removing "+contName);
+			    containerNames.remove(contName);			    
+			    remoteShutdownContainer(dataplaneIPAddr, dockerPort, contName, bridge_name, ovsPort);
+			}
+		    } else {
+			System.out.println("invalid request");
+		    }
+		} else if(rootNode.getModificationType()==DataObjectModification.ModificationType.DELETE) {
+		    System.out.println("got DELETE");
+		    close();
 		}
-	    }
-	    else if(rootNode.getModificationType()==DataObjectModification.ModificationType.DELETE) {
 	    }
 	}
     }
 
+    private String findExistingContainers() {
+	String cmd = "/usr/bin/sudo /usr/bin/docker ps --format '{{.Names}}'";
+	ExecShellCmd obj = new ExecShellCmd();
+	String output=obj.exeCmd(cmd);
+	return output;
+    }
+
+    private String remoteFindExistingContainers(String ip, String docker_port) {
+	String cmd = String.format("curl -s -X GET http://%s:%s/containers/json | jq '.' | grep -A 1 --no-group-separator 'Names' | awk -F '\"' '{ print $2 }' | awk -F '/' '{ print $2 }'", ip, docker_port);
+	String[] newCmd = {"/bin/sh", "-c", cmd};
+	ExecShellCmd obj = new ExecShellCmd();
+	String output=obj.exeCmd(newCmd);
+	return output;
+    }    
+    
     private boolean inList(List l1, String testStr) {
 	int index = l1.indexOf(testStr);
 	if(index>=0)
@@ -144,13 +184,9 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 	String[] newCmd = {"/bin/sh", "-c", cmd};
 	ExecShellCmd obj = new ExecShellCmd();
 	String output=obj.exeCmd(newCmd);
-	System.out.println(output);
-	
 	cmd=String.format("/usr/bin/curl -s -X POST http://%s:%s/v1.37/containers/%s/start", ip, docker_port, cont_name);
 	String[] newCmd2={"/bin/sh", "-c", cmd};
 	output=obj.exeCmd(newCmd2);
-	System.out.println(output);
-
 	containerNames.add(cont_name);
 	System.out.println("New Container Started "+cont_name);
     }    
@@ -201,7 +237,7 @@ public class DockerTestProvider implements DataTreeChangeListener<DockerTest> {
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
-	System.out.println("Added interface "+iface+" to container "+name);
+	System.out.println("Added interface "+iface+" to container "+name+" with IP address "+cont_ip);
     }
 
     private void addContainerPort(String bridge, String name, String iface, String ip) {
