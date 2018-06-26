@@ -1,6 +1,6 @@
 sudo apt-get install -yqq default-jre default-jdk maven
 
-export JAVA_HOME=/usr/lib/jvm/java-java-8-openjdk-amd64/
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 export PATH=$PATH:$JAVA_HOME/bin/
 
 mkdir -p ~/.m2

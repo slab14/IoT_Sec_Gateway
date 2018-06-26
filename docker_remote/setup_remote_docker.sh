@@ -1,6 +1,8 @@
 #!/bin/bash
 
-sudo sed -i 's/fd\:\/\// fd\:\/\/ \-H tcp\:\/\/0\.0\.0\.0\:4243/g' /lib/systemd/system/docker.service
+PORT=4243
+
+sudo sed -i 's/fd\:\/\// fd\:\/\/ \-H tcp\:\/\/0\.0\.0\.0\:'"$PORT"'/g' /lib/systemd/system/docker.service
 
 sudo systemctl daemon-reload
 
