@@ -89,7 +89,7 @@ setup_remote_ovsdb_server() {
     sudo ovs-appctl -t ovsdb-server ovsdb-server/add-remote ptcp:$OVS_PORT
 }
 
-setup_remote_docker(){
+setup_remote_docker() {
     sudo sed -i 's/fd\:\/\// fd\:\/\/ \-H tcp\:\/\/0\.0\.0\.0\:'"$DOCKER_PORT"'/g' /lib/systemd/system/docker.service
     sudo systemctl daemon-reload
     sudo service docker restart
@@ -128,7 +128,9 @@ install_docker
 install_ovs
 install_python_packages
 setup_maven
-
+setup_remote_ovsdb_server
+setup_remote_docker
+    
 # Setup
 disable_gro
 setup_bridge

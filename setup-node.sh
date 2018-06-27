@@ -107,5 +107,7 @@ echo "Beginning Node Setup..."
 update
 install_iperf
 install_python_packages
+setup_maven
 setup_ip_routes
+install_ovs
 echo "Node Setup Complete"
