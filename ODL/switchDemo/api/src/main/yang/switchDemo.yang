@@ -1,0 +1,18 @@
+module switchDemo {
+    yang-version 1;
+    namespace "edu:cmu:slab:yang:switchDemo";
+    prefix "switchDemo";
+
+    revision "2018-06-27" {
+        description "Initial revision of switchDemo model -- getting notifications from packets";
+    }
+
+    container switchDemo {
+	leaf var1 {
+	    type string;
+	    config true;
+	    default 0;
+	    description "for future use";
+	}
+    }
+}
