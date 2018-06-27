@@ -20,14 +20,6 @@ import edu.cmu.slab.impl.decoders.IcmpDecoder;
 import edu.cmu.slab.impl.decoders.Ipv4Decoder;
 import edu.cmu.slab.impl.decoders.Ipv6Decoder;
 
-import edu.cmu.slab.impl.flow.FlowWriterServiceImpl;
-import edu.cmu.slab.impl.flow.InitialFlowWriter;
-import edu.cmu.slab.impl.flow.ReactiveFlowWriter;
-import edu.cmu.slab.impl.inventory.InventoryReader;
-import org.opendaylight.yangtools.concepts.Registration;
-
-import org.opendaylight.yang.gen.v1.urn.opendaylight.flow.service.rev130819.SalFlowService;
-
 public class SwitchDemoProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(SwitchDemoProvider.class);
@@ -37,14 +29,9 @@ public class SwitchDemoProvider {
     private final DataBroker dataBroker;
     private final NotificationProviderService notificationService;
 
-    private final SalFlowService salFlowService;
-    private Registration reactFlowWriterReg = null;
-
-    public SwitchDemoProvider(final DataBroker dataBroker, final NotificationProviderService notificationService,
-			      final SalFlowService salFlowService) {
+    public SwitchDemoProvider(final DataBroker dataBroker, final NotificationProviderService notificationService) {
         this.dataBroker = dataBroker;
 	this.notificationService = notificationService;
-	this.salFlowService = salFlowService;
     }
 
     /**
@@ -55,10 +42,7 @@ public class SwitchDemoProvider {
                 .add(new EthernetDecoder(notificationService))
                 .add(new ArpDecoder(notificationService)).add(new Ipv4Decoder(notificationService))
                 .add(new Ipv6Decoder(notificationService)).add(new IcmpDecoder(notificationService)).build();
-	FlowWriterServiceImpl flowWriterService = new FlowWriterServiceImpl(salFlowService);
-	InventoryReader inventoryReader = new InventoryReader(dataBroker);
-	ReactiveFlowWriter reactiveFlowWriter = new ReactiveFlowWriter(inventoryReader, flowWriterService);
-	reactFlowWriterReg = notificationService.registerNotificationListener(reactiveFlowWriter);
+	
         LOG.info("SwitchDemoProvider Session Initiated");
     }
 
