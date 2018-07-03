@@ -12,6 +12,6 @@ if [[ -z "$PASSWORD" ]]; then
 fi
 
 chmod +x /etc/squid/passwords
-htpasswd -b -c -B /etc/squid/passwords $USERNAME $PASSWORD
+htpasswd -b -c /etc/squid/passwords $USERNAME $PASSWORD
 chmod o+r /etc/squid/passwords
 
