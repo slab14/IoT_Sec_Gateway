@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.opendaylight.odlparent</groupId>
+    <artifactId>odlparent-lite</artifactId>
+    <version>1.8.4-Carbon</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>org.opendaylight.controller</groupId>
+  <artifactId>sal-parent</artifactId>
+  <version>1.5.4-Carbon</version>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>mdsal-artifacts</module>
+
+    <!-- Common APIs & Implementation -->
+    <module>sal-common-api</module>
+    <module>sal-common-impl</module>
+    <module>sal-common-util</module>
+
+    <!-- Binding Independent -->
+    <module>sal-dom-api</module>
+    <module>sal-dom-broker</module>
+    <module>sal-dom-spi</module>
+    <module>sal-schema-service</module>
+
+    <!-- Binding Aware -->
+    <module>sal-binding-api</module>
+    <module>sal-binding-broker</module>
+
+    <module>sal-binding-util</module>
+
+    <!-- Config subsystem bindings -->
+    <module>sal-dom-config</module>
+    <module>sal-dom-broker-config</module>
+    <module>sal-binding-config</module>
+
+    <!-- Configuration File -->
+    <module>md-sal-config</module>
+
+    <!-- Samples -->
+    <module>samples</module>
+
+    <!-- Connectors -->
+    <module>sal-connector-api</module>
+
+    <module>sal-akka-raft</module>
+    <module>sal-akka-raft-example</module>
+
+    <!--InMemory DOM DataStore-->
+    <module>sal-inmemory-datastore</module>
+
+    <module>sal-clustering-commons</module>
+    <module>cds-access-api</module>
+    <module>cds-access-client</module>
+    <module>cds-dom-api</module>
+
+    <!-- sal clustering configuration -->
+    <module>sal-clustering-config</module>
+
+    <!-- sal-distributed-datastore -->
+    <module>sal-distributed-datastore</module>
+    <module>sal-dummy-distributed-datastore</module>
+    <module>sal-cluster-admin-api</module>
+    <module>sal-cluster-admin-impl</module>
+
+    <!-- XSQL -->
+    <module>sal-dom-xsql</module>
+    <module>sal-karaf-xsql</module>
+    <module>sal-karaf4-xsql</module>
+    <module>sal-dom-xsql-config</module>
+
+    <!-- Yang Test Models for MD-SAL -->
+    <module>sal-test-model</module>
+
+    <!-- Clustering -->
+    <module>sal-remoterpc-connector</module>
+
+    <!-- Message Bus -->
+    <module>messagebus-api</module>
+    <module>messagebus-spi</module>
+    <module>messagebus-impl</module>
+    <module>messagebus-util</module>
+    <module>messagebus-config</module>
+
+    <!-- PAX EXAM ITs -->
+    <module>sal-binding-it</module>
+    <module>sal-binding-dom-it</module>
+
+    <!-- IT Base and Parent -->
+    <module>mdsal-it-base</module>
+    <module>mdsal-it-parent</module>
+
+    <!-- Debug utils -->
+    <module>mdsal-trace</module>
+
+  </modules>
+
+  <scm>
+    <connection>scm:git:http://git.opendaylight.org/gerrit/controller.git</connection>
+    <developerConnection>scm:git:ssh://git.opendaylight.org:29418/controller.git</developerConnection>
+    <tag>HEAD</tag>
+    <url>https://wiki.opendaylight.org/view/OpenDaylight_Controller:MD-SAL</url>
+  </scm>
+
+  <profiles>
+    <profile>
+      <id>benchmarks</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <modules>
+        <module>benchmark-data-store</module>
+      </modules>
+    </profile>
+  </profiles>
+</project>

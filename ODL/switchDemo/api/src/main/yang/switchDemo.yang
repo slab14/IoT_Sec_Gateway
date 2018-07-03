@@ -7,12 +7,4 @@ module switchDemo {
         description "Initial revision of switchDemo model -- getting notifications from packets";
     }
 
-    container switchDemo {
-	leaf var1 {
-	    type string;
-	    config true;
-	    default 0;
-	    description "for future use";
-	}
-    }
 }

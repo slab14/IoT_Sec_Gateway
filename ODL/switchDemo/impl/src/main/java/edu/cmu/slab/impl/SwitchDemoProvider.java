@@ -12,14 +12,6 @@ import org.opendaylight.controller.md.sal.binding.api.DataBroker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableSet;
-import edu.cmu.slab.impl.decoders.AbstractPacketDecoder;
-import edu.cmu.slab.impl.decoders.ArpDecoder;
-import edu.cmu.slab.impl.decoders.EthernetDecoder;
-import edu.cmu.slab.impl.decoders.IcmpDecoder;
-import edu.cmu.slab.impl.decoders.Ipv4Decoder;
-import edu.cmu.slab.impl.decoders.Ipv6Decoder;
-
 import edu.cmu.slab.impl.flow.FlowWriterServiceImpl;
 import edu.cmu.slab.impl.flow.InitialFlowWriter;
 import edu.cmu.slab.impl.flow.ReactiveFlowWriter;
@@ -32,13 +24,11 @@ public class SwitchDemoProvider {
 
     private static final Logger LOG = LoggerFactory.getLogger(SwitchDemoProvider.class);
 
-    ImmutableSet<AbstractPacketDecoder> decoders;
-
     private final DataBroker dataBroker;
     private final NotificationProviderService notificationService;
 
     private final SalFlowService salFlowService;
-    private Registration reactFlowWriterReg = null;
+    private Registration topoNodeListherReg = null, reactFlowWriterReg = null;
 
     public SwitchDemoProvider(final DataBroker dataBroker, final NotificationProviderService notificationService,
 			      final SalFlowService salFlowService) {
@@ -51,12 +41,19 @@ public class SwitchDemoProvider {
      * Method called when the blueprint container is created.
      */
     public void init() {
-	decoders = new ImmutableSet.Builder<AbstractPacketDecoder>()
-                .add(new EthernetDecoder(notificationService))
-                .add(new ArpDecoder(notificationService)).add(new Ipv4Decoder(notificationService))
-                .add(new Ipv6Decoder(notificationService)).add(new IcmpDecoder(notificationService)).build();
+	System.out.println("SwitchDemoProvider init() called");
 	FlowWriterServiceImpl flowWriterService = new FlowWriterServiceImpl(salFlowService);
+	flowWriterService.setFlowTableId((short)0);
+	flowWriterService.setFlowPriority(0);
+	flowWriterService.setFlowIdleTimeout(0);
+	flowWriterService.setFlowHardTimeout(0);
 	InventoryReader inventoryReader = new InventoryReader(dataBroker);
+	InitialFlowWriter initialFlowWriter = new InitialFlowWriter(salFlowService);
+	initialFlowWriter.setFlowTableId((short)0);
+	initialFlowWriter.setFlowPriority(0);
+	initialFlowWriter.setFlowIdleTimeout(0);
+	initialFlowWriter.setFlowHardTimeout(0);
+	topoNodeListherReg = initialFlowWriter.registerAsDataChangeListener(dataBroker);
 	ReactiveFlowWriter reactiveFlowWriter = new ReactiveFlowWriter(inventoryReader, flowWriterService);
 	reactFlowWriterReg = notificationService.registerNotificationListener(reactiveFlowWriter);
         LOG.info("SwitchDemoProvider Session Initiated");
@@ -66,11 +63,11 @@ public class SwitchDemoProvider {
      * Method called when the blueprint container is destroyed.
      */
     public void close() throws Exception {
-	if (decoders != null && !decoders.isEmpty()) {
-            for (AbstractPacketDecoder decoder : decoders) {
-                decoder.close();
-            }
-	}
+	//if (decoders != null && !decoders.isEmpty()) {
+        //    for (AbstractPacketDecoder decoder : decoders) {
+        //        decoder.close();
+        //    }
+	//}
         LOG.info("SwitchDemoProvider Closed");
     }
 }
