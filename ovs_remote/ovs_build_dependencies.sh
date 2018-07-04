@@ -10,7 +10,7 @@ install_dependencies() {
 	 libtool wget netcat curl clang sparse flake8 \
 	 graphviz autoconf automake libtool python-dev
 
-    pip -qq install --upgrade pip
+    sudo pip -qq install --upgrade pip
     pip -qq install --user six pyftpdlib tftpy
 }
 
