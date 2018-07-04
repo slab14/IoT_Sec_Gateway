@@ -10,7 +10,7 @@ SERVER_IP=10.1.1.2
 
 update() {
     echo "Updating apt-get..."
-    sudo apt-get -qq update
+    sudo apt-get update -qq
     sudo apt-get install -yqq default-jdk default-jre jq maven
     echo "Update Complete"
 }
@@ -18,13 +18,13 @@ update() {
 
 install_iperf() {
     echo "Installing iperf..."
-    sudo apt-get -yqq install iperf3
+    sudo apt-get install -yqq iperf3
     echo "iperf Install Complete"
 }
 
 install_python_packages() {
     echo "Installing Python..."
-    sudo apt-get -yqq install python python-dev python-pip
+    sudo apt-get install -yqq python python-dev python-pip
     sudo pip -qq install --upgrade pip
     sudo pip -qq install ipaddress subprocess32
     echo "Python Install Complete"

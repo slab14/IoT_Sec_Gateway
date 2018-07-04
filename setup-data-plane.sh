@@ -11,16 +11,16 @@ DOCKER_PORT=4243
 
 update() {
     echo "Updating apt-get..."
-    sudo apt-get -qq update
+    sudo apt-get update -qq
     sudo apt-get install -yqq default-jre default-jdk maven jq
     echo "Update complete"
 }
 
 install_docker() {
     echo "Installing Docker..."
-    sudo apt-get -yqq install docker-compose 
+    sudo apt-get install -yqq docker-compose 
 
-    sudo apt-get -yqq install apt-transport-https ca-certificates \
+    sudo apt-get install -yqq apt-transport-https ca-certificates \
 	 curl software-properties-common
 
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
@@ -28,8 +28,8 @@ install_docker() {
 
     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
-    sudo apt-get -qq update
-    sudo apt-get -yqq install docker-ce
+    sudo apt-get update -qq
+    sudo apt-get install -yqq docker-ce
 
     sudo systemctl start docker
     sudo systemctl enable docker
@@ -45,14 +45,14 @@ build_docker_containers(){
 
 install_python_packages() {
     echo "Installing Python..."
-    sudo apt-get -yqq install python python-ipaddress python-subprocess32 \
+    sudo apt-get install -yqq python python-ipaddress python-subprocess32 \
 	 python-pip
     echo "Python Install Complete"
 }
 
 install_ovs() {
     echo "Installing OVS..."
-    sudo apt-get -yqq install openvswitch-common openvswitch-switch \
+    sudo apt-get install -yqq openvswitch-common openvswitch-switch \
 	 openvswitch-dbg
     sudo systemctl start openvswitch-switch
     sudo systemctl enable openvswitch-switch

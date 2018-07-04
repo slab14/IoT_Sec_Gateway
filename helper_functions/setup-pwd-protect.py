@@ -18,7 +18,7 @@ SERVER_IFACE='enp6s0f1'
 SERVER_IP='10.1.1.2'
 PROXY_IMAGE='squid_cont'
 #PROXY_IMAGE='ping_box'
-SNORT_IMAGE='snort_direct_block'
+SNORT_IMAGE='snort_direct_blockv2'
 #SNORT_IMAGE='click_bridge'
 
 def start_squid_proxy(image_name):
