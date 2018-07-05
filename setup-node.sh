@@ -89,6 +89,9 @@ install_docker() {
     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     sudo apt-get update -qq
     sudo apt-get install -yqq docker-ce
+
+    sudo systemctl start docker
+    sudo systemctl enable docker
 }
 
 

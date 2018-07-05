@@ -18,16 +18,14 @@ update() {
 
 install_docker() {
     echo "Installing Docker..."
+    sudo apt-get update -qq
     sudo apt-get install -yqq docker-compose 
-
     sudo apt-get install -yqq apt-transport-https ca-certificates \
 	 curl software-properties-common
-
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
 	| sudo apt-key add -
-
+    sudo apt-key fingerprint 0EBFCD88
     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-
     sudo apt-get update -qq
     sudo apt-get install -yqq docker-ce
 
@@ -57,7 +55,34 @@ install_ovs() {
     sudo systemctl start openvswitch-switch
     sudo systemctl enable openvswitch-switch
     echo "OVS Install Complete"
+}
 
+install_ovs_fromGit() {
+    #Install Build Dependencies
+    sudo apt-get update -qq
+    sudo apt-get install -yqq make gcc libssl1.0.0 libssl-dev \
+	 libcap-ng0 libcap-ng-dev python python-pip autoconf \
+	 libtool wget netcat curl clang sparse flake8 \
+	 graphviz autoconf automake libtool python-dev
+    sudo pip -qq install --upgrade pip
+    pip -qq install --user six pyftpdlib tftpy
+
+    #Clone repository, build, and install
+    cd ~
+    git clone https://github.com/slab14/ovs.git
+    cd ovs
+    git checkout slab
+    ./boot.sh
+    ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc
+    make
+    sudo make install
+    cd ~
+
+    # Install ovs-docker-remote dependencies
+    sudo apt-get install -yqq jq curl uuid-runtime
+
+    # Start OVS Deamons
+    sudo /usr/share/openvswitch/scripts/ovs-ctl start
 }
 
 setup_maven() {
@@ -125,7 +150,7 @@ setup_bridge() {
 echo "Beginning Dataplane Setup..."
 update
 install_docker
-install_ovs
+install_ovs_fromGit
 install_python_packages
 setup_maven
 setup_remote_ovsdb_server
