@@ -62,7 +62,35 @@ install_ovs_fromGit() {
     sudo pip -qq install --upgrade pip
     pip -qq install --user six pyftpdlib tftpy
 
-    
+    #Clone repository, build, and install
+    cd ~
+    git clone https://github.com/slab14/ovs.git
+    cd ovs
+    git checkout slab
+    ./boot.sh
+    ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc
+    make
+    sudo make install
+    cd ~
+
+    # Install ovs-docker-remote dependencies
+    sudo apt-get install -yqq jq curl uuid-runtime
+
+    # Start OVS Deamons
+    sudo /usr/share/openvswitch/scripts/ovs-ctl start
+}
+
+install_docker() {
+    sudo apt-get update -qq
+    sudo apt-get install -yqq apt-transport-https \
+	 ca-certificates curl software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo apt-key fingerprint 0EBFCD88
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    sudo apt-get update -qq
+    sudo apt-get install -yqq docker-ce
+}
+
 
 find_interface_for_ip() {
     local ip="$1"
@@ -121,5 +149,6 @@ install_iperf
 install_python_packages
 setup_maven
 setup_ip_routes
-install_ovs
+install_ovs_fromGit
+install_docker
 echo "Node Setup Complete"
