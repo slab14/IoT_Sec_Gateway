@@ -1,6 +1,10 @@
 #!/bin/bash
 
-PORT=4243
+if [ -z $1 ]; then
+    PORT=4243
+else
+    PORT=$1
+fi
 
 sudo sed -i 's/fd\:\/\// fd\:\/\/ \-H tcp\:\/\/0\.0\.0\.0\:'"$PORT"'/g' /lib/systemd/system/docker.service
 
