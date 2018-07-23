@@ -83,3 +83,6 @@ sudo sed -i '/node1\tnode1/d' /etc/hosts
 echo "
 network.bind_host: 0" | sudo tee -a /etc/elasticsearch/elasticsearch.yml
 sudo service elasticsearch restart
+
+sudo sed -i 's/supervisor.slots.ports : \[6700, 6701, 6702, 6703, 6704, 6705\]/supervisor.slots.ports : [6700, 6701, 6702, 6703, 6704, 6705, 6706]/g' /etc/storm/conf/storm.yaml
+sudo service storm restart
