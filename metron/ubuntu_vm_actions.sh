@@ -15,7 +15,8 @@ export METRON_HOME="/usr/metron/${METRON_VERSION}"
 ${HDP_HOME}/kafka-broker/bin/kafka-topics.sh --zookeeper $ZOOKEEPER --create --topic squid --partitions 1 --replication-factor 1
 
 # Setup indexing
-echo"{
+echo '
+{
 "hdfs" : {
 "index": "squid",
 "batchSize": 5,
@@ -31,12 +32,13 @@ echo"{
 "batchSize": 5,
 "enabled" : true
 }
-}" | sudo tee ${METRON_HOME}/config/zookeeper/indexing/squid.json
+}' | sudo tee ${METRON_HOME}/config/zookeeper/indexing/squid.json
 
 
 sudo sed -i ':a;N;$!ba;s/.mmdb.gz\"\n}/.mmdb.gz",\n/g' ${METRON_HOME}/config/zookeeper/global.json
 
-echo '"fieldValidations" : [
+echo '
+"fieldValidations" : [
 {
 "input" : [ "ip_src_addr", "ip_dst_addr" ],
 "validation" : "IP",
@@ -78,5 +80,6 @@ sudo service nifi start
 sudo sed -i '/node1\tnode1/d' /etc/hosts
 
 ## make elastic search accessible from remote
-echo "network.bind_host: 0" | sudo tee -a /etc/elasticsearch/elasticsearch.yml
+echo "
+network.bind_host: 0" | sudo tee -a /etc/elasticsearch/elasticsearch.yml
 sudo service elasticsearch restart
