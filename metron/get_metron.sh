@@ -17,10 +17,12 @@ install_docker() {
 ## Dependencies
 sudo apt-get update -qq
 sudo apt-get install -yqq ansible npm nodejs-legacy maven
-sudo add-apt-repository ppa:webupd8team/java
-sudo apt-get update -qq
-sudo apt-get install -yqq oracle-java8-installer
+## JAVA
+# sudo add-apt-repository ppa:webupd8team/java
+# sudo apt-get update -qq
+# sudo apt-get install -yqq oracle-java8-installer
 ##assumes that docker and maven are already installed
+sudo apt-get install -yqq default-jdk default-jre
 install_docker
 sudo usermod -a -G docker $USER
 ## vagrant from distribution is v1.8.1, need v2.0+

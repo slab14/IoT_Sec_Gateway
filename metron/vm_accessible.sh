@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## Find VM name
-VM=VBoxManage list runningvms | awk -F '"' '{ print $2 }'
+VM=`VBoxManage list runningvms | awk -F '"' '{ print $2 }'`
 
 ## Port Forwarding (8080 Ambari, 5000 Kibana, 8744 Storm, 9200 Elastisearch, 8089 NiFi)
 VBoxManage controlvm $VM natpf1 ,tcp,,8080,,8080
