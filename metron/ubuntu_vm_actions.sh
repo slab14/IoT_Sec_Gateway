@@ -169,7 +169,7 @@ ${HDP_HOME}/kafka-broker/bin/kafka-topics.sh --zookeeper $ZOOKEEPER --create --t
 
 # Setup indexing
 echo '{
-"elasti" :csearch": {
+"elasticsearch": {
 "index": "squid",
 "batchSize": 5,
 "enabled" : true
@@ -196,7 +196,7 @@ echo '
 ]
 }' | sudo tee -a ${METRON_HOME}/config/zookeeper/global.json
 
-## Elastisearch update??
+## Elastisearch update
 update_es
 
 ## Upload configuration to zookeeper
@@ -205,9 +205,8 @@ ${METRON_HOME}/bin/zk_load_configs.sh -i ${METRON_HOME}/config/zookeeper -m PUSH
 ## Start new parser
 ${METRON_HOME}/bin/start_parser_topology.sh -k $BROKERLIST -z $ZOOKEEPER -s squid
 
-## currently implementation only has 6 supervisors and all are being used
 ## can kill an existing topology (sensor)
-#storm kill bro
+storm kill bro
 
 ## Install NiFi
 #cd /usr/lib
