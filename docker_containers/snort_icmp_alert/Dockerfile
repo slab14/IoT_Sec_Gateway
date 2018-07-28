@@ -84,7 +84,7 @@ COPY snort.conf /etc/snort/snort.conf
 COPY local.rules /etc/snort/rules/local.rules 
 COPY run.sh run.sh
 
-CMD ["-Q", "--daq", "afpacket", "-i", "eth0:eth1", "-c", "/etc/snort/snort.conf", "-l", "/var/log/snort/"]
+CMD ["-Q", "--daq", "afpacket", "-i", "eth1:eth2", "-c", "/etc/snort/snort.conf", "-l", "/var/log/snort/"]
 
 ENTRYPOINT ["/run.sh"]
 
