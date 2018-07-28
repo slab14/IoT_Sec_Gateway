@@ -230,4 +230,5 @@ sudo service elasticsearch restart
 sudo sed -i 's/listeners=PLAINTEXT:\/\/localhost:6667/listeners=PLAINTEXT:\/\/0.0.0.0:6667/g' /etc/kafka/conf/server.properties
 echo '
 advertised.listeners=PLAINTEXT://node1:6667' | sudo tee -a /etc/kafka/conf/server.properties
-
+sudo kafka stop
+sudo kafka start
