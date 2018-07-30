@@ -23,7 +23,7 @@ sudo apt-get install -yqq ansible npm nodejs-legacy maven
 # sudo apt-get install -yqq oracle-java8-installer
 ##assumes that docker and maven are already installed
 sudo apt-get install -yqq default-jdk default-jre
-install_docker
+#install_docker
 sudo usermod -a -G docker $USER
 ## vagrant from distribution is v1.8.1, need v2.0+
 wget https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.deb
@@ -44,7 +44,7 @@ echo "MAVEN_HOME=$MAVEN_HOME" >> /etc/environments
 cd /mnt
 git clone https://github.com/slab14/metron.git
 cd metron
-git checkout Metron_0.5.0
+git checkout slab
 
 ## Build
 # mvn clean install -DskipTests
