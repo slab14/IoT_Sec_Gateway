@@ -1,7 +1,7 @@
 FROM ubuntu:xenial
 
 RUN apt-get update && \
-    apt-get install -yqq squid3 apache2-utils
+    apt-get install -yqq squid3 apache2-utils ethtool
 
 RUN touch /etc/squid/passwords 
 
