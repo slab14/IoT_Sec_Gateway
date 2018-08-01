@@ -9,11 +9,6 @@ while true; do
 
 done
 
-ethtool -K eth0 gro off
-ethtool -K eth0 lro off
-ethtool -K eth1 gro off
-ethtool -K eth1 lro off
-
 if [[ ! -s /etc/snort/snort.conf ]]; then
     mv /etc/snort/snort.conf.default /etc/snort/snort.conf
 fi
