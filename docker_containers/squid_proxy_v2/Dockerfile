@@ -11,6 +11,8 @@ EXPOSE 13128/tcp
 
 COPY run.sh /
 COPY update_password.sh /
+COPY remove_password.sh /
+COPY add_password.sh /
 
 CMD ["squid", "-NYCd", "1"]
 
