@@ -1,0 +1,75 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+html, body, .container-fluid, .row-fluid {
+    height: 96%;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.form-control {
+    width: 15%;
+    min-width: 150px;
+    float: right;
+    margin-top: 10px;
+    margin-right: 5px;
+}
+
+.col-xs-3 {
+    padding: 0;
+}
+
+.container-fluid {
+    min-width: 305px;
+    min-height: 305px;
+}
+
+#viewer {
+    margin: 0 auto;
+    position: relative;
+    clear: both;
+}
+
+.box {
+    position: relative;
+    border: 1vh solid transparent;
+    min-height: 75px;
+    migh-width: 50px;
+    perspective: 1000px;
+}
+
+.containerImage {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    border: solid 3px #000000;
+}
+
+.containerImage div {
+    margin: 0;
+    width: 100%;
+    height: 50%;
+    display: block;
+    position: absolute;
+}
+
+.containerImage .front {
+    background-color: #ffffff;
+    text-align: center;
+    display: table;
+}
+
+.containerImage .front .words {
+    display: table-cell;
+    vertical-align: middle;
+    font-size: 2vh;
+}
+
+.rows {
+    height: 33%;
+}
+	       
