@@ -16,7 +16,7 @@ def attach_container(bridge, container_name):
         cmd = cmd.format(bridge, interface, container_name)
         subprocess.check_call(shlex.split(cmd))
 
-def find_container_ports(bridge, container_name):
+def find_container_ports(bridge, container_name, OF_version='1'):
     interfaces=('eth0', 'eth1')
     of_ports = []
     for interface in interfaces:
@@ -26,7 +26,10 @@ def find_container_ports(bridge, container_name):
         cmd = cmd.format(container_name, interface)
         ovs_port = subprocess.check_output(cmd, shell=True)
         ovs_port = ovs_port.strip()
-        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl show {} | grep {}'
+        if(OF_version=="13"):
+            cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 show {} | grep {}'
+        else:
+            cmd='/usr/bin/sudo /usr/bin/ovs-ofctl show {} | grep {}'
         cmd=cmd.format(bridge, ovs_port) + " | awk -F '(' '{ print $1 }'"
         of_port = subprocess.check_output(cmd, shell=True)
         of_port= of_port.strip()
@@ -38,27 +41,37 @@ def pairwise(iterable):
     a = iter(iterable)
     return itertools.izip(a,a)
 
-def connect_container(bridge, client_ip, server_ip, container_name):
+def connect_container(bridge, client_ip, server_ip, container_name, OF_version='1'):
     interfaces=('eth0', 'eth1')
-    of_ports = find_container_ports(bridge, container_name)
+    of_ports = find_container_ports(bridge, container_name, OF_version)
     of_ports = [1] + of_ports + [2]
     # Connect client to server (direction = 1 (only client to server) or 3)
     for in_port,out_port in pairwise(of_ports):
-        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        if(OF_version=="13"):
+            cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        else:
+            cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
         cmd=cmd.format(bridge, in_port, client_ip, server_ip, out_port)
         subprocess.check_call(shlex.split(cmd))
     # Connect server to client (direction=2 (only server to client) or 3)
     for in_port,out_port in pairwise(reversed(of_ports)):
-        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        if(OF_version=="13"):
+            cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        else:
+            cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
         cmd=cmd.format(bridge, in_port, server_ip, client_ip, out_port)
-        subprocess.check_call(shlex.split(cmd))
+        subprocess.check_call(shlex.split(cmd))        
 
 def main():
     parser=argparse.ArgumentParser(description='Connect container to vswitch')
     parser.add_argument('--name', '-N', required=True, type=str)
+    parser.add_argument('--OFversion', '-O', required=False, type=str)    
     args=parser.parse_args()
-    attach_container(BRIDGE, args.name)
-    connect_container(BRIDGE, NODE_0, NODE_1, args.name)
+    attach_container(BRIDGE, args.name)    
+    if(args.OFversion!=None):
+        connect_container(BRIDGE, NODE_0, NODE_1, args.name, args.OFversion)        
+    else:
+        connect_container(BRIDGE, NODE_0, NODE_1, args.name)
 
 if __name__ == '__main__':
     main()
