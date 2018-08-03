@@ -18,13 +18,6 @@ function getConts() {
 	.catch(err => console.error('An error occurred', err));
 }
 
-function drawContainer_learning(words) {
-    var output="";
-    output="<div class=\"box col-sx-3 rows\"><div class=\"containerImage\" id=\"0\">\
-            <div class=\"front\"><span class=\"words\"</span>"+words+"</div></div></div>";
-    $("#viewer").html(output);
-}
-
 function drawContainers_JSON(json) {
     var output="";
     for (var i=0; i<json.length; i++) {
@@ -38,11 +31,13 @@ function drawContainers_parsed(data) {
     var output="";
     for (var i=0; i<data.length; i++) {
 	if (data[i].Type == "Proxy") {
-	    output+="<div class=\"box col-sx-3 rows\"><div class=\"containerImage\" id=\""+data[i].Id+"\"> \
+	    output+="<div class=\"box col-sx-3 rows\"><div class=\"containerImage\" id=\""+data[i].Id+"\" onclick=\"getIP(this)\"> \
                      <button onclick=\"getInfo(this.parentNode)\">Get Users & Passwords</button> \
                      <button onclick=\"newPassword(this.parentNode)\">Update Users & Passwords</button> \
                      <div class=\"front\"><span class=\"words\"</span>"+data[i].Name+"</div> \
                      </div></div>";
+
+
 	} else {
 	    output+="<div class=\"box col-sx-3 rows\"><div class=\"containerImage\" id=\""+data[i].Id+"\">\
                      <div class=\"front\"><span class=\"words\"</span>"+data[i].Name+"</div></div></div>";
@@ -65,7 +60,7 @@ function parseJSON(jsonData) {
 	    "Name": jsonData[i].Names[0].replace("/",""),
 	    "Id": jsonData[i].Id,
 	    "Image": jsonData[i].Image,
-	    "Type": isProxy
+	    "Type": isProxy,
 	});
     }
     return parsedData;
@@ -125,6 +120,31 @@ function newPassword(info) {
 	})
 	.catch(error => console.error(error));
  }
+
+function getIP(data) {
+    var url = proxyurl+dockerHost+'/containers/'+data.id+'/exec';
+    postData(url, {
+	"Cmd": ["sh", "-c", "ip addr | grep eth1 | tail -n1 | awk '{ print $2 }'"],
+	"Tty": true,
+	"AttachStdout": true
+    })
+	.then(response => response.json())
+	.then(execID=> {
+	    console.log(execID.Id);
+	    url=proxyurl+dockerHost+'/exec/'+execID.Id+'/start';
+	    postData(url, {"Tty": true})
+		.then(output => output.text())
+		.then(text_output => {
+		    ip=text_output;
+		    console.log(ip);
+		    alert("Proxy IP Address is: "+ip);
+		})
+		.catch(error=> console.error(error));
+	})
+	.catch(error => console.error(error));
+}    
+	    
+
 
 const postData = (url, data = {}) => {
     return fetch(url, {
