@@ -24,8 +24,8 @@ a {
 }
 
 .container-fluid {
-    min-width: 305px;
-    min-height: 305px;
+    min-width: 250px;
+    min-height: 300px;
 }
 
 #viewer {
@@ -37,14 +37,14 @@ a {
 .box {
     position: relative;
     border: 1vh solid transparent;
-    min-height: 75px;
+    min-height: 100px;
     migh-width: 50px;
     perspective: 1000px;
 }
 
 .containerImage {
     position: absolute;
-    width: 50%;
+    width: 75%;
     height: 100%;
     border: solid 3px #000000;
 }
@@ -52,7 +52,7 @@ a {
 .containerImage div {
     margin: 0;
     width: 100%;
-    height: 50%;
+    height: 25%;
     display: block;
     position: absolute;
 }

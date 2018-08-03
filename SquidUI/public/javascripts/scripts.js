@@ -41,8 +41,8 @@ function drawContainers_parsed(data) {
 	    output+="<div class=\"box col-sx-3 rows\"><div class=\"containerImage\" id=\""+data[i].Id+"\"> \
                      <button onclick=\"getInfo(this.parentNode)\">Get Users & Passwords</button> \
                      <button onclick=\"newPassword(this.parentNode)\">Update Users & Passwords</button> \
-                     <div class=\"front\"><span class=\"words\"</span>"+data[i].Name+" \
-                     </div></div></div>";
+                     <div class=\"front\"><span class=\"words\"</span>"+data[i].Name+"</div> \
+                     </div></div>";
 	} else {
 	    output+="<div class=\"box col-sx-3 rows\"><div class=\"containerImage\" id=\""+data[i].Id+"\">\
                      <div class=\"front\"><span class=\"words\"</span>"+data[i].Name+"</div></div></div>";
