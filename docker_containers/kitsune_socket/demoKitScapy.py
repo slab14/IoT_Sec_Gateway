@@ -12,13 +12,13 @@ import includes.KitNET as kit
 
 ##Global Variables
 maxHost = 100
-maxSess = 100000
+maxSess = 100000000
 nstat=ns.netStat(maxHost, maxSess)
-maxAE=5
-FMgrace=5000
-ADgrace=10000
-findThreshold=71000
-threshold=0.01
+maxAE=10
+FMgrace=1000
+ADgrace=3000
+findThreshold=10000
+threshold=0.5
 pkt_cnt=0
 K=kit.KitNET(len(nstat.getNetStatHeaders()), maxAE, FMgrace, ADgrace)
 
@@ -110,13 +110,17 @@ def packet_callback(packet):
     X=nstat.updateGetStats(IPtype, srcMAC, dstMAC, srcIP, srcproto, dstIP, dstproto, int(framelen), float(timestamp))
     global K
     RMSE=K.process(X)
+
+    #For debugging
+    print(RMSE)
+
     global pkt_cnt
     if pkt_cnt<findThreshold:
         pkt_cnt+=1
         global threshold
         if RMSE>threshold:
             threshold=RMSE
-    if(RMSE < 1.001*threshold):
+    if(RMSE < 3*threshold):
         return True
     else: 
         return False
