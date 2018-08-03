@@ -1,9 +1,12 @@
-const dockerHost = "http://128.104.222.15:4243";
+var dockerHost = "";
 const proxyurl = "https://cors-anywhere.herokuapp.com/";
 
 var numContainers = 0;
 
 function getConts() {
+    var host = window.location.hostname;
+    console.log(host);
+    dockerHost="http://"+host+":4243";
     fetch(proxyurl+dockerHost+'/containers/json')
 	.then(response => response.json())
 	.then(data => {
@@ -94,10 +97,14 @@ function newPassword(info) {
     console.log("Hello World");
     console.log(info.id);
     var uname = prompt("Please enter your username:", "");
+    if (uname == null || uname == "") {
+	return;
+    }
     var password = prompt("Please enter your password:", "");
-
     console.log(uname, password);
-    
+    if (password == null || password == "") {
+	return;
+    }
     var url = proxyurl+dockerHost+'/containers/'+info.id+'/exec';
     postData(url, {
 	"Cmd": ["/update_password.sh", uname, password],
