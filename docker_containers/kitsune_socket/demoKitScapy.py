@@ -9,6 +9,7 @@ import argparse
 import numpy as np
 import includes.netStat2 as ns
 import includes.KitNET as kit
+import threading
 
 ##Global Variables
 maxHost = 100
@@ -16,11 +17,16 @@ maxSess = 100000000
 nstat=ns.netStat(maxHost, maxSess)
 maxAE=10
 FMgrace=1000
-ADgrace=3000
-findThreshold=10000
-threshold=0.5
+ADgrace=5000
+findThreshold=35000
+overThreshCnt=0
+retryCnt=0
+threshold=0.1
+maxRMSE=0.1
 pkt_cnt=0
+prevRMSE=0.0
 K=kit.KitNET(len(nstat.getNetStatHeaders()), maxAE, FMgrace, ADgrace)
+
 
 
 def getEthAddr(val):
@@ -115,14 +121,43 @@ def packet_callback(packet):
     print(RMSE)
 
     global pkt_cnt
+    global overThreshCnt
+    global threshold
+    global retryCnt
+    global maxRMSE
+    global prevRMSE
+        
     if pkt_cnt<findThreshold:
         pkt_cnt+=1
-        global threshold
-        if RMSE>threshold:
-            threshold=RMSE
-    if(RMSE < 3*threshold):
+        if (RMSE>maxRMSE):
+            maxRMSE=RMSE
+            threshold=1.1*maxRMSE
+        
+    if((RMSE < 4*threshold) or (prevRMSE/RMSE > 2.5)):
+        print("Threshold = ")
+        print(threshold)
+        print("-------------")
+        retryCnt=0
+        overThreshCnt=0
+        prevRMSE=RMSE
         return True
-    else: 
+    elif (RMSE < 9*threshold):
+        overThreshCnt=0
+        retryCnt+=1
+        prevRMSE=RMSE
+        if(retryCnt < 5):
+            return True
+        else:
+            return False
+    elif (RMSE < 15*threshold):
+        overThreshCnt+=1
+        prevRMSE=RMSE
+        if(overThreshCnt<3):
+            return True
+        else:
+            return False
+    else:
+        prevRMSE=RMSE
         return False
     return True
 
@@ -153,7 +188,16 @@ class EtherSniff:
                             self.sock1.send(data)
     
 
+
+def reset_retryCnt():
+    threading.Timer(600.0, reset_retryCnt).start()
+    global retryCnt
+    global overThreshCnt    
+    retryCnt=0
+    overThreshCnt=0
+                            
 def main():
+    reset_retryCnt()
     parser=argparse.ArgumentParser()
     parser.add_argument('--in_interface', '-i', required=True, type=str)
     parser.add_argument('--out_interface', '-o', required=True, type=str)    
