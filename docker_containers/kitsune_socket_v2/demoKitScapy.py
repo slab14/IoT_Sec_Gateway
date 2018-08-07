@@ -1,5 +1,3 @@
-
-
 #!/usr/bin/env python3
 
 import socket
@@ -20,7 +18,7 @@ nstat=ns.netStat(maxHost, maxSess)
 maxAE=10
 FMgrace=1000
 ADgrace=5000
-findThreshold=40000
+findThreshold=34000
 retryCnt=0
 threshold=0.1
 maxRMSE=0.1
@@ -129,11 +127,12 @@ def packet_callback(packet):
     global prevRMSE
     global lastAllowed
     
-    if pkt_cnt<findThreshold:
-        pkt_cnt+=1
-        if (RMSE>maxRMSE):
-            maxRMSE=RMSE
-            threshold=1.1*maxRMSE
+    if(RMSE>0.0):
+        if pkt_cnt<findThreshold:
+            pkt_cnt+=1
+            if (RMSE>maxRMSE):
+                maxRMSE=RMSE
+                threshold=1.1*maxRMSE
         
     if((RMSE <= threshold) or (prevRMSE/RMSE > 5.0)):
         print("Threshold = ")
