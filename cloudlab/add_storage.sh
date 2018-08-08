@@ -2,4 +2,4 @@
 
 sudo /usr/testbed/bin/mkextrafs /mnt 
 
-sudo chown slab:psi-PG0 /mnt
+sudo chown $USER:`id -gn` /mnt
