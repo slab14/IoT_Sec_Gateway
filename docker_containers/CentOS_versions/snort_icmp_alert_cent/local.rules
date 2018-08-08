@@ -1,0 +1,1 @@
+alert icmp any any -> 10.0.0.0/8 any (msg:"ICMP Packet"; sid:10000001; rev:1;)
