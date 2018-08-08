@@ -1,20 +1,16 @@
 FROM python:3-slim
 
+COPY requirements.txt run.sh /
+
 RUN apt-get update && \
-    apt-get install -yqq iproute2 ethtool
+    apt-get install -yqq iproute2 ethtool && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install -r /requirements.txt
 
+COPY includes/ /usr/local/bin/includes
 
-COPY requirements.txt /
-
-RUN pip install -r /requirements.txt
-
-COPY run.sh /
-
-WORKDIR /usr/local/bin
-
-COPY includes/ ./includes
-
-COPY demoKitScapy.py .
+COPY demoKitScapy.py /usr/local/bin
 
 CMD ["demoKitScapy.py",  "-i", "eth1",  "-o", "eth2"]
 
