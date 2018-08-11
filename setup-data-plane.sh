@@ -146,6 +146,21 @@ setup_bridge() {
     echo "Bridge Setup Complete"
 }
 
+configure_ovs_switch() {
+    sudo ovs-vsctl set-controller $BRIDGE_NAME tcp:127.0.0.1:6633 ptcp:6634
+    sudo ovs-vsctl set bridge $BRIDGE_NAME protocol=OpenFlow13
+    sudo ovs-vsctl set-fail-mode $BRIDGE_NAME secure
+}
+
+get_controller() {
+    cd ~
+    git clone https://github.com/slab14/l2switch.git
+    cd l2switch/
+    git checkout slab-demo
+    mvn clean install -DskipTests
+    cd ~
+
+
 # Install packages
 echo "Beginning Dataplane Setup..."
 update
@@ -155,8 +170,10 @@ install_python_packages
 setup_maven
 setup_remote_ovsdb_server
 setup_remote_docker
+get_controller
     
 # Setup
 disable_gro
 setup_bridge
+configure_ovs_switch
 echo "Dataplane Ready"
