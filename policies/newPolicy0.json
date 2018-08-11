@@ -1,11 +1,18 @@
 {
     "n": 1,
-    "device0": {
-	"inMAC": "90:e2:ba:24:cf:f4",
-	"outMAC": "90:e2:ba:1f:90:50",
-	"images": ["docker-click-bridge"],
-	"imageOpts": {
-	    "docker-click-bridge": []
+    "devices": [
+	{
+	    "name" : "device0",
+	    "inMAC": "90:e2:ba:24:cf:f4",
+	    "outMAC": "90:e2:ba:1f:90:50",
+	    "images": ["docker-click-bridge"],
+	    "imageOpts": [
+		{
+		    "contImage": "docker-click-bridge",
+		    "contOpts": []
+		}
+	    ]
 	}
-    }
+	
+    ]
 }
