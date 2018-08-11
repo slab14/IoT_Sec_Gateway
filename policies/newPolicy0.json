@@ -8,8 +8,9 @@
 	    "images": ["docker-click-bridge"],
 	    "imageOpts": [
 		{
-		    "contImage": "docker-click-bridge",
-		    "contOpts": []
+		    "ip": "",
+		    "hostFS": "",
+		    "contFS": ""
 		}
 	    ]
 	}
