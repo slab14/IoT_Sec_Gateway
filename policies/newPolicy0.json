@@ -5,18 +5,18 @@
 	    "name" : "device0",
 	    "inMAC": "90:e2:ba:24:cf:f4",
 	    "outMAC": "90:e2:ba:1f:90:50",
-	    "chain": "P-P",
-	    "images": ["docker-click-bridge", "docker-click-bridge"],
+	    "chain": "P-A",
+	    "images": ["snort_direct_block_v2", "squid_proxy_v2"],
 	    "imageOpts": [
 		{
-		    "contName": "click_cont1",
+		    "contName": "snort_cont1",
 		    "ip": "",
 		    "hostFS": "",
 		    "contFS": ""
 		},
 		{
-		    "contName": "click_cont2",
-		    "ip": "1.2.3.4",
+		    "contName": "squid_cont2",
+		    "ip": "10.10.2.100",
 		    "hostFS": "",
 		    "contFS": ""
 		}		
