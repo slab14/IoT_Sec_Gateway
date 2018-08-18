@@ -1,0 +1,7 @@
+#!/bin/bash
+
+git clone git://w1.fi/srv/git/hostap.git
+cp linux_ioctl.c hostap/src/drivers/linux_ioctl.c
+
+
+
