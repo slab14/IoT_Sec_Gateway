@@ -1,0 +1,11 @@
+acl localnet src 192.0.0.0/8
+acl localnet src 10.0.0.0/8
+auth_param digest program /usr/lib/squid/digest_file_auth -c /etc/squid/passwords
+auth_param digest children 5
+auth_param digest realm proxy
+auth_param digest nonce_garbage_interval 5 minutes
+auth_param digest nonce_max_duration 30 minutes
+auth_param digest nonce_max_count 50
+acl authenticated proxy_auth REQUIRED
+http_access allow authenticated localnet
+http_port 13128

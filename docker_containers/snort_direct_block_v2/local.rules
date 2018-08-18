@@ -1,2 +1,2 @@
 alert icmp any any -> 10.0.0.0/8 any (msg:"ICMP Packet"; sid:10000001; rev:1;)
-drop tcp !10.1.2.1 any -> 10.1.1.2 any (msg:"Attempted Direct Access"; sid:10000002; rev:1;)
+drop tcp !10.10.2.100 any -> 10.10.1.1 any (msg:"Attempted Direct Access"; sid:10000002; rev:1;)

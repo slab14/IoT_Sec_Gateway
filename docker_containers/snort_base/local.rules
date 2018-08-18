@@ -1,0 +1,1 @@
+alert icmp any any -> any any (msg:"ICMP Packet"; sid:10000001; rev:1;)

@@ -8,7 +8,7 @@ RUN apt-get update && \
 
 COPY squid.conf /etc/squid/squid.conf
 
-COPY run.sh update_password.sh remove_password.sh add_password.sh /
+COPY run.sh update_password.sh remove_password.sh add_password.sh genPwdFile.sh /
 
 EXPOSE 13128/tcp
 

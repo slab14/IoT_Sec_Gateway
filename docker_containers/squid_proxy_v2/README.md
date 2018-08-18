@@ -1,0 +1,1 @@
+Squid Authenticating Proxy - using Basic authentication
