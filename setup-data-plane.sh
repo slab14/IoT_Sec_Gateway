@@ -159,7 +159,7 @@ get_controller() {
     git checkout slab-demo
     mvn clean install -DskipTests
     cd ~
-
+}
 
 # Install packages
 echo "Beginning Dataplane Setup..."

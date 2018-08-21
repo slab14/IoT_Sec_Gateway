@@ -4,7 +4,7 @@
 	{
 	    "name" : "device0",
 	    "inMAC": "90:e2:ba:24:cf:f4",
-	    "outMAC": "90:e2:ba:1f:90:50",
+	    "outMAC": "*",
 	    "chain": "P-P",
 	    "images": ["snort_base", "docker-click-bridge"],
 	    "imageOpts": [
