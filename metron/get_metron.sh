@@ -57,3 +57,14 @@ wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key a
 sudo apt-get update -qq
 sudo apt-get install -yqq virtualbox-5.2
 vboxmanage setproperty machinefolder /mnt
+
+# Install Nifi
+cd /usr/lib
+sudo wget  http://public-repo-1.hortonworks.com/HDF/centos6/1.x/updates/1.2.0.0/HDF-1.2.0.0-91.tar.gz
+sudo tar -zxvf HDF-1.2.0.0-91.tar.gz
+cd HDF-1.2.0.0/nifi
+sudo sed -i 's/nifi.web.http.port=8080/nifi.web.http.port=8090/g' conf/nifi.properties
+sudo bin/nifi.sh install nifi
+sudo service nifi start
+cd ~
+

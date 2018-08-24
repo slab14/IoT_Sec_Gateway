@@ -3,16 +3,16 @@
     "devices": [
 	{
 	    "name" : "device0",
-	    "inMAC": "90:e2:ba:24:cf:f4",
+	    "inMAC": "90:e2:ba:b3:bb:3c",
 	    "outMAC": "*",
-	    "chain": "P-P",
-	    "images": ["snort_base", "docker-click-bridge"],
+	    "chain": "P-A",
+	    "images": ["snort_base", "squid_proxy_v3"],
 	    "imageOpts": [
 		{
 		    "contName": "snort_cont1",
 		    "ip": "",
-		    "hostFS": "",
-		    "contFS": "",
+		    "hostFS": "/mnt/snort/log",
+		    "contFS": "/var/log/snort/",
 		    "archives": [
 			{
 			    "tar": "/mnt/rules.tar",
@@ -25,10 +25,10 @@
 		    ]
 		},
 		{
-		    "contName": "click_cont2",
-		    "ip": "",
-		    "hostFS": "",
-		    "contFS": "",
+		    "contName": "squid_cont2",
+		    "ip": "10.1.2.100",
+		    "hostFS": "/mnt/squid/log/",
+		    "contFS": "/var/log/squid/",
 		    "archives": [{}]
 		}		
 	    ]

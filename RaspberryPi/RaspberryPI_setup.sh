@@ -1,39 +1,56 @@
 #!/bin/bash
 
 # Steps for setting up Raspberry Pi 3's with a fresh installation of Raspian
-# for use in 18-731 course project: IoT Security Gateway
+# for use in IoT Security Gateway
 #
 # File created: 9 January 2018 by Matt McCormack
+# File updated: 23 August 2018 by Matt McCormack
 #
 # Invocation example ./RaspberryPI_setup.sh <STEP#>
 
-# Step 1a - Get latest software
+# Step 1 - Get latest software
 if [ $1 == 1 ]; then
     sudo apt-get update -y
     sudo apt-get dist-upgrade -y
     sudo reboot
 fi
 
-# Step 1b - Get latest firmware
+# Step 2 - Get latest firmware
 if [ $1 == 2 ]; then
     sudo rpi-update -y
     sudo reboot
 fi
 
-# Step 2 - Setup *.conf files for static IP address for the PI (assumes single wifi)
+# Step 3 - Setup *.conf files for static IP address for the PI (assumes single wifi)
 if [ $1 == 3 ]; then
     sudo cp /etc/network/interfaces /etc/network/interfaces-wifi
     sudo touch /etc/network/interfaces-gateway
-    sudo sh -c 'echo "auto eth0
-iface eth0 inet dhcp
-
-auto lo 
+    sudo sh -c 'echo "auto lo
 iface lo inet loopback 
 
 allow-hotplug wlan0
 
-auto wlan0
-iface wlan0 inet static
+auto eth1
+iface eth1 inet static
+      address 10.10.10.10
+      netmask 255.255.255.0
+
+allow-ovs br0
+iface br0 inet static
+      ovs_type OVSBridge
+      ovs_ports eth0 wlan0
+      address 192.168.42.1
+      netmask 255.255.255.0
+
+allow-br0 eth0
+iface eth0 inet manual
+      ovs_bridge br0
+      ovs_type OVSPort
+
+allow-br0 wlan0
+iface wlan0 inet manual
+      ovs_bridge br0
+      ovs_type OVSPort
       address 192.168.42.1
       netmask 255.255.255.0" > /etc/network/interfaces-gateway'
 
@@ -79,13 +96,16 @@ if [ $1 == 3 ]; then
 	 apt-transport-https ca-certificates \
 	 docker openvswitch-common openvswitch-switch openvswitch-dbg \
 	 isc-dhcp-server wireshark tcpdump wavemon netcat hping3 \
-	 hostapd iptables-persistent
+	 iptables-persistent
 
     sudo dpkg-reconfigure wireshark-common
     sudo adduser $USER wireshark
 
+    #TODO: Update getting hostapd to use modified linux_ioctl.c file
+    
     curl -sSL https://get.docker.com | sh
 
+    #TODO: Update to get my modified version of OVS
     cd /usr/bin
     sudo wget https://raw.githubusercontent.com/openvswitch/ovs/master/utilities/ovs-docker
     sudo chmod a+rwx ovs-docker
@@ -105,10 +125,10 @@ if [ $1 == 4 ]; then
     sudo ip link set wlan0 down
     sudo ip link set wlan0 up
     sudo touch /etc/default/isc-dhcp-server-adhoc
-    sudo sh -c 'echo "INTERFACESv4=\"wlan0\"
-INTERFACESv6=\"\"">/etc/default/isc-dhcp-server-adhoc'
+    sudo sh -c 'echo "INTERFACESv4=\"br0\"
+INTERFACESv6=\"\"">/etc/default/isc-dhcp-server-gateway'
     sudo cp /etc/default/isc-dhcp-server /etc/default/isc-dhcp-server-orig
-    sudo cp /etc/default/isc-dhcp-server-adhoc /etc/default/isc-dhcp-server
+    sudo cp /etc/default/isc-dhcp-server-gateway /etc/default/isc-dhcp-server
     sudo service isc-dhcp-server restart
     sudo cp /etc/hostapd/hostapd.conf /etc/hostapd/hostapd.conf-orig
     sudo cp /etc/hostapd/hostapd.conf-gateway /etc/hostapd/hostapd.conf
