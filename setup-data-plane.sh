@@ -82,11 +82,11 @@ install_ovs_fromGit() {
     sudo apt-get install -yqq jq curl uuid-runtime
 
     # Start OVS Deamons
-    sudo /usr/share/openvswitch/scripts/ovs-ctl start
+    sudo /usr/share/openvswitch/scripts/ovs-ctl start --system-id
 }
 
 setup_maven() {
-    export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+    export JAVA_HOME=`type -p javac|xargs readlink -f|xargs dirname|xargs dirname`
     export PATH=$PATH:$JAVA_HOME/bin/
     mkdir -p ~/.m2
     cp /usr/share/maven/conf/settings.xml ~/.m2/settings.xml
@@ -157,6 +157,7 @@ get_controller() {
     git clone https://github.com/slab14/l2switch.git
     cd l2switch/
     git checkout slab-demo
+    export JAVA_HOME=`type -p javac|xargs readlink -f|xargs dirname|xargs dirname`
     mvn clean install -DskipTests
     cd ~
 }
