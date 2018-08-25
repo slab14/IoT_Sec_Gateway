@@ -12,7 +12,8 @@ DOCKER_PORT=4243
 update() {
     echo "Updating apt-get..."
     sudo apt-get update -qq
-    sudo apt-get install -yqq default-jre default-jdk maven jq
+    #    sudo apt-get install -yqq default-jre default-jdk maven jq
+    sudo apt-get install -yqq openjdk-8-jre openjdk-8-jdk maven jq
     echo "Update complete"
 }
 
