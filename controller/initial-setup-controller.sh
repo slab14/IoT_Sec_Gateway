@@ -168,30 +168,11 @@ write_wifi_configs(){
 iface lo inet loopback 
 
 allow-hotplug wlan0
-
-auto eth1
-iface eth1 inet static
-      address 10.10.10.10
-      netmask 255.255.255.0
-
-allow-ovs br0
-iface br0 inet static
-      ovs_type OVSBridge
-      ovs_ports eth0 wlan0
-      address 192.168.42.1
-      netmask 255.255.255.0
-
-allow-br0 eth0
-iface eth0 inet manual
-      ovs_bridge br0
-      ovs_type OVSPort
-
-allow-br0 wlan0
+auto wlan0
 iface wlan0 inet manual
-      ovs_bridge br0
-      ovs_type OVSPort
-      address 192.168.42.1
-      netmask 255.255.255.0" > /etc/network/interfaces-gateway'
+
+auto eno1
+iface eno1 inet manual" > /etc/network/interfaces-gateway'
 
     sudo touch /etc/dhcp/dhcpd.conf-gateway
     sudo sh -c 'echo "default-lease-time 600;
@@ -222,7 +203,8 @@ wpa=2
 wpa_passphrase=3w3Sha11NotPa$$
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
-rsn_pairwise=CCMP" > /etc/hostapd/hostapd.conf-gateway'
+rsn_pairwise=CCMP
+bridge=br0" > /etc/hostapd/hostapd.conf-gateway'
 }
 
 install_std_pkgs() {
