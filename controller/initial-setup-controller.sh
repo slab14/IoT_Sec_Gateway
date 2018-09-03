@@ -132,16 +132,19 @@ setup_bridge() {
     sudo ovs-vsctl --may-exist add-br $BRIDGE_NAME
     sudo ip link set $BRIDGE_NAME up
 
-    local device_side_if=$(find_interface_for_ip $DEVICE_SIDE_IP)
+
     local router_side_if=$(find_interface_for_ip $ROUTER_SIDE_IP)
     
-    sudo ovs-vsctl --may-exist add-port $BRIDGE_NAME $device_side_if \
-	 -- set Interface $device_side_if ofport_request=1
-    sudo ovs-ofctl mod-port $BRIDGE_NAME $device_side_if up
-
     sudo ovs-vsctl --may-exist add-port $BRIDGE_NAME $router_side_if \
 	 -- set Interface $router_side_if ofport_request=2
     sudo ovs-ofctl mod-port $BRIDGE_NAME $router_side_if up
+
+    # Add veth between wlan-br and br0
+    sudo ip link add wlan0-wlan-br type veth peer name wlan0-br0
+    sudo ovs-vsctl add-port wlan-br wlan0-wlan-br
+    sudo ip link set wlan0-wlan-br up
+    sudo ovs-vsctl add-port $BRIDGE_NAME wlan0-br0 -- set Interface wlan0-br0 ofport_request=1
+    sudo ip link set wlan0-br0 up
     echo "Bridge Setup Complete"
 }
 
@@ -204,7 +207,7 @@ wpa_passphrase=3w3Sha11NotPa$$
 wpa_key_mgmt=WPA-PSK
 wpa_pairwise=TKIP
 rsn_pairwise=CCMP
-bridge=br0" > /etc/hostapd/hostapd.conf-gateway'
+bridge=wlan-br" > /etc/hostapd/hostapd.conf-gateway'
 }
 
 install_std_pkgs() {
@@ -247,14 +250,25 @@ install_patched_hostapd(){
     make && sudo make install
 }
 
+setup_wlan_bridge() {
+    sudo ovs-vsctl --may-exist add-br wlan-br
+    sudo ip link set wlan-br up
+    local device_side_if=$(find_interface_for_ip $DEVICE_SIDE_IP)    
+    sudo ovs-vsctl --may-exist add-port wlan-br wlan0
+    sudo ovs-vsctl mod-port wlan-br wlan0 up
+    ## Not sure if this occurs automatically
+    sudo ovs-ofctl -OOpenflow13 add-flow wlan-br "priority=0, actions=NORMAL"
+}
+
 setup_wifi_AP() {
     sudo cp /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf-orig
     sudo cp /etc/network/interfaces-gateway /etc/network/interfaces
     sudo cp /etc/dhcp/dhcpd.conf-gateway /etc/dhcp/dhcpd.conf
     sudo ip link set wlan0 down
+    sudo ifconfig wlan-br 192.168.42.0/24 up
     sudo ip link set wlan0 up
     sudo touch /etc/default/isc-dhcp-server-gateway
-    sudo sh -c 'echo "INTERFACESv4=\"br0\"
+    sudo sh -c 'echo "INTERFACESv4=\"wlan-br\"
 INTERFACESv6=\"\"">/etc/default/isc-dhcp-server-gateway'
     sudo cp /etc/default/isc-dhcp-server /etc/default/isc-dhcp-server-orig
     sudo cp /etc/default/isc-dhcp-server-adhoc /etc/default/isc-dhcp-server
@@ -266,6 +280,7 @@ INTERFACESv6=\"\"">/etc/default/isc-dhcp-server-gateway'
     sudo update-rc.d hostapd enable
     sudo update-rc.d isc-dhcp-server enable
 }
+
 
 
 # Install packages
@@ -284,6 +299,7 @@ build_docker_containers
 # Configure WiFi AP
 install_patched_hostapd
 write_wifi_configs
+setup_wlan_bridge
 setup_wifi_AP
 
 # Setup
