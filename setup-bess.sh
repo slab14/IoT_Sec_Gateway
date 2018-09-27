@@ -27,3 +27,10 @@ sudo bin/dpdk-devbind.py -b igb_uio 5e:00.0 5e:00.1
 ## Python dependencies
 python -m pip install grpcio
 python -m pip install grpcio-tools
+
+
+## Instructions on starting up BESS
+# cd bess/bessctl
+# ./bessctl
+# daemon start
+# run McBridge
