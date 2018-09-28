@@ -143,6 +143,14 @@ setup_ip_routes() {
     local net=$(network $ip 16)
     sudo ip route add $net/16 dev $interface \
 	|| sudo ip route change $net/16 dev $interface
+
+    # Delete old routes using via
+    IFS=$'\n'
+    local oldrtes=($(ip route | grep via))
+    for i in ${oldrtes[@]}; do
+	sudo ip route del $i
+    done
+    
 }
 
 # Install packages
