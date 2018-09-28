@@ -148,7 +148,10 @@ setup_ip_routes() {
     IFS=$'\n'
     local oldrtes=($(ip route | grep via))
     for i in ${oldrtes[@]}; do
-	sudo ip route del $i
+	IFS=$' '
+	if [[ $i != *"default"* ]]; then
+	    sudo ip route del $i
+	fi
     done
     
 }
