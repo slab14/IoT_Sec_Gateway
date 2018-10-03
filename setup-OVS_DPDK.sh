@@ -20,9 +20,22 @@ echo 1024 | sudo tee /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
 sudo mkdir /mnt/huge
 sudo mount -t hugetlbfs nodev /mnt/huge
 
-sudo ifconfig enp94s0f0 down
-sudo ifconfig enp94s0f1 down
-sudo ./usertools/dpdk-devbind.py --bind=igb_uio enp94s0f0 enp94s0f1
+IFACES=$(ifconfig | grep enp | awk -F ' ' '{ print $1 }')
+for IFACE in $IFACES; do
+        IP=$(ifconfig $IFACE | grep "inet addr" | awk -F ' ' '{ print $2 }' | awk -F ':' '{ print $2 }')
+	testVal=$( echo $IP | awk -F '.' '{ print $1 }' )
+	if [[ "$testVal" -eq 128 ]]; then
+	    echo "skip"
+	else
+	    sudo ifconfig $IFACE down
+	    DPDK_ID=$( bin/dpdk-devbind.py --status | grep $IFACE | awk -F ' ' '{ print $1 }' | awk -F ':' '{ print $2":"$3 }')
+	    sudo bin/dpdk-devbind.py -b igb_uio $DPDK_ID
+	fi
+done
+
+#sudo ifconfig enp94s0f0 down
+#sudo ifconfig enp94s0f1 down
+#sudo ./usertools/dpdk-devbind.py --bind=igb_uio enp94s0f0 enp94s0f1
 
 sudo apt-get install -yqq make gcc libssl1.0.2 libssl1.0-dev \
 	 libcap-ng0 libcap-ng-dev python python-pip autoconf \
