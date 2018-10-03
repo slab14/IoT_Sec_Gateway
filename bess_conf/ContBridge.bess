@@ -1,0 +1,16 @@
+inport::PMDPort(port_id=0, num_inc_q=1, num_out_q=1)
+outport::PMDPort(port_id=1, num_inc_q=1, num_out_q=1)
+
+inInport::QueueInc(port=inport, qid=0)
+outInport::QueueOut(port=inport, qid=0)
+
+inOutport::QueueInc(port=outport, qid=0)
+outOutport::QueueOut(port=outport, qid=0)
+
+containerIn_if = VPort(ifname='eth0', docker='test', ip_addrs=['10.0.0.0/8'])
+containerOut_if = VPort(ifname='eth1', docker='test', ip_addrs=['192.0.0.0/8'])
+
+inInport->PortOut(port=containerIn_if)
+PortInc(port=containerOut_if)->outOutport
+inOutport->PortOut(port=containerOut_if)
+PortInc(port=containerIn_if)->outInport
