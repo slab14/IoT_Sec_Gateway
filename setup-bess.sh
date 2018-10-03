@@ -79,6 +79,7 @@ python -m pip install grpcio
 python -m pip install grpcio-tools
 
 cp ~/IoT_Sec_Gateway/bess_conf/McBridge ~/bess/bessctl/conf/
+cp ~/IoT_Sec_Gateway/bess_conf/ContBridge ~/bess/bessctl/conf/
 
 ## Instructions on starting up BESS
 # cd bess/bessctl
