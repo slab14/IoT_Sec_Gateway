@@ -20,7 +20,7 @@ echo 1024 | sudo tee /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
 sudo mkdir /mnt/huge
 sudo mount -t hugetlbfs nodev /mnt/huge
 
-IFACES=$(ifconfig -a | grep enp | awk -F ' ' '{ print $1 }')
+IFACES=$(ifconfig -a | grep enp | awk -F ': ' '{ print $1 }')
 for IFACE in $IFACES; do
         IP=$(ifconfig $IFACE | grep "inet addr" | awk -F ' ' '{ print $2 }' | awk -F ':' '{ print $2 }')
 	testVal=$( echo $IP | awk -F '.' '{ print $1 }' )
