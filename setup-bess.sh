@@ -1,12 +1,28 @@
 #!/bin/bash
 
-sudo apt-get update
+install_docker() {
+    sudo apt-get update -qq
+    sudo apt-get install -yqq docker-compose
+    sudo apt-get install -yqq apt-transport-https ca-certificates \
+	 curl software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+	| sudo apt-key add -
+    sudo apt-key fingerprint 0EBFCD88
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    sudo apt-get update -qq
+    sudo apt-get install -yqq docker-ce
+    sudo systemctl start docker
+    sudo systemctl enable docker
+}
+
+sudo apt-get update -qq
+apt-get install -yqq software-properties-common
 ## Ubuntu 18
 #sudo apt-get install -yqq make apt-transport-https ca-certificates g++ make pkg-config libunwind8-dev liblzma-dev zlib1g-dev libpcap-dev libssl-dev libnuma-dev git python python-pip python-scapy libgflags-dev libgoogle-glog-dev libgraph-easy-perl libgtest-dev libgrpc++-dev libprotobuf-dev libc-ares-dev libbenchmark-dev libgtest-dev protobuf-compiler-grpc dpdk-igb-uio-dkms
 
 ## Ubuntu 16
-sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-sudo apt-get update
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+sudo apt-get update -qq
 sudo apt-get install -yqq apt-transport-https ca-certificates g++ make \
      libunwind8-dev liblzma-dev zlib1g-dev libpcap-dev libnuma-dev libgflags-dev \
      libgoogle-glog-dev libgtest-dev python pkg-config autoconf libtool cmake clang\
@@ -60,7 +76,7 @@ sudo insmod deps/dpdk-17.11/build/kmod/igb_uio.ko
 
 ## Place interfaces to be used by DPDK down
 ## Then bind interface to DPDK
-IFACES=$(ifconfig | grep enp | awk -F ' ' '{ print $1 }')
+IFACES=$(ifconfig -a | grep enp | awk -F ' ' '{ print $1 }')
 
 for IFACE in $IFACES; do
     IP=$(ifconfig $IFACE | grep "inet addr" | awk -F ' ' '{ print $2 }' | awk -F ':' '{ print $2 }')
@@ -70,6 +86,7 @@ for IFACE in $IFACES; do
     else
 	sudo ifconfig $IFACE down
 	DPDK_ID=$( bin/dpdk-devbind.py --status | grep $IFACE | awk -F ' ' '{ print $1 }' | awk -F ':' '{ print $2":"$3 }')
+	echo $DPDK_ID
 	sudo bin/dpdk-devbind.py -b igb_uio $DPDK_ID
     fi
 done
@@ -78,8 +95,11 @@ done
 python -m pip install grpcio
 python -m pip install grpcio-tools
 
-cp ~/IoT_Sec_Gateway/bess_conf/McBridge ~/bess/bessctl/conf/
-cp ~/IoT_Sec_Gateway/bess_conf/ContBridge ~/bess/bessctl/conf/
+cp /users/slab/IoT_Sec_Gateway/bess_conf/McBridge.bess /users/slab/bess/bessctl/conf/
+cp /users/slab/IoT_Sec_Gateway/bess_conf/ContBridge.bess /users/slab/bess/bessctl/conf/
+
+
+#install_docker
 
 ## Instructions on starting up BESS
 # cd bess/bessctl
