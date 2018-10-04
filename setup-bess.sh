@@ -75,6 +75,7 @@ sudo mkdir /mnt/huge
 sudo mount -t hugetlbfs nodev /mnt/huge
 
 cd bess
+git checkout v0.4.0
 ./build.py
 
 if [[ "$OSver" = "4.15.0" ]]; then
@@ -115,6 +116,11 @@ CHECK_DOCKER=$(which docker)
 if [[ -z CHECK_DOCKER ]]; then
     install_docker
 fi
+if [[ "$OSver" = "4.15.0" ]]; then
+    sudo systemctl disable apparmor.service --now
+    sudo service apparmor teardown
+fi
+
 
 ## Instructions on starting up BESS
 # cd bess/bessctl

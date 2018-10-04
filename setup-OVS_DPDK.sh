@@ -1,5 +1,22 @@
 #!/bin/bash
 
+OSver=$(uname -r | awk -F '-' '{ print $1 }')
+
+install_docker() {
+    sudo apt-get update -qq
+    sudo apt-get install -yqq docker-compose
+    sudo apt-get install -yqq apt-transport-https ca-certificates \
+	 curl software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+	| sudo apt-key add -
+    sudo apt-key fingerprint 0EBFCD88
+        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+	sudo apt-get update -qq
+	sudo apt-get install -yqq docker-ce
+	sudo systemctl start docker
+	sudo systemctl enable docker
+}
+
 sudo apt-get update
 sudo apt-get install -yqq build-essential linux-headers-`uname -r` libnuma-dev
 
@@ -33,10 +50,6 @@ for IFACE in $IFACES; do
 	fi
 done
 
-#sudo ifconfig enp94s0f0 down
-#sudo ifconfig enp94s0f1 down
-#sudo ./usertools/dpdk-devbind.py --bind=igb_uio enp94s0f0 enp94s0f1
-
 sudo apt-get install -yqq make gcc libssl1.0.2 libssl1.0-dev \
 	 libcap-ng0 libcap-ng-dev python python-pip autoconf \
 	 libtool wget netcat curl clang sparse flake8 \
@@ -63,3 +76,13 @@ sudo ovs-vsctl --no-wait set Open_vSwitch . other_config:dpdk-init=true
 sudo ovs-vsctl add-br br0 -- set bridge br0 datapath_type=netdev
 sudo ovs-vsctl add-port br0 port1 -- set Interface port1 type=dpdk options:dpdk-devargs=0000:5e:00.0
 sudo ovs-vsctl add-port br0 port2 -- set Interface port2 type=dpdk options:dpdk-devargs=0000:5e:00.1
+
+CHECK_DOCKER=$(which docker)
+if [[ -z CHECK_DOCKER ]]; then
+    install_docker
+fi
+if [[ "$OSver" = "4.15.0" ]]; then
+    sudo systemctl disable apparmor.service --now
+    sudo service apparmor teardown
+fi
+
