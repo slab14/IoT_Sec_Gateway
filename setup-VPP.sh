@@ -20,10 +20,9 @@ install_docker() {
 sudo apt-get update
 
 ##Set Ifaces down
-IFACES=$(ifconfig -a | grep enp | awk -F ': ' '{ print $1 }')
+IFACES=$(ifconfig -a | grep enp | awk -F ' ' '{ print $1 }')
 for IFACE in $IFACES; do
-        IP=$(ifconfig $IFACE | grep "inet addr" | awk -F ' ' '{ print $2 }' | awk -F ':' '{ pr\
-int $2 }')
+        IP=$(ifconfig $IFACE | grep "inet addr" | awk -F ' ' '{ print $2 }' | awk -F ':' '{ print $2 }')
 	testVal=$( echo $IP | awk -F '.' '{ print $1 }' )
 	if [[ "$testVal" -eq 128 ]]; then
 	    echo "skip"
