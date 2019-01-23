@@ -17,13 +17,13 @@ def docker_delport(name):
     subprocess.call(shlex.split(cmd))
 
 def cleanup_switch():
-    cmd='/usr/bin/sudo /usr/bin/ovs-ofctl del-flows {}'
+    cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 del-flows {}'
     cmd=cmd.format(BRIDGE)
     subprocess.check_call(shlex.split(cmd))
-    cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=0 in_port=1 actions=output:2"'
+    cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow -OOpenflow13 {} "priority=0 in_port=1 actions=output:2"'
     cmd=cmd.format(BRIDGE)
     subprocess.check_call(shlex.split(cmd))
-    cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=0 in_port=2 actions=output:1"'
+    cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow -OOpenflow13 {} "priority=0 in_port=2 actions=output:1"'
     cmd=cmd.format(BRIDGE)
     subprocess.check_call(shlex.split(cmd))    
 

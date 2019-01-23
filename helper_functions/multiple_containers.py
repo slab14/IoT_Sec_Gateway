@@ -4,8 +4,8 @@ import subprocess
 import itertools
 import ipaddress
 
-NODE_0='10.10.1.3'
-NODE_1='10.10.2.2'
+NODE_0='192.1.1.2'
+NODE_1='10.1.1.2'
 BRIDGE='br0'
 
 # Syntax: python connect_container.py -B br0 -N click0 -D 3
@@ -27,7 +27,7 @@ def find_container_ports(bridge, container_name):
         cmd = cmd.format(container_name, interface)
         ovs_port = subprocess.check_output(cmd, shell=True)
         ovs_port = ovs_port.strip()
-        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl show {} | grep {}'
+        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 show {} | grep {}'
         cmd=cmd.format(bridge, ovs_port) + " | awk -F '(' '{ print $1 }'"
         of_port = subprocess.check_output(cmd, shell=True)
         of_port= of_port.strip()
@@ -45,12 +45,12 @@ def connect_container(bridge, client_ip, server_ip, container_name):
     of_ports = [1] + of_ports + [2]
     # Connect client to server (direction = 1 (only client to server) or 3)
     for in_port,out_port in pairwise(of_ports):
-        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
         cmd=cmd.format(bridge, in_port, client_ip, server_ip, out_port)
         subprocess.check_call(shlex.split(cmd))
     # Connect server to client (direction=2 (only server to client) or 3)
     for in_port,out_port in pairwise(reversed(of_ports)):
-        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
         cmd=cmd.format(bridge, in_port, server_ip, client_ip, out_port)
         subprocess.check_call(shlex.split(cmd))
 
