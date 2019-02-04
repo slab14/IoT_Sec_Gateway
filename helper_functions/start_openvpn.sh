@@ -10,7 +10,7 @@ BRIDGE=$6
 cd ~
 mkdir -p vpn
 # Generate the openvpn config file
-sudo docker run -v $PWD/vpn:/etc/openvpn --rm $IMGNAME ovpn_genconfig -u udp://$CONTIP -N -d -p "route 192.1.0.0 255.255.0.0"
+sudo docker run -v $PWD/vpn:/etc/openvpn --rm $IMGNAME ovpn_genconfig -N -d -t -u udp://$CONTIP -p "route 192.1.0.0 255.255.0.0"
 
 # Generate cryto stuff
 sudo docker run -v $PWD/vpn:/etc/openvpn --rm -it $IMGNAME ovpn_initpki
