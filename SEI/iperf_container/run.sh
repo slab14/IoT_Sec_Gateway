@@ -6,4 +6,4 @@ while true; do
     sleep 1
 done
 
-exec /usr/bin/iperf3 -s -p 5101 & /usr/bin/iperf3 -s -p -5102 
+exec /usr/bin/iperf3 -s -p 5101 & /usr/bin/iperf3 -s -p 5102 

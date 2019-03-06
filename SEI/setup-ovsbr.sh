@@ -3,9 +3,10 @@
 #borrowed form Jeff Helt
 
 BRIDGE_NAME=br0
-CLIENT_SIDE_IP=10.1.1.1
+CLIENT_SIDE_IP=10.1.1.2
 SERVER_SIDE_IP=10.1.1.10
 CONT_NAME='demo_container'
+CONT_IMAGE='iperf3_container'
 
 update() {
     echo "Updating apt-get..."
@@ -35,7 +36,10 @@ install_docker() {
 
 build_docker_containers(){
     echo "Building Iperf3 Container"
-    sudo docker build -t="$CONT_NAME" iperf_container/.
+    sudo docker pull ubuntu:xenial
+    #sudo docker build -t="$CONT_IMAGE" iperf_container/.
+    # For SEI proxy
+    sudo docker build --build-arg http_proxy=http://proxy.sei.cmu.edu:8080 --build-arg https_proxy=http://proxy.sei.cmu.edu:8080 --build-arg HTTP_PROXY=http://proxy.sei.cmu.edu:8080 --build-arg HTTPS_PROXY=http://proxy.sei.cmu.edu:8080 -t="$CONT_IMAGE" iperf_container/.
     echo "Docker containers built"
 }
 
@@ -75,7 +79,7 @@ disable_gro() {
 
 start_demo_container() {
     echo "Starting a container to receive iperf3 traffic"
-    sudo docker -itd --rm --network=none demo_container iperf3_cont
+    sudo docker run -itd --rm --network=none --name=$CONT_NAME $CONT_IMAGE
     sudo ovs-docker add-port $BRIDGE_NAME eth0 $CONT_NAME --ipaddress=$SERVER_SIDE_IP/24
 }
 
@@ -93,16 +97,10 @@ setup_bridge() {
 }
 
 add_routing() {
-    OVS_PORT=sudo ovs-vsctl --data=bare --no-heading --columns-name find \
+    OVS_PORT=`sudo ovs-vsctl --data=bare --no-heading --columns=name find \
 	 interface external_ids:container_id=$CONT_NAME \
-	 external_ids:container_iface=eth0
-
-    echo $OVS_PORT
-
-    OF_PORT=sudo ovs-ofctl show $BRIDGE_NAME | grep $OVS_PORT
-
-    echo $OF_PORT
- 
+	 external_ids:container_iface=eth0`
+    OF_PORT=`sudo ovs-ofctl show $BRIDGE_NAME | grep $OVS_PORT | awk -F '(' '{ print $1 }' | awk -F ' ' '{ print $1 }'`
     sudo ovs-ofctl add-flow $BRIDGE_NAME "priority=100 in_port=1 actions=output:$OF_PORT"
     sudo ovs-ofctl add-flow $BRIDGE_NAME "priority=100 in_port=$OF_PORT actions=output:1"
 

@@ -1,4 +1,4 @@
-FROM ubuntu:xenail
+FROM ubuntu:xenial
 
 RUN apt-get update && \
     apt-get install -yqq iperf3
