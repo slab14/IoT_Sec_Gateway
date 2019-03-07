@@ -37,9 +37,9 @@ install_docker() {
 build_docker_containers(){
     echo "Building Iperf3 Container"
     sudo docker pull ubuntu:xenial
-    #sudo docker build -t="$CONT_IMAGE" iperf_container/.
+    sudo docker build -t="$CONT_IMAGE" iperf_container/.
     # For SEI proxy
-    sudo docker build --build-arg http_proxy=http://proxy.sei.cmu.edu:8080 --build-arg https_proxy=http://proxy.sei.cmu.edu:8080 --build-arg HTTP_PROXY=http://proxy.sei.cmu.edu:8080 --build-arg HTTPS_PROXY=http://proxy.sei.cmu.edu:8080 -t="$CONT_IMAGE" iperf_container/.
+    #sudo docker build --build-arg http_proxy=http://proxy.sei.cmu.edu:8080 --build-arg https_proxy=http://proxy.sei.cmu.edu:8080 --build-arg HTTP_PROXY=http://proxy.sei.cmu.edu:8080 --build-arg HTTPS_PROXY=http://proxy.sei.cmu.edu:8080 -t="$CONT_IMAGE" iperf_container/.
     echo "Docker containers built"
 }
 
