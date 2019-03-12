@@ -11,6 +11,6 @@ cd /usr/local/src/i40e
 
 sudo tar xzf XL710_NVMUpdatePackage_v6_01_Linux.tar.gz
 
-cd XL170/Linux_x64
+cd XL710/Linux_x64
 
 sudo ./nvmupdate64e
