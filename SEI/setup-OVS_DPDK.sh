@@ -141,7 +141,7 @@ build_docker_containers(){
 
 start_demo_container() {
     echo "Starting a container to receive iperf3 traffic"
-    sudo docker run -itd --rm --network=none --name=$CONT_NAME $CONT_IMAGE
+    sudo docker run -itd --rm --network=none --privileged --name=$CONT_NAME -p 5101:5101 -p 5102:5102 $CONT_IMAGE
     sudo ovs-docker add-port $BRIDGE_NAME eth0 $CONT_NAME --ipaddress=$SERVER_SIDE_IP/24
     echo "iperf3 container up"
 }
