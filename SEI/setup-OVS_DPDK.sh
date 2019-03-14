@@ -9,7 +9,7 @@ OSver=$(uname -r | awk -F '-' '{ print $1 }')
 InitDir=$(pwd)
 
 install_docker() {
-    echo "Installing Docker"
+    echo "[*] Startng to installing Docker"
     sudo apt-get update -qq
     sudo apt-get install -yqq docker-compose
     sudo apt-get install -yqq apt-transport-https ca-certificates \
@@ -22,33 +22,40 @@ install_docker() {
 	sudo apt-get install -yqq docker-ce
 	sudo systemctl start docker
 	sudo systemctl enable docker
-    echo "Docker installed"
+    echo "[*] Docker installed"
 }
 
 update() {
-    "Performing a packet update"
+    echo "[*] Performing a package update"
     sudo apt-get update
-    sudo apt-get install -yqq build-essential linux-headers-`uname -r` libnuma-dev libpcap-dev
-    echo "Packages updated"
+    sudo apt-get install -yqq build-essential linux-headers-`uname -r` libnuma-dev libpcap-dev g++-multilib
+    echo "[*] Packages updated"
 }
 
 get_DPDK() {
-    echo "Installing DPDK"
+    echo "[*] Getting ready to install DPDK"
     cd ~
     git clone http://dpdk.org/git/dpdk
     cd dpdk
     git checkout v18.11
     export DPDK_DIR=`pwd`/build
-    make config T=x86_64-native-linuxapp-gcc
+    # for 32-bit OS T=i686-native-linuxapp-gcc, for 64-bit OS T=x86_64-native-linuxapp-gcc
+    PROC=$(uname -i)
+    if [[ $PROC == 'i686' ]]; then
+	make config T=i686-native-linuxapp-gcc
+    fi
+    if [[ $PROC == 'x86_64' ]]; then
+	make config T=x86_64-native-linuxapp-gcc
+    fi
     sed -ri 's,(PMD_PCAP=).*,\1y,' build/.config
     make
 
-    echo "DPDK installed"
+    echo "[*] DPDK installed"
 }
 
 
 setup_DPDK_interfaces() {
-    echo "Setting up physical interfaces to use DPDK"
+    echo "[*] Setting up physical interfaces to use DPDK"
     cd ~/dpdk
     
     sudo modprobe uio
@@ -69,7 +76,7 @@ setup_DPDK_interfaces() {
     sudo ./usertools/dpdk-devbind.py -b igb_uio $DPDK_ID
     #sudo ./usertools/dpdk-devbind.py -b uio_pci_generic $DPDK_ID
     #sudo ./usertools/dpdk-devbind.py -b vfio-pci $DPDK_ID
-    echo "DPDK physical interface setup. It will no longer show in ifconfig"
+    echo "[*] DPDK physical interface setup. It will no longer show in ifconfig"
 }
 
 
@@ -82,7 +89,7 @@ startup_ovsdb() {
 
 
 install_ovs() {
-    echo "Installing OVS, with DPDK option selected"
+    echo "[*] Installing OVS, with DPDK option selected"
     sudo apt-get install -yqq make gcc libssl1.0.0 libssl-dev \
 	 libcap-ng0 libcap-ng-dev python python-pip autoconf \
 	 libtool wget netcat curl clang sparse flake8 \
@@ -92,22 +99,24 @@ install_ovs() {
     pip -qq install --user six pyftpdlib tftpy
 
     cd ~
-    git clone https://github.com/slab14/ovs.git
+    # forked version of OVS 2.9.
+    # git clone https://github.com/slab14/ovs.git
+    git clone https://github.com/openvswitch/ovs.git
     cd ovs
-    git checkout slab
+    git checkout v2.11.0
+    export OVS_DIR=~/ovs*
     ./boot.sh
     ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc --with-dpdk=$DPDK_DIR
     make
     sudo make install
-    cd ~
 
     startup_ovsdb
-    echo "OVS-DPDK installed"
+    echo "[*] OVS-DPDK installed"
 }
 
 
 setup_bridge() {
-    echo "Setting up OVS bridge"
+    echo "[*] Setting up OVS bridge"
     ## Ensure that ovsdb is running
     if ! sudo ovs-vsctl show; then
 	startup_ovsdb
@@ -119,42 +128,44 @@ setup_bridge() {
     sudo ovs-vsctl add-port $BRIDGE_NAME port1 -- set Interface port1 type=dpdk options:dpdk-devargs=$DPDK_ARGS ofport_request=1
     # For 2nd physical interface
     #sudo ovs-vsctl add-port $BRIDGE_NAME port2 -- set Interface port2 type=dpdk options:dpdk-devargs=0000:5e:00.1 ofport_request=2
-    echo "OVS bridge setup complete"
+    echo "[*] OVS bridge setup complete"
 }
 
 docker_check() {
+    echo "[*] checking if docker is installed"
     CHECK_DOCKER=$(command -v docker)
-    if [[ -z CHECK_DOCKER ]]; then
+    if [[ -z $CHECK_DOCKER ]]; then
+	echo "[*]Docker not found"
 	install_docker
     fi
 }
 
 build_docker_containers(){
-    echo "Building Iperf3 Container"
+    echo "[*] Building Iperf3 Container"
     sudo docker pull ubuntu:xenial
     cd $InitDir
     #sudo docker build -t="$CONT_IMAGE" iperf_container/.
     # For SEI proxy
     sudo docker build --build-arg http_proxy=http://proxy.sei.cmu.edu:8080 --build-arg https_proxy=http://proxy.sei.cmu.edu:8080 --build-arg HTTP_PROXY=http://proxy.sei.cmu.edu:8080 --build-arg HTTPS_PROXY=http://proxy.sei.cmu.edu:8080 -t="$CONT_IMAGE" iperf_container/.
-    echo "Docker containers built"
+    echo "[*] Docker container built"
 }
 
 start_demo_container() {
-    echo "Starting a container to receive iperf3 traffic"
+    echo "[*] Starting a container to receive iperf3 traffic"
     sudo docker run -itd --rm --network=none --privileged --name=$CONT_NAME -p 5101:5101 -p 5102:5102 $CONT_IMAGE
     sudo ovs-docker add-port $BRIDGE_NAME eth0 $CONT_NAME --ipaddress=$SERVER_SIDE_IP/24
-    echo "iperf3 container up"
+    echo "[*] iperf3 container up"
 }
 
 add_routing() {
-    echo "Adding OVS routing rules"
+    echo "[*] Adding OVS routing rules"
     OVS_PORT=`sudo ovs-vsctl --data=bare --no-heading --columns=name find \
 	 interface external_ids:container_id=$CONT_NAME \
 	 external_ids:container_iface=eth0`
     OF_PORT=`sudo ovs-ofctl show $BRIDGE_NAME | grep $OVS_PORT | awk -F '(' '{ print $1 }' | awk -F ' ' '{ print $1 }'`
     sudo ovs-ofctl add-flow $BRIDGE_NAME "priority=100 in_port=1 actions=output:$OF_PORT"
     sudo ovs-ofctl add-flow $BRIDGE_NAME "priority=100 in_port=$OF_PORT actions=output:1"
-    echo "OVS routes added"
+    echo "[*] OVS routes added"
 }
 
 update
@@ -173,4 +184,4 @@ setup_bridge
 start_demo_container
 add_routing
 
-echo "Dataplane Ready"
+echo "[*] Dataplane Ready"
