@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BRIDGE_NAME='brDPDK'
-SERVER_SIDE_IP=10.1.1.10
+SERVER_SIDE_IP=10.1.1.100
 CONT_NAME='demo_container'
 CONT_IMAGE='iperf3_container'
 
@@ -125,8 +125,12 @@ setup_bridge() {
     sudo ovs-vsctl add-br $BRIDGE_NAME -- set bridge $BRIDGE_NAME datapath_type=netdev
     cd ~
     DPDK_ARGS=`./dpdk/usertools/dpdk-devbind.py --status | grep XL710 | awk -F ' ' '{ print $1 }'`
-    sudo ovs-vsctl add-port $BRIDGE_NAME port1 -- set Interface port1 type=dpdk options:dpdk-devargs=$DPDK_ARGS ofport_request=1
-    # For 2nd physical interface
+    port_num=1
+    for DPDK_ARG in DPDK_ARGS; do
+	sudo ovs-vsctl add-port $BRIDGE_NAME port1 -- set Interface port1 type=dpdk options:dpdk-devargs=$DPDK_ARGS ofport_request=$port_num
+	port_num=$((port_num+1))
+    done
+    #OLD--For 2nd physical interface
     #sudo ovs-vsctl add-port $BRIDGE_NAME port2 -- set Interface port2 type=dpdk options:dpdk-devargs=0000:5e:00.1 ofport_request=2
     echo "[*] OVS bridge setup complete"
 }
@@ -168,7 +172,7 @@ add_routing() {
     echo "[*] OVS routes added"
 }
 
-update
+#update
 cd ~
 if [ ! -d "dpdk" ]; then
     get_DPDK
