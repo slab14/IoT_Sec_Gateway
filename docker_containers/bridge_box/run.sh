@@ -16,10 +16,10 @@ brctl addif bridge0 eth0 eth1
 ifconfig eth0 up
 ifconfig eth1 up
 ifconfig bridge0 up
-#ip link set dev bridge0 up
 
-#sysctl -w net.ipv4.ip_forward=1 
-#iptables -A FORWARD -i eth0 -o eth1 -j ACCEPT 
-#iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT
+#Limit number of simultaneous connections: --connlimit-above X, currently 15--allows 14 connections, drops the 15th
+iptables -A FORWARD -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m connlimit --connlimit-above 15 --connlimit-mask 32 --connlimit-saddr -j REJECT --reject-with tcp-reset
+#Limit the throughput (in either pkts/sec or Bytes/sec, for granularity/group desired--src&dst, only dst, dst&dstport, etc; specified in --hashlimit-mode). --hashlimit-above X/time (or Xb/time for Bytes, does not allow modifiers such as K or M)
+iptables -A FORWARD -m hashlimit --hashlimit-above 1000/sec --hashlimit-mode srcip,srcport,dstip,dstport --hashlimit-name foo -j DROP
 
 /bin/bash
