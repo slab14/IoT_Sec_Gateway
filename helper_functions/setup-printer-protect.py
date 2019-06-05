@@ -1,9 +1,11 @@
+#!/usr/bin/python
+
 import argparse
 import shlex
 import subprocess
 import itertools
 import ipaddress
-from utils.OVS_Tools import start_containers, attach_container, connect_container_wIPs
+from utils.OVS_Tools import start_containers, attach_container, connect_container_chain_wIPs
 
 # Syntax: python connect_container.py -C <image name> -n <number of containers>
 
@@ -15,10 +17,10 @@ BRIDGE='br0'
 # controlPC -> antidos (a) -> VPN server -> IPS (a) -> 3dPrinter
 # 3dPrinter -> antidos (b)  -> IPS (a)  -> VPN server -> controlPC
 
-CONTAINER_NAME_LIST=["input_antiDoS", "VPNserver", "IPS", "output_antiDoS"]
-CONTAINER_IMAGE_LIST=['antidos', 'openvpn', 'snort_base', 'antidos']
+CONTAINER_NAME_and_IMAGE_LIST=[("antiDoS", 'antidos'), ("VPNserver", 'click-bridge'), ("IPS",'snort')]
 
-CONTAINER_NAME_and_IMAGE_LIST=[("input_antiDoS", 'antidos'), ("VPNserver", 'openvpn'), ("IPS",'snort_base'), ("output_antiDoS", 'antidos')]
+INGRESS_CHAIN=['antiDoS', 'VPNserver', 'IPS']
+EGRESS_CHAIN=['antiDoS', 'IPS', 'VPNserver']
 
 
 def get_names(number):
@@ -48,10 +50,12 @@ def main():
     #for i in range(0, len(name_list)):
     for name,image in CONTAINER_NAME_and_IMAGE_LIST:
         start_containers(image, name, True)
+        attach_container(BRIDGE, name)
         
-        attach_container(BRIDGE, name_list[i])
-        connect_container_wIPs(BRIDGE, client_ips[i], server_ips[i], name_list[i])
+    connect_container_chain_wIPs(BRIDGE, NODE_0, NODE_1, INGRESS_CHAIN, True, True)
+    connect_container_chain_wIPs(BRIDGE, NODE_0, NODE_1, EGRESS_CHAIN, True, False)
 
+        
 if __name__ == '__main__':
     main()
     

@@ -10,6 +10,7 @@ def start_containers(container, name, netPriv=False):
         cmd='/usr/bin/sudo /usr/bin/docker run -itd --rm --network=none --name {} {}'
     cmd=cmd.format(name, container)
     subprocess.check_call(shlex.split(cmd))
+    ##Future improvement. Fails if container image doesn't exist. Is there a way to identify this situation and fix it?
 
 #Add ethernet ports to a container that are connected to an OVS bridge
 def attach_container(bridge, container_name, twoPorts=True):
@@ -49,11 +50,7 @@ def pairwise(iterable):
 
 #Add OVS routing rules between predefined end points (OF ports 1 & 2) and container
 def connect_container(bridge, container_name, twoPorts=True):
-    if twoPorts:
-        interfaces=('eth0', 'eth1')
-    else:
-        interfaces=('eth0')
-    of_ports = find_container_ports(bridge, container_name)
+    of_ports = find_container_ports(bridge, container_name, twoPorts)
     of_ports = [1] + of_ports + [2]
     for in_port,out_port in pairwise(of_ports):
         cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "in_port={} actions=output:{}"'
@@ -65,21 +62,21 @@ def connect_container(bridge, container_name, twoPorts=True):
         subprocess.check_call(shlex.split(cmd))
 
 
-def connect_container_wIPs(bridge, client_ip, server_ip, container_name, twoPorts=True):
-    if twoPorts:
-        interfaces=('eth0', 'eth1')
-    else:
-        interfaces=('eth0')
-    of_ports = find_container_ports(bridge, container_name)
+def connect_container_wIPs(bridge, client_ip, server_ip, container_name_list, twoPorts=True):
+    of_ports = find_container_ports(bridge, container_name, twoPorts)
     of_ports = [1] + of_ports + [2]
-    # Connect client to server (direction = 1 (only client to server) or 3)
     for in_port,out_port in pairwise(of_ports):
         cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
         cmd=cmd.format(bridge, in_port, client_ip, server_ip, out_port)
         subprocess.check_call(shlex.split(cmd))
-    # Connect server to client (direction=2 (only server to client) or 3)
+        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "priority=10 arp in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        cmd=cmd.format(bridge, in_port, client_ip, server_ip, out_port)
+        subprocess.check_call(shlex.split(cmd))
     for in_port,out_port in pairwise(reversed(of_ports)):
         cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        cmd=cmd.format(bridge, in_port, server_ip, client_ip, out_port)
+        subprocess.check_call(shlex.split(cmd))
+        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "priority=10 arp in_port={} nw_src={} nw_dst={} actions=output:{}"'
         cmd=cmd.format(bridge, in_port, server_ip, client_ip, out_port)
         subprocess.check_call(shlex.split(cmd))
         
@@ -88,3 +85,52 @@ def connect_container_wIPs(bridge, client_ip, server_ip, container_name, twoPort
 # 1) different paths for different directions
 # 2) more than a single middlebox for each chain
 # 3) option to specify different paths for different hosts
+
+def connect_container_chain_wIPs_mirror(bridge, client_ip, server_ip, container_name_list, twoPorts=True):
+    of_ports=[]
+    for container_name in container_name_list:
+        of_ports += find_container_ports(bridge, container_name, twoPorts)
+    of_ports = [1] + of_ports + [2]
+    for in_port,out_port in pairwise(of_ports):
+        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        cmd=cmd.format(bridge, in_port, client_ip, server_ip, out_port)
+        subprocess.check_call(shlex.split(cmd))
+        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "priority=10 arp in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        cmd=cmd.format(bridge, in_port, client_ip, server_ip, out_port)
+        subprocess.check_call(shlex.split(cmd))
+    for in_port,out_port in pairwise(reversed(of_ports)):
+        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        cmd=cmd.format(bridge, in_port, server_ip, client_ip, out_port)
+        subprocess.check_call(shlex.split(cmd))
+        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "priority=10 arp in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        cmd=cmd.format(bridge, in_port, server_ip, client_ip, out_port)
+        subprocess.check_call(shlex.split(cmd))        
+
+
+def connect_container_chain_wIPs(bridge, client_ip, server_ip, container_name_list, twoPorts=True, forward=True):
+    of_ports=[]
+    for container_name in container_name_list:
+        cont_ports = find_container_ports(bridge, container_name, twoPorts)
+        if forward:
+            of_ports += cont_ports
+        else:
+            of_ports += reversed(cont_ports)
+    if forward:    
+        of_ports = [1] + of_ports + [2]
+    else:
+        of_ports = [2] + of_ports + [1]
+    for in_port,out_port in pairwise(of_ports):
+        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "priority=100 ip in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        if forward:
+            cmd=cmd.format(bridge, in_port, client_ip, server_ip, out_port)
+        else:
+            cmd=cmd.format(bridge, in_port, server_ip, client_ip, out_port)
+        subprocess.check_call(shlex.split(cmd))
+        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl -OOpenflow13 add-flow {} "priority=10 arp in_port={} nw_src={} nw_dst={} actions=output:{}"'
+        if forward:
+            cmd=cmd.format(bridge, in_port, client_ip, server_ip, out_port)
+        else:
+            cmd=cmd.format(bridge, in_port, server_ip, client_ip, out_port)
+        subprocess.check_call(shlex.split(cmd))
+
+        
