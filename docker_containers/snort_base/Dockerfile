@@ -1,7 +1,7 @@
 FROM ubuntu:xenial
 
 ENV DAQ_VER=2.0.6 \
-    SNORT_VER=2.9.12
+    SNORT_VER=2.9.13
 
 # Install Dependencies
 RUN apt-get update && \
@@ -88,6 +88,6 @@ COPY snort.conf /etc/snort/snort.conf.default
 COPY local.rules /etc/snort/rules/local.rules.default 
 COPY run.sh /
 
-CMD ["-Q", "--daq", "afpacket", "--daq-var", "buffer_size=8192", "-i", "eth0:eth1", "-c", "/etc/snort/snort.conf", "-l", "/var/log/snort/"]
+CMD ["-Q", "--daq", "afpacket", "--daq-var", "buffer_size_mb=1", "-i", "eth0:eth1", "-c", "/etc/snort/snort.conf", "-l", "/var/log/snort/"]
 
 ENTRYPOINT ["/run.sh"]
