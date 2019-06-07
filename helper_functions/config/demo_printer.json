@@ -1,0 +1,21 @@
+{
+    description="File to describe protections for a generic 3D printer",
+    middleboxes=['antiDoS', 'VPN', 'IPS'],
+    routing={
+	ingress=['antiDoS', 'VPN', 'IPS'],
+	egress=['antiDoS', 'IPS', 'VPN']
+    },
+    middlebox_configs={
+	antiDoS={
+	    config=["MAX_CONN=4", "MAX_RATE=1666"]
+	},
+	VPN={
+	    config=["-p 1194:1194/udp", "-v vpn:/etc/openvpn"],
+	    actions=["/sbin/iptables -t nat -A POSTROUTING -o eth1 -j MASQUERADE"],
+	    ips=['192.1.2.2', '10.1.2.2']
+	},
+	IPS={
+	    config=["-v snort/snort.conf:/etc/snort/snort.conf", "-v snort/local.rules:/etc/snort/rules/local.rules"]
+	}
+    }
+}

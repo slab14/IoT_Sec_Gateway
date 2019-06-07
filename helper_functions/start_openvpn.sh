@@ -10,6 +10,8 @@ BRIDGE=$6
 cd ~
 mkdir -p vpn
 # Generate the openvpn config file
+# options: -N = NAT, -d = disable default, -t = use TAP interfaces (Layer 2), -u = specify IP address of server, -p = push info
+# options: -a = auth, -T = TLS cipher, -C = cipher 
 sudo docker run -v $PWD/vpn:/etc/openvpn --rm $IMGNAME ovpn_genconfig -N -d -t -u udp://$CONTIP -p "route 192.1.0.0 255.255.0.0"
 
 # Generate cryto stuff
@@ -29,3 +31,5 @@ sudo docker exec $CONTNAME /sbin/iptables -t nat -A POSTROUTING -o eth1 -j MASQU
 # Instructions from: https://medium.com/@gurayy/set-up-a-vpn-server-with-docker-in-5-minutes-a66184882c45
 
 # git repository: git clone https://github.com/kylemanna/docker-openvpn.git
+
+# client routing requires (destination address) XX.XX.XX.XX/Y via 192.168.255.1 dev tap0 
