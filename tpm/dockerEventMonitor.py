@@ -2,6 +2,7 @@
 
 import json
 import subprocess
+import six
 from docker import Client
 from binascii import hexlify, unhexlify
 
@@ -29,20 +30,20 @@ def performAction(inputData):
         else:
             for i in range(numInputs):
                 subprocess.check_call(["echo", inputData[i]])
-    elif isinstance(inputData, str):
+    elif isinstance(inputData, six.string_types):
         subprocess.check_call(["echo", inputData])
 
 def extendPCR(hashData, register='16'):
     '''
     if isinstance(inputData, list):
-        numInputs=len(inputData)
+        numInputs=len(hashData)
         if numInputs==1:
-            subprocess.check_call(["echo", inputData[0]])
+            subprocess.check_call(["echo", hashData[0]])
         else:
             for i in range(numInputs):
-                subprocess.check_call(["echo", inputData[i]])
+                subprocess.check_call(["echo", hashData[i]])
     '''
-    if isinstance(inputData, str):
+    if isinstance(hashData, six.string_types):
         subprocess.check_call(["tpm2_pcrextend", register+':sha256='+hashData])
         
 
