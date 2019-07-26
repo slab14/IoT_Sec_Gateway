@@ -3,6 +3,7 @@
 import json
 import subprocess
 import six
+import daemon
 from docker import Client
 from binascii import hexlify, unhexlify
 
@@ -22,6 +23,7 @@ def getNewContImageHash(cli, event):
         ret=imgHash.split(':')[1]        
     return ret
 
+# For initial testing 
 def performAction(inputData):
     if isinstance(inputData, list):
         numInputs=len(inputData)
@@ -40,12 +42,13 @@ def extendPCR(hashData, register='16'):
 
 def main():
     cli = Client(base_url='unix://var/run/docker.sock')
-    for event in cli.events(decode=True):
-        eventStatus=get_status(event)
-        if eventStatus in ['create', 'die']:
-            newImgHash=getNewContImageHash(cli, event)
-            print(newImgHash)
-            extendPCR(newImgHash)
+    with daemon.DaemonContext():
+        for event in cli.events(decode=True):
+            eventStatus=get_status(event)
+            if eventStatus in ['create', 'die']:
+                newImgHash=getNewContImageHash(cli, event)
+                extendPCR(newImgHash)
+                performAction(eventStatus)
         
 
 if __name__=='__main__':
