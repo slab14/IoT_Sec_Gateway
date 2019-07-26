@@ -4,21 +4,28 @@ import daemon
 import re
 import subprocess
 import os.path
+from os import mkdir, remove
 
 def tpm_create_primary():
     subprocess.check_call(['tpm2_createprimary', '-H', 'o', '-g', 'sha256', '-G', 'rsa', '-C', '/home/pi/tpmData/primary.ctx'])
 
 def tpm_create():
-    subprocess.check_call(['tpm2_create', '-C', '/home/pi/tpmData/primary_ctx', '-g', 'sha256', '-G', 'keyedhash', '-A', '"userwithauth|restricted|sign|fixedtpm|fixedparent|sensitivedataorigin"', '-u', '/home/pi/tpmData/key.pub', '-r', '/home/pi/tpmData/key.priv'])
+    subprocess.check_call(['tpm2_create', '-c', '/home/pi/tpmData/primary.ctx', '-g', 'sha256', '-G', 'keyedhash', '-A', 'userwithauth|restricted|sign|fixedtpm|fixedparent|sensitivedataorigin', '-u', '/home/pi/tpmData/key.pub', '-r', '/home/pi/tpmData/key.priv'])
 
 def tpm_load():
-    subprocess.check_call(['tpm2_load', '-C', '/home/pi/tpmeData/primary_ctx', '-u', '/home/pi/tpmData/key.pub', '-r', '/home/pi/tpmData/key.priv', '-c', '/home/pi/tpmData/key.ctx'])
+    subprocess.check_call(['tpm2_load', '-c', '/home/pi/tpmData/primary.ctx', '-u', '/home/pi/tpmData/key.pub', '-r', '/home/pi/tpmData/key.priv', '-C', '/home/pi/tpmData/key.ctx'])
 
 def tpm_quote(pcr, nonce=None):
+    if not os.path.isdir('/home/pi/tpmData/quote'):
+        mkdir('/home/pi/tpmData/quote')
+    if os.path.isfile('/home/pi/tpmData/quote/message'):
+        remove('/home/pi/tpmData/quote/message')
+    if os.path.isfile('/home/pi/tpmData/quote/sig'):
+        remove('/home/pi/tpmData/quote/sig')
     if nonce:
-        subprocess.check_call(['tpm2_quote', '-C', '/home/pi/tpmData/key_ctx', '-g', 'sha256', '-L', pcr, '-q', nonce, '-m', '/home/pi/tpmData/quote/message', '-s', '/home/pi/tpmData/quote/sig'])
+        subprocess.check_call(['tpm2_quote', '-c', '/home/pi/tpmData/key.ctx', '-G', 'sha256', '-L', pcr, '-q', nonce, '-m', '/home/pi/tpmData/quote/message', '-s', '/home/pi/tpmData/quote/sig'])
     else:
-        subprocess.check_call(['tpm2_quote', '-C', '/home/pi/tpmData/key_ctx', '-g', 'sha256', '-L', pcr, '-m', '/home/pi/tpmData/quote/message', '-s', '/home/pi/tpmData/quote/sig'])
+        subprocess.check_call(['tpm2_quote', '-c', '/home/pi/tpmData/key.ctx', '-G', 'sha256', '-L', pcr, '-m', '/home/pi/tpmData/quote/message', '-s', '/home/pi/tpmData/quote/sig'])
 
 def handle_client(sock, address, controller_address):
     if address[0] != controller_address:
@@ -31,7 +38,7 @@ def handle_client(sock, address, controller_address):
             f.write("received: \n")
             f.write(data)
             f.write("\n***********\n")
-            tpm2_quote('sha256:16') #TODO add avility to imput nonce (could even start by using port--address[1]
+            tpm_quote('sha256:16') #TODO add avility to imput nonce (could even start by using port--address[1]
             with open('/home/pi/tpmData/quote/message', 'r') as f:
                 message=f.read()
             with open('/home/pi/tpmData/quote/sig', 'r') as f:
@@ -52,9 +59,12 @@ def serve_forever():
         thread.start()
 
 with daemon.DaemonContext():
+    if not os.path.isdir('/home/pi/tpmData'):
+        mkdir('/home/pi/tpmData')
     if not os.path.isfile('/home/pi/tpmData/primary.ctx'):
-        tpm2_create_primary()
+        tpm_create_primary()
+    if not (os.path.isfile('/home/pi/tpmData/key.pub') and os.path.isfile('/home/pi/tpmData/key.priv')):
+        tpm_create()                
     if not os.path.isfile('/home/pi/tpmData/key.ctx'):
-        tpm2_create()        
-        tpm2_load() 
-    server_forever()
+        tpm_load() 
+    serve_forever()
