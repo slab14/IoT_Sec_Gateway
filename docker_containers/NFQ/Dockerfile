@@ -10,9 +10,10 @@ RUN apt-get update && \
 			 build-essential python-dev gcc \
 			 libssl-dev
 
-RUN pip install NetfilterQueue ecdsa
+RUN pip install NetfilterQueue ecdsa pysha3 poly1305_aes pycryptodome
 
 COPY pyscript.py packetFilterandHash.c run.sh ./
+COPY umac.py rijndael.py ./
 
 ENTRYPOINT ["/run.sh"]
 

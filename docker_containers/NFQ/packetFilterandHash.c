@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <netinet/in.h>
 #include <linux/types.h>
 #include <linux/netfilter.h>
 #include <libnetfilter_queue/libnetfilter_queue.h>
 #include <openssl/hmac.h>
+#include <openssl/aes.h>
+#include <openssl/evp.h>
+
 
 static u_int32_t print_pkt(struct nfq_data *tb){
   int id=0;
@@ -63,8 +67,32 @@ char * calcHmac(char * key, struct nfq_data *tb) {
   char * data;
   int len;
   len = nfq_get_payload(tb, &data);
-  digest=HMAC(EVP_sha256(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
+  digest=HMAC(EVP_md5(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
   return digest;
+}
+
+char * calcGMAC(char *key, struct nfq_data *tb) {
+  struct nfqnl_msg_packet_hdr *ph;
+  unsigned char* digest;
+  char * data;
+  int len, unused, rc=0;
+  int id=0;
+  char  iv[32];
+  ph=nfq_get_msg_packet_hdr(tb);
+  if(ph) {
+    id=ntohl(ph->packet_id);
+  }
+  snprintf(iv, sizeof(iv), "%d", id);
+  len = nfq_get_payload(tb, &data);
+  char tag[16];
+  EVP_CIPHER_CTX *ctx = NULL;
+  ctx = EVP_CIPHER_CTX_new();
+  rc = EVP_EncryptInit_ex(ctx, EVP_aes_128_gcm(), NULL, NULL, NULL);
+  rc = EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_SET_IVLEN, sizeof(iv), NULL);
+  rc = EVP_EncryptInit_ex(ctx, NULL, NULL, key, iv);
+  rc = EVP_EncryptUpdate(ctx, NULL, &unused, data, sizeof(data));
+  rc = EVP_EncryptFinal_ex(ctx, NULL, &unused);
+  rc = EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, sizeof(tag), tag);
 }
 
 /* Callback function */
@@ -73,7 +101,9 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
   //print_pkt(nfa);
   unsigned char * hash;
   char key[]="super_secret_key_for_hmac";
-  hash = calcHmac(key, nfa);
+  char iv[]="this is my iv";
+  //hash = calcHmac(key, nfa);
+  hash = calcGMAC(key, nfa);
   u_int32_t id;
   struct nfqnl_msg_packet_hdr *ph;
   ph=nfq_get_msg_packet_hdr(nfa);

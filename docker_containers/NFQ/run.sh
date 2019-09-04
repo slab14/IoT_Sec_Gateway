@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gcc -o packetScript packetFilterandHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl -lssl -lcrypto
+gcc -O1 -o packetScript packetFilterandHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl -lssl -lcrypto
 
 while true; do
     grep -q '^1$' "/sys/class/net/eth0/carrier" &&
@@ -22,6 +22,6 @@ ifconfig bridge0 up
 #Send packets to NFQUEUE
 iptables -t raw -A PREROUTING -j NFQUEUE --queue-num 1
 
-#python pyscript.py
+python -O pyscript.py
 
-./packetScript
+#./packetScript
