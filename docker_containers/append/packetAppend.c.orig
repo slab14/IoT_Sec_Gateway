@@ -68,7 +68,7 @@ static u_int32_t print_pkt(struct nfq_data *tb){
   return id;
 }
 
-void reverseData(char *payload, int payloadLen){
+void reverseData(char * payload, int payloadLen){
   for(unsigned int i = 0; i < payloadLen/2; ++i) {
     char tmp = payload[i];
     payload[i] = payload[payloadLen-1-i];
@@ -99,37 +99,21 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
   //testing
   unsigned char *rawData;
   int len = nfq_get_payload(nfa, &rawData);
-  struct pkt_buff *pkBuff=pktb_alloc(AF_INET, rawData, len, 0x11); /* create buffer with extra space for hash value */
+  struct pkt_buff *pkBuff=pktb_alloc(AF_INET, rawData, len, 0x10);
   struct iphdr* ip=nfq_ip_get_hdr(pkBuff);
   nfq_ip_set_transport_header(pkBuff, ip);
   if(ip->protocol == IPPROTO_TCP) {
     struct tcphdr *tcp = nfq_tcp_get_hdr(pkBuff);    
     unsigned int payloadLen = nfq_tcp_get_payload_len(tcp, pkBuff);
     payloadLen -= 4*tcp->th_off;
-    if(payloadLen>1){
-      char *payload = nfq_tcp_get_payload(tcp, pkBuff);      
-      //if(strncmp(hash, payload, 16)) {
-      /* using mangle, updates ip & tcp headers */
-      //nfq_tcp_mangle_ipv4(pkBuff, 0, 16, NULL, 0);  
-      //char *newData="a secret";
-          /* alternative to mangle, performing same actions */
-          pktb_put(pkBuff,16);
-          memmove(payload+16, payload, payloadLen);
-	  memcpy(payload, hash, 16);
-          ip->tot_len=htons(pktb_len(pkBuff));	  
-	  /*
-	  nfq_tcp_compute_checksum_ipv4(tcp,ip);
-	  nfq_ip_set_checksum(ip);
-	  */
+    if(payloadLen>0){
+      char *newData="a secret";
+      nfq_tcp_mangle_ipv4(pkBuff, 0, 0, hash, 16);
 
-      /* Remove first 4 data items */
-      /*
-      memmove(payload, payload+4, payloadLen-4);
-      pktb_trim(pkBuff, pktb_len(pkBuff)-4);
-      ip->tot_len=htons(pktb_len(pkBuff));
+      //char *payload = nfq_tcp_get_payload(tcp, pkBuff);
+      //reverseData(payload, payloadLen);
       nfq_tcp_compute_checksum_ipv4(tcp,ip);
-      nfq_ip_set_checksum(ip);      
-      */
+
     }
     return nfq_set_verdict(qh, id, NF_ACCEPT, pktb_len(pkBuff), pktb_data(pkBuff));
   }
