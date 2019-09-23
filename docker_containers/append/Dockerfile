@@ -8,11 +8,11 @@ RUN apt-get update && \
 			 tcpdump python libnetfilter-queue1 \
 			 libnetfilter-queue-dev python-pip \
 			 build-essential python-dev gcc \
-			 libssl-dev
+			 libssl-dev ethtool
 
 RUN pip install NetfilterQueue 
 
-COPY pyscript.py packetAppend.c run.sh ./
+COPY pyscript.py packetAppend.c checkHash.c addHash.c run.sh ./
 
 ENTRYPOINT ["/run.sh"]
 

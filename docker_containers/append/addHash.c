@@ -34,11 +34,16 @@ char * calcHmac(char *key, struct nfq_data *tb) {
   return digest;
 }
 
+char * newCalcHmac(char *key, uint8_t *data, uint32_t len) {
+  unsigned char *digest;
+  digest=HMAC(EVP_md5(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
+  return digest;
+}
+
 /* Callback function */
 static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *nfa, void *data) {
   unsigned char * hash;
   char key[]="super_secret_key_for_hmac";
-  char iv[]="this is my iv";
   hash = calcHmac(key, nfa);
   u_int32_t id;
   struct nfqnl_msg_packet_hdr *ph;
@@ -58,23 +63,15 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
     if(payloadLen>1){
       /* using mangle, updates ip & tcp headers */
       //nfq_tcp_mangle_ipv4(pkBuff, 0, 0, hash, 16);  
-          /* alternative to mangle, performing same actions */
-          pktb_put(pkBuff,16);
-	  char *payload=nfq_tcp_get_payload(tcp, pkBuff);
-          memmove(payload+16, payload, payloadLen);
-	  memcpy(payload, hash, 16);
-          ip->tot_len=htons(pktb_len(pkBuff));	  
-	  nfq_tcp_compute_checksum_ipv4(tcp,ip);
-	  nfq_ip_set_checksum(ip);
-
-      /* Remove first 4 data items */
-      /*
-      memmove(payload, payload+4, payloadLen-4);
-      pktb_trim(pkBuff, pktb_len(pkBuff)-4);
-      ip->tot_len=htons(pktb_len(pkBuff));
+      /* alternative to mangle, performing same actions */
+      pktb_put(pkBuff,16);
+      char *payload=nfq_tcp_get_payload(tcp, pkBuff);
+      memmove(payload+16, payload, payloadLen);
+      memcpy(payload, hash, 16);
+      ip->tot_len=htons(pktb_len(pkBuff));	  
       nfq_tcp_compute_checksum_ipv4(tcp,ip);
-      nfq_ip_set_checksum(ip);      
-      */
+      nfq_ip_set_checksum(ip);
+
     }
     return nfq_set_verdict(qh, id, NF_ACCEPT, pktb_len(pkBuff), pktb_data(pkBuff));
   }
@@ -104,7 +101,7 @@ int main(int argc, char **argv) {
     exit(1);
   }
   /* Set callback function */
-  qh=nfq_create_queue(h,1,&cb, NULL);
+  qh=nfq_create_queue(h,2,&cb, NULL);
   if(!qh) {
     fprintf(stderr, "error during nfq_create_queue()\n");
     exit(1);
