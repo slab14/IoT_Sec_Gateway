@@ -61,12 +61,14 @@ install_ovs() {
 install_ovs_fromGit() {
     #Install Build Dependencies
     sudo apt-get update -qq
-    sudo apt-get install -yqq make gcc libssl1.0.2 libssl1.0-dev \
+    sudo apt-get install -yqq make gcc \
 	 libcap-ng0 libcap-ng-dev python python-pip autoconf \
 	 libtool wget netcat curl clang sparse flake8 \
-	 graphviz autoconf automake libtool python-dev
-    sudo pip -qq install --upgrade pip
-    pip -qq install --user six pyftpdlib tftpy
+	 graphviz automake python-dev python3-pip \
+	 graphviz build-essential pkg-config \
+         libssl-dev gdb linux-headers-`uname -r`
+    sudo pip3 -qq install --upgrade pip
+    pip -qq install --user six pyftpdlib tftpy flake8 sparse
 
     #Clone repository, build, and install
     cd ~
