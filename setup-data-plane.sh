@@ -76,7 +76,7 @@ install_ovs_fromGit() {
     cd ovs
     git checkout slab
     ./boot.sh
-    ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc
+    ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc --with-linux=/lib/modules/$(uname -r)/build
     make
     sudo make install
     cd ~
