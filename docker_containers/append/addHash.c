@@ -16,6 +16,7 @@
 #include <openssl/aes.h>
 #include <openssl/evp.h>
 
+#define DIGEST_SIZE 16
 
 void reverseData(char *payload, int payloadLen){
   for(unsigned int i = 0; i < payloadLen/2; ++i) {
@@ -25,7 +26,7 @@ void reverseData(char *payload, int payloadLen){
   }
 }
 
-char * calcHmac(char *key, struct nfq_data *tb) {
+unsigned char * calcHmac(char *key, struct nfq_data *tb) {
   unsigned char *digest;
   char *data;
   int len;
@@ -34,7 +35,7 @@ char * calcHmac(char *key, struct nfq_data *tb) {
   return digest;
 }
 
-char * newCalcHmac(char *key, uint8_t *data, uint32_t len) {
+unsigned char * newCalcHmac(char *key, uint8_t *data, uint32_t len) {
   unsigned char *digest;
   digest=HMAC(EVP_md5(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
   return digest;
@@ -62,12 +63,12 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
     payloadLen -= 4*tcp->th_off;
     if(payloadLen>1){
       /* using mangle, updates ip & tcp headers */
-      //nfq_tcp_mangle_ipv4(pkBuff, 0, 0, hash, 16);  
+      //nfq_tcp_mangle_ipv4(pkBuff, 0, 0, hash, DIGEST_SIZE);  
       /* alternative to mangle, performing same actions */
-      pktb_put(pkBuff,16);
+      pktb_put(pkBuff,DIGEST_SIZE);
       char *payload=nfq_tcp_get_payload(tcp, pkBuff);
-      memmove(payload+16, payload, payloadLen);
-      memcpy(payload, hash, 16);
+      //memmove(payload+DIGEST_SIZE, payload, payloadLen);
+      memcpy(payload+payloadLen, hash, DIGEST_SIZE);
       ip->tot_len=htons(pktb_len(pkBuff));	  
       nfq_tcp_compute_checksum_ipv4(tcp,ip);
       nfq_ip_set_checksum(ip);

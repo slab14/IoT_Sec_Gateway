@@ -15,7 +15,17 @@
 #include <openssl/hmac.h>
 #include <openssl/aes.h>
 #include <openssl/evp.h>
+#include <inttypes.h>
 
+#define DIGEST_SIZE 16
+
+int compare(unsigned char *a, unsigned char *b, int size) {
+    while(size-- > 0) {
+        if ( *a != *b ) { return (*a < *b ) ? -1 : 1; }
+        a++; b++;
+    }
+    return 0;
+}
 
 void reverseData(char *payload, int payloadLen){
   for(unsigned int i = 0; i < payloadLen/2; ++i) {
@@ -25,7 +35,7 @@ void reverseData(char *payload, int payloadLen){
   }
 }
 
-char * calcHmac(char *key, struct nfq_data *tb) {
+unsigned char * calcHmac(char *key, struct nfq_data *tb) {
   unsigned char *digest;
   char *data;
   int len;
@@ -34,7 +44,7 @@ char * calcHmac(char *key, struct nfq_data *tb) {
   return digest;
 }
 
-char * newCalcHmac(char *key, uint8_t *data, uint32_t len) {
+unsigned char * newCalcHmac(char *key, uint8_t *data, uint32_t len) {
   unsigned char *digest;
   digest=HMAC(EVP_md5(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
   return digest;
@@ -52,30 +62,32 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
   //testing
   unsigned char *rawData;
   int len = nfq_get_payload(nfa, &rawData);
-  struct pkt_buff *pkBuff=pktb_alloc(AF_INET, rawData, len, 0x20); /* create buffer with extra space for hash value */
+  struct pkt_buff *pkBuff=pktb_alloc(AF_INET, rawData, len, 0x0); /* create buffer with extra space for hash value */
   struct iphdr* ip=nfq_ip_get_hdr(pkBuff);
   nfq_ip_set_transport_header(pkBuff, ip);
   if(ip->protocol == IPPROTO_TCP) {
     struct tcphdr *tcp = nfq_tcp_get_hdr(pkBuff);    
     unsigned int payloadLen = nfq_tcp_get_payload_len(tcp, pkBuff);
     payloadLen -= 4*tcp->th_off;
-    if(payloadLen>16){
+    if(payloadLen>DIGEST_SIZE){
       /* received hash */
-      unsigned char oldHash[16];
+      unsigned char oldHash[DIGEST_SIZE];
       char *payload = nfq_tcp_get_payload(tcp, pkBuff);
-      memcpy(oldHash, payload, 16);
-
+      memcpy(oldHash, payload+payloadLen-DIGEST_SIZE, DIGEST_SIZE);
       /* Remove first 16 data Bytes */
-      memmove(payload, payload+16, payloadLen-16);
-      pktb_trim(pkBuff, pktb_len(pkBuff)-16);
+      //memmove(payload, payload, payloadLen-DIGEST_SIZE);
+      
+      /* Set final 16 byes (tag) to 0 */
+      memset(payload+payloadLen-DIGEST_SIZE, 0x00, DIGEST_SIZE);
+      pktb_trim(pkBuff, pktb_len(pkBuff)-DIGEST_SIZE);
       ip->tot_len=htons(pktb_len(pkBuff));
       nfq_tcp_compute_checksum_ipv4(tcp,ip);
       nfq_ip_set_checksum(ip);
 
       /* Cacl hash of data */
       hash = newCalcHmac(key, pktb_data(pkBuff), pktb_len(pkBuff));
-
-      if(strncmp(hash, oldHash, 16)==0) {
+      //hash = newCalcHmac(key, payload, payloadLen-DIGEST_SIZE);
+      if(compare(hash, oldHash, DIGEST_SIZE)==0) {
         return nfq_set_verdict(qh, id, NF_ACCEPT, pktb_len(pkBuff), pktb_data(pkBuff));
       }else {
         return nfq_set_verdict(qh, id, NF_DROP, 0, NULL);
