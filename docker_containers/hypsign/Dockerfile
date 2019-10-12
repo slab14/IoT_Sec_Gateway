@@ -12,7 +12,7 @@ RUN apt-get update && \
 
 RUN pip install NetfilterQueue 
 
-COPY libuhcall.a uhcall.h checkHash.c addHash.c run.sh ./
+COPY uhcalltest libuhcall.a uhcall.h checkHash.c addHash.c run.sh ./
 
 ENTRYPOINT ["/run.sh"]
 

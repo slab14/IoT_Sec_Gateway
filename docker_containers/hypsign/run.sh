@@ -1,9 +1,11 @@
 #!/bin/bash
 
-gcc -O1 -o packetScript packetAppend.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl -lssl -lcrypto
-
-gcc -O1 -o checkHash checkHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl libuhcall.a
-gcc -O1 -o addHash addHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl libuhcall.a
+#gcc  -o checkHash checkHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl /libuhcall.a
+gcc -I. uhcall.h -c -g checkHash.c
+gcc -g checkHash.o -o checkHash -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl /libuhcall.a
+#gcc  -o addHash addHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl /libuhcall.a
+gcc -I. uhcall.h -c -g addHash.c
+gcc -g addHash.o -o addHash -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl /libuhcall.a
 
 while true; do
     grep -q '^1$' "/sys/class/net/eth0/carrier" &&
@@ -25,12 +27,8 @@ ifconfig eth0 mtu 1520
 ifconfig eth1 mtu 1520
 
 #Send packets to NFQUEUE
-iptables -t raw -A PREROUTING -i eth0 -d 10.1.1.2 -j NFQUEUE --queue-num 1
-iptables -t raw -A PREROUTING -i eth1 -d 10.1.1.2 -j NFQUEUE --queue-num 2
+#iptables -t raw -A PREROUTING -i bridge0 -d 10.1.1.2 -j NFQUEUE --queue-num 1
+iptables -t raw -A PREROUTING -i bridge0 -d 10.1.1.2 -j NFQUEUE --queue-num 2
 
-#python -O pyscript.py
-
-#./packetScript
-
-./checkHash &
+#./checkHash &
 ./addHash

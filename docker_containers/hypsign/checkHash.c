@@ -12,15 +12,19 @@
 #include <libnetfilter_queue/pktbuff.h>
 #include <libnetfilter_queue/libnetfilter_queue_ipv4.h>
 #include <libnetfilter_queue/libnetfilter_queue_tcp.h>
-#include <openssl/hmac.h>
-#include <openssl/aes.h>
-#include <openssl/evp.h>
 #include <inttypes.h>
+
 #include "uhcall.h"
+#define DIGEST_SIZE 20
+#define UAPP_UHSIGN_FUNCTION_SIGN 0x69
+
+typedef struct {
+  uint8_t pkt[1600];
+  uint32_t pkt_size;
+  uint8_t digest[DIGEST_SIZE];
+}uhsign_param_t;
 
 __attribute__((aligned(4096))) __attribute__((section(".data"))) uhsign_param_t uhcp;
-
-#define DIGEST_SIZE 20
 
 int compare(unsigned char *a, unsigned char *b, int size) {
     while(size-- > 0) {
@@ -38,22 +42,7 @@ void reverseData(char *payload, int payloadLen){
   }
 }
 
-unsigned char * calcHmac(char *key, struct nfq_data *tb) {
-  unsigned char *digest;
-  char *data;
-  int len;
-  len = nfq_get_payload(tb, &data);
-  digest=HMAC(EVP_md5(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
-  return digest;
-}
-
-unsigned char * newCalcHmac(char *key, uint8_t *data, uint32_t len) {
-  unsigned char *digest;
-  digest=HMAC(EVP_md5(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
-  return digest;
-}
-
-unsigned char * uappCalcHmac(char *key, uint8_t *data, uint32_t len) {
+unsigned char * uappCalcHmac(uint8_t *data, uint32_t len) {
   memcpy(&uhcp.pkt, data, len);
   uhcp.pkt_size=len;
   uhsign_param_t *uhcp_ptr = &uhcp;
