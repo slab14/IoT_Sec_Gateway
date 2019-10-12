@@ -15,14 +15,7 @@
 #include <inttypes.h>
 
 #include "uhcall.h"
-#define DIGEST_SIZE 20
-#define UAPP_UHSIGN_FUNCTION_SIGN 0x69
 
-typedef struct {
-  uint8_t pkt[1600];
-  uint32_t pkt_size;
-  uint8_t digest[DIGEST_SIZE];
-}uhsign_param_t;
 
 __attribute__((aligned(4096))) __attribute__((section(".data"))) uhsign_param_t uhcp;
 
@@ -47,7 +40,7 @@ unsigned char * uappCalcHmac(uint8_t *data, uint32_t len) {
   uhcp.pkt_size=len;
   uhsign_param_t *uhcp_ptr = &uhcp;
 
-  if(!uhcall(UAPP_UHSIGN_FUNCTION_SIGN, uhcp_ptr, sizeof(uhsign_param_t))){
+  if(uhcall(UAPP_UHSIGN_FUNCTION_SIGN, uhcp_ptr, sizeof(uhsign_param_t))){
     return uhcp_ptr->digest;
   }
   return NULL;
@@ -88,10 +81,12 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
       nfq_ip_set_checksum(ip);
 
       /* Cacl hash of data */
+      //hash = newCalcHmac(key, payload, payloadLen-DIGEST_SIZE);      
       hash = uappCalcHmac(pktb_data(pkBuff), pktb_len(pkBuff));
-      //hash = newCalcHmac(key, payload, payloadLen-DIGEST_SIZE);
-      if(compare(hash, oldHash, DIGEST_SIZE)==0) {
-        return nfq_set_verdict(qh, id, NF_ACCEPT, pktb_len(pkBuff), pktb_data(pkBuff));
+      if(hash!=NULL){
+	if(compare(hash, oldHash, DIGEST_SIZE)==0) {
+	  return nfq_set_verdict(qh, id, NF_ACCEPT, pktb_len(pkBuff), pktb_data(pkBuff));
+	}
       }else {
         return nfq_set_verdict(qh, id, NF_DROP, 0, NULL);
       }

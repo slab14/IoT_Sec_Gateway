@@ -1,3 +1,4 @@
 ##NOTEs##
 1) Container must be run with: NET_ADMIN priviledges (for creating bridge & iptables rules)
 2) Container must mount /dev/uhcallkmod to perform hypcall (/dev/uhcallkmod must haver permissions set to allow this to occur)
+3) Container must be run with proper privileges to use /dev/uhcallkmod (can be done with --privileged)

@@ -14,14 +14,6 @@
 #include <libnetfilter_queue/libnetfilter_queue_tcp.h>
 
 #include "uhcall.h"
-#define DIGEST_SIZE  20
-#define UAPP_UHSIGN_FUNCTION_SIGN 0x69
-
-typedef struct {
-  uint8_t pkt[1600];
-  uint32_t pkt_size;
-  uint8_t digest[DIGEST_SIZE];
-}uhsign_param_t;
 
 __attribute__((aligned(4096))) __attribute__((section(".data"))) uhsign_param_t uhcp;
 
@@ -34,25 +26,18 @@ void reverseData(char *payload, int payloadLen){
 }
 
 unsigned char * uappCalcHmac(uint8_t *data, uint32_t len) {
-  printf("entering uappCalcHmac\n");
   memcpy(&uhcp.pkt, data, len);
-  printf("** performed memcpy\n");
   uhcp.pkt_size=len;
-  printf("** added pkt_size value\n");
   uhsign_param_t *uhcp_ptr = &uhcp;
-  printf("created pointer to hyp buffer...about to perform hypcall\n");
-
-  if(!uhcall(UAPP_UHSIGN_FUNCTION_SIGN, uhcp_ptr, sizeof(uhsign_param_t))){
-    printf("performed hyp call successfully\n");
+    
+  if(uhcall(UAPP_UHSIGN_FUNCTION_SIGN, uhcp_ptr, sizeof(uhsign_param_t))){
     return uhcp_ptr->digest;
   }
-  printf("hypcall failed\n");
   return NULL;
 }
 
 /* Callback function */
 static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *nfa, void *data) {
-  printf("got a packet\n");
   unsigned char * hash;
   char key[]="super_secret_key_for_hmac";
   //hash = calcHmac(key, nfa);
@@ -74,11 +59,6 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
     if(payloadLen>0){
       hash=uappCalcHmac(pktb_data(pkBuff), pktb_len(pkBuff));
       if(hash != NULL) {
-	int i;
-	for(i=0;i<DIGEST_SIZE;i++){
-	  printf("%02x", *(hash+i));
-	}
-	printf("\n");
 	/* using mangle, updates ip & tcp headers */
 	//nfq_tcp_mangle_ipv4(pkBuff, 0, 0, hash, DIGEST_SIZE);  
 	/* alternative to mangle, performing same actions */
