@@ -8,12 +8,11 @@ DOCKER_PORT=4243
 update() {
     echo "Updating apt-get..."
     sudo apt-get update -qq
-    sudo apt-get install -y python python-dev python-pip emacs vim \
+    sudo apt-get install -yqq python python-dev python-pip emacs vim \
 	 iperf3 nmap python-ipaddress python-subprocess32 \
 	 apt-transport-https ca-certificates \
 	 docker openvswitch-common openvswitch-switch openvswitch-dbg \
-	 isc-dhcp-server tcpdump wavemon netcat hping3 \
-	 iptables-persistent
+	 isc-dhcp-server tcpdump wavemon netcat hping3 
     
     echo "Update complete"
 }
