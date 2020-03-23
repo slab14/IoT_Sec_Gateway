@@ -88,7 +88,7 @@ sudo ip rule add to 172.16.12.0/24 lookup 11 prio 11
 #start-up SIG
 sudo mkdir -p $SC/logs/sig${IA}-1
 sudo touch $SC/logs/sig${IA}-1.log
-$GOPATH/bin/sig -config=${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.config | sudo tee -a $SC/logs/sig${IA}-1.log 2>&1 &
+$GOPATH/bin/sig -config=${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.config 2>&1 | sudo tee -a $SC/logs/sig${IA}-1.log > /dev/null &
 
 # teting
 # Host A
