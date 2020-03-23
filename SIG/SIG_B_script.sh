@@ -82,9 +82,11 @@ sudo modprobe dummy
 # Host B
 sudo ip link add dummy12 type dummy
 sudo ip addr add 172.16.0.12/32 brd + dev dummy12 label dummy12:0
-
 sudo ip rule add to 172.16.11.0/24 lookup 12 prio 12
 
+#startup SIG
+sudo mkdir -p $SC/logs/sig${IA}-1
+sudo touch $SC/logs/sig${IA}-1.log
 $GOPATH/bin/sig -config=${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigB.config > $SC/logs/sig${IA}-1.log 2>&1 &
 
 # teting
