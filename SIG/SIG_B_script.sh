@@ -5,16 +5,16 @@ SIG_A_IP="128.105.145.216"
 
 START_DIR=$(pwd)
 
-sudo apt-get install apt-transport-https ca-certificates
+sudo apt-get install -yqq apt-transport-https ca-certificates
 echo "deb [trusted=yes] https://packages.netsec.inf.ethz.ch/debian all main" | sudo tee /etc/apt/sources.list.d/scionlab.list
-sudo apt-get update
-sudo apt-get install scionlab
+sudo apt-get update -qq
+sudo apt-get install -yqq scionlab
 
 #SIG B:
 sudo scionlab-config --host-id=329acd1a195c40c0a9e1b5064060d4bd --host-secret=0542629f113749349110b1d728e2ba2c
 
 #Webapp
-sudo apt install scion-apps-webapp
+sudo apt install -yqq scion-apps-webapp
 sudo systemctl start scion-webapp
 
 export SC=/etc/scion
