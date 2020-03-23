@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SIG_A_AS="18-ffaa_1_d12"
+SIG_A_AS="18-ffaa:1:d12"
 SIG_A_IP="128.105.145.216"
 
 START_DIR=$(pwd)
@@ -94,8 +94,9 @@ $GOPATH/bin/sig -config=${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigB.config | sud
 sudo ip link add server type dummy
 sudo ip addr add 172.16.12.1/24 brd + dev server label server:0
 
-mkdir $SC/WWW
-echo "Hello World!" > $SC/WWW/hello.html
+sudo mkdir $SC/WWW
+sudo touch $SC/WWW/hello.html
+echo "Hello World!" sudo tee -a $SC/WWW/hello.html
 cd $SC/WWW/ && python3 -m http.server --bind 172.16.12.1 8081 &
 
 echo "SIG setup complete"
