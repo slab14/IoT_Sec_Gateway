@@ -3,6 +3,8 @@
 SIG_B_AS="18-ffaa:1:d13"
 SIG_B_IP="128.105.145.219"
 
+START_DIR=$(pwd)
+
 sudo apt-get install apt-transport-https ca-certificates
 echo "deb [trusted=yes] https://packages.netsec.inf.ethz.ch/debian all main" | sudo tee /etc/apt/sources.list.d/scionlab.list
 sudo apt-get update
@@ -46,6 +48,8 @@ sudo setcap cap_net_admin+eip $GOPATH/bin/sig
 sudo sysctl net.ipv4.conf.default.rp_filter=0
 sudo sysctl net.ipv4.conf.all.rp_filter=0
 sudo sysctl net.ipv4.ip_forward=1
+
+cd $START_DIR
 
 # sig.conf
 sudo touch ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.config
