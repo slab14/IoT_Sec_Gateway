@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SIG_B_AS="18-ffaa:1:d13"
+SIG_B_IP="128.105.145.219"
+
 sudo apt-get install apt-transport-https ca-certificates
 echo "deb [trusted=yes] https://packages.netsec.inf.ethz.ch/debian all main" | sudo tee /etc/apt/sources.list.d/scionlab.list
 sudo apt-get update
@@ -44,23 +47,32 @@ sudo sysctl net.ipv4.conf.default.rp_filter=0
 sudo sysctl net.ipv4.conf.all.rp_filter=0
 sudo sysctl net.ipv4.ip_forward=1
 
+# sig.conf
 sudo touch ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.config
-
 cat sigA.config | sudo tee -a ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.config
-
 sudo sed -i "s/\${IA}/${IA}/g" ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.config
 sudo sed -i "s/\${IAd}/${IAd}/g" ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.config
 sudo sed -i "s/\${AS}/${AS}/g" ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.config
 sudo sed -i "s/\${ISD}/${ISD}/g" ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.config
-
 # This sed command is creating an error: sed: -e expression #1, char 11: unknown option to `s'
 sudo sed -i "s/\${SC}/${SC}/g" ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.config
-
 sudo sed -i "s/\${LOG}/${LOG}/g" ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.config
 
+#sig.json
 sudo touch ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.json
-
 cat sigA.json | sudo tee -a ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.json
+sudo sed -i "s/17-ffaa:1:XXX/$SIG_B_AS/g" ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.json
+sudo sed -i "s/10.0.8.XXX/$SIG_B_IP/g" ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.json
+
+#update *.topology files
+sed -i "s/sig17-ffaa_1_XXX"/sig${ISD}-${ASD}/g topology.json
+sed -i "s/172.16.0.XX/${SIG_B_IP}/g" topology.json
+sudo sed -i '/^{/r topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/endhost/topology.json
+sudo sed -i '/^{/r topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/br${IA}-1/topology.json
+sudo sed -i '/^{/r topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/bs${IA}-1/topology.json
+sudo sed -i '/^{/r topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/cs${IA}-1/topology.json
+sudo sed -i '/^{/r topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/ps${IA}-1/topology.json  
+
 
 # setup
 sudo modprobe dummy
