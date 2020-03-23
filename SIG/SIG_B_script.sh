@@ -69,7 +69,7 @@ sudo sed -i "s/10.0.8.XXX/$SIG_A_IP/g" ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/si
 
 #update *.topology files
 sed -i "s/sig17-ffaa_1_XXX"/sig${ISD}-${ASD}/g topology.json
-sed -i "s/172.16.0.XX/${SIG_B_IP}/g" topology.json
+sed -i "s/172.16.0.XX/${SIG_A_IP}/g" topology.json
 sudo sed -i '/^{/r topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/endhost/topology.json	
 sudo sed -i '/^{/r topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/br${IA}-1/topology.json
 sudo sed -i '/^{/r topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/bs${IA}-1/topology.json
