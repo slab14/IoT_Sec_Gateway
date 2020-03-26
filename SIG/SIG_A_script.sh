@@ -2,6 +2,7 @@
 
 SIG_B_AS="18-ffaa:1:d13"
 SIG_B_IP="128.105.145.219"
+SIG_A_IP="128.105.145.216"
 
 START_DIR=$(pwd)
 
@@ -12,6 +13,7 @@ sudo apt-get install -yqq scionlab
 
 #SIG A:
 sudo scionlab-config --host-id=72805bf4c956422b9a087af7ff512628 --host-secret=ce3462d2903347059aa1fae225e74ca4
+sudo systemctl start scionlab.target
 
 #Webapp
 sudo apt install -yqq scion-apps-webapp
@@ -68,8 +70,8 @@ sudo sed -i "s/17-ffaa:1:XXX/$SIG_B_AS/g" ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1
 sudo sed -i "s/10.0.8.XXX/$SIG_B_IP/g" ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/sigA.json
 
 #update *.topology files
-sed -i "s/sig17-ffaa_1_XXX"/sig${ISD}-${ASD}/g topology.json
-sed -i "s/172.16.0.XX/${SIG_B_IP}/g" topology.json
+sed -i "s/sig17-ffaa_1_XXX"/sig${ISD}-${ASD}-1/g topology.json
+sed -i "s/172.16.0.XX/${SIG_A_IP}/g" topology.json
 sudo sed -i '/^{/r topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/endhost/topology.json
 sudo sed -i '/^{/r topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/br${IA}-1/topology.json
 sudo sed -i '/^{/r topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/bs${IA}-1/topology.json
