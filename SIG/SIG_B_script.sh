@@ -98,7 +98,7 @@ sudo ip addr add 172.16.12.1/24 brd + dev server label server:0
 
 sudo mkdir $SC/WWW
 sudo touch $SC/WWW/hello.html
-echo "Hello World!" sudo tee -a $SC/WWW/hello.html
+echo "Hello World!" | sudo tee -a $SC/WWW/hello.html
 cd $SC/WWW/ && python3 -m http.server --bind 172.16.12.1 8081 &
 
 echo "SIG setup complete"
