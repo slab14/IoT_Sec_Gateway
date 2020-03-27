@@ -13,14 +13,22 @@ sudo apt-get install -yqq scionlab
 
 #SIG A:
 sudo scionlab-config --host-id=72805bf4c956422b9a087af7ff512628 --host-secret=ce3462d2903347059aa1fae225e74ca4
+
+export SC=/etc/scion
+export LOGS=/var/log/scion
+export IA=$(cat $SC/gen/ia)
+export IAd=$(cat $SC/gen/ia | sed 's/_/\:/g')
+export AS=$(cat $SC/gen/ia | cut --fields=2 --delimiter="-")
+export ISD=$(cat $SC/gen/ia | cut --fields=1 --delimiter="-")
+
+printf "\n\n${IAd},[${SIG_A_IP}]\tlocalhost" | sudo tee -a /etc/hosts
+
 sudo systemctl start scionlab.target
 
 #Webapp
 sudo apt install -yqq scion-apps-webapp
 sudo systemctl start scion-webapp
 
-export SC=/etc/scion
-export LOGS=/var/log/scion
 
 # configure golang build environment
 echo 'export GOPATH="$HOME/go"' >> ~/.profile
@@ -37,10 +45,6 @@ git clone https://github.com/netsec-ethz/scion
 cd ~/scion/go/sig
 go install
 
-export IA=$(cat $SC/gen/ia)
-export IAd=$(cat $SC/gen/ia | sed 's/_/\:/g')
-export AS=$(cat $SC/gen/ia | cut --fields=2 --delimiter="-")
-export ISD=$(cat $SC/gen/ia | cut --fields=1 --delimiter="-")
 sudo mkdir -p ${SC}/gen/ISD${ISD}/AS${AS}/sig${IA}-1/
 cd ~
 git clone -b scionlab https://github.com/netsec-ethz/scion
