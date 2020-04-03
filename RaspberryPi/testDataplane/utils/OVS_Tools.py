@@ -69,7 +69,7 @@ def pairwise(iterable):
     a = iter(iterable)
     return itertools.izip(a,a)
 
-def setup_flow(bridge, containerChain):
+def setup_flow(bridge, containerChain, ip=None):
     of_ports=[]
     for containerName,containerIfaceCount in containerChain:
         twoPorts=False
@@ -81,12 +81,31 @@ def setup_flow(bridge, containerChain):
                 of_ports.append(port)
         else:
             of_ports.append(contPorts)    
-                    
-    for in_port,out_port in pairwise(of_ports):
-        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "in_port={} actions=output:{}"'
-        cmd=cmd.format(bridge, in_port, out_port)
-        subprocess.check_call(shlex.split(cmd))
-    for in_port,out_port in pairwise(reversed(of_ports)):
-        cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "in_port={} actions=output:{}"'
-        cmd=cmd.format(bridge, in_port, out_port)
-        subprocess.check_call(shlex.split(cmd))
+    if ip==None:
+        for in_port,out_port in pairwise(of_ports):
+            cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "in_port={} actions=output:{}"'
+            cmd=cmd.format(bridge, in_port, out_port)
+            subprocess.check_call(shlex.split(cmd))
+        for in_port,out_port in pairwise(reversed(of_ports)):
+            cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "in_port={} actions=output:{}"'
+            cmd=cmd.format(bridge, in_port, out_port)
+            subprocess.check_call(shlex.split(cmd))
+    else:
+        for in_port,out_port in pairwise(of_ports):
+            cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "ip nw_src={} nw_dst={} in_port={} actions=output:{}"'
+            cmd=cmd.format(bridge, ip[0], ip[1], in_port, out_port)
+            subprocess.check_call(shlex.split(cmd))
+            cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "arp nw_src={} nw_dst={} in_port={} actions=output:{}"'
+            cmd=cmd.format(bridge, ip[0], ip[1], in_port, out_port)
+            subprocess.check_call(shlex.split(cmd))            
+        for in_port,out_port in pairwise(reversed(of_ports)):
+            cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "ip nw_src={} nw_dst={} in_port={} actions=output:{}"'
+            cmd=cmd.format(bridge, ip[1], ip[0], in_port, out_port)
+            subprocess.check_call(shlex.split(cmd))
+            cmd='/usr/bin/sudo /usr/bin/ovs-ofctl add-flow {} "arp nw_src={} nw_dst={} in_port={} actions=output:{}"'
+            cmd=cmd.format(bridge, ip[1], ip[0], in_port, out_port)
+            subprocess.check_call(shlex.split(cmd))            
+
+def setup_flow_mult(bridge, containerChainLst, ipLst):
+    for containerChain,ips in itertools.izip(containerChainLst, ipLst):
+        setup_flow(bridge, containerChain,ips)
