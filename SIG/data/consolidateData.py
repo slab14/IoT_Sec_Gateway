@@ -40,12 +40,13 @@ def getStdDev(data):
 
 def main():
     parser=argparse.ArgumentParser()
-    parser.add_argument('--path', '-P', required=True, type=str)
-    parser.add_argument('--name', '-N', required=True, type=str)
+    parser.add_argument('--path', '-P', required=True, type=str, help='path to where files are located')
+    parser.add_argument('--name', '-N', required=True, type=str, help='Name identifire in file name for group to be conslidated')
 
     args=parser.parse_args()
 
     data=getData(args.path, args.name)
+    print("Average (Mbps), Standard Deviation, Median (Mbps)")
     print(getAverage(data), getStdDev(data), getMedian(data))
     
     
