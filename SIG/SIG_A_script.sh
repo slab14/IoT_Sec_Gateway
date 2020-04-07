@@ -1,8 +1,9 @@
 #!/bin/bash
 
 SIG_B_AS="18-ffaa:1:d13"
-SIG_B_IP="128.105.145.219"
-SIG_A_IP="128.105.145.216"
+SIG_B_IP="128.105.145.225"
+SIG_A_IP="128.105.145.227"
+GO_VER="1.13.9"
 
 START_DIR=$(pwd)
 
@@ -41,10 +42,10 @@ fi
 source ~/.profile
 mkdir -p "$GOPATH"
 # install golang
-if ! [ -f ~/go1.11.13.linux-amd64.tar.gz ]; then
+if ! [ -f ~/go${GO_VER}.linux-amd64.tar.gz ]; then
     cd ~
-    curl -O https://dl.google.com/go/go1.11.13.linux-amd64.tar.gz
-    sudo tar -C /usr/local -xzf go1.11.13.linux-amd64.tar.gz
+    curl -O https://dl.google.com/go/go${GO_VER}.linux-amd64.tar.gz
+    sudo tar -C /usr/local -xzf go${GO_VER}.linux-amd64.tar.gz
 fi
 
 # download scionlab's fork of scion and build and install sig
