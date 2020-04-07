@@ -16,15 +16,15 @@ if ! [ -d /etc/scion ]; then
 fi
 
 export SC=/etc/scion
-export LOGS=/var/log/scion
+export LOG=/var/log/scion
 export ISD=$(ls /etc/scion/gen/ | grep ISD | awk -F 'ISD' '{ print $2 }')
 export AS=$( ls /etc/scion/gen/ISD${ISD}/ | grep AS | awk -F 'AS' '{ print $2 }')
 export IAd=$(echo $AS | sed 's/_/\:/g')
 export IA=${ISD}-${AS}
 
-if ! grep -q $IAd /etc/hosts; then
-    printf "\n\n${IAd},[${SIG_A_IP}]\tlocalhost" | sudo tee -a /etc/hosts
-fi
+#if ! grep -q $IAd /etc/hosts; then
+#    printf "\n\n${IAd},[${SIG_A_IP}]\tlocalhost" | sudo tee -a /etc/hosts
+#fi
 
 sudo systemctl start scionlab.target
 
