@@ -3,6 +3,7 @@
 SIG_B_AS="18-ffaa:1:d13"
 SIG_B_IP="128.105.145.225"
 SIG_A_IP="128.105.145.227"
+IP="127.0.0.1"
 GO_VER="1.13.9"
 
 START_DIR=$(pwd)
@@ -98,7 +99,7 @@ fi
 #update *.topology files
 if ! grep -q sig${IAd}-1 topology.json; then
     sed -i "s/sig17-ffaa_1_XXX"/sig${IAd}-1/g topology.json
-    sed -i "s/172.16.0.XX/${SIG_A_IP}/g" topology.json
+    sed -i "s/172.16.0.XX/${IP}/g" topology.json
 fi
 if ! grep -q sig${IAd}-1 ${SC}/gen/ISD${ISD}/AS${AS}/endhost/topology.json; then
     sudo sed -i '/^{/r topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/endhost/topology.json
