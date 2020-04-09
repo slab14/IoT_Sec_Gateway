@@ -3,14 +3,7 @@
         "17-ffaa:1:XXX": {
             "Nets": [
                 "172.16.11.0/24"
-            ],
-            "Sigs": {
-                "remote-1": {
-                    "Addr": "10.0.8.XXX",
-                    "CtrlPort": 10081,
-                    "EncapPort": 10080
-                }
-            }
+            ]
         }
     },
     "ConfigVersion": 9001

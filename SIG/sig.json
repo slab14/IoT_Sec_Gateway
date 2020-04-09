@@ -1,8 +1,8 @@
 {
     "ASes": {
-        "17-ffaa:1:XXX": {
+        "${remote_sig_AS}": {
             "Nets": [
-                "172.16.12.0/24"
+                "${remote_sig_IPnet}"
             ]
         }
     },

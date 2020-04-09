@@ -1,12 +1,12 @@
   "SIG": {
-      "sig17-ffaa_1_XXX": {
-        "Addrs": {
-          "IPv4": {
-            "Public": {
-              "Addr": "172.16.0.XX",
-              "L4Port": 31056
-            }
+    "sig${ISD}-${IAd}-1": {
+      "Addrs": {
+        "IPv4": {
+          "Public": {
+            "Addr": "127.0.0.1",
+            "L4Port": 31056
           }
         }
       }
-    },
+    }
+  },
