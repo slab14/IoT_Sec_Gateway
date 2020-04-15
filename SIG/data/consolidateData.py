@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+# example call: python consolidateData.py -P  <path> -N <filename ID>
+
 import argparse
 import re
 from os import listdir
