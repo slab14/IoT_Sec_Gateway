@@ -3,7 +3,7 @@
 GO_VER="1.13.9"
 
 remote_sig_AS="18-ffaa:1:d12"
-remote_sig_IPnet="172.16.11.0/24"
+remote_sig_IPnet="172.16.11.0"
 
 sigID="sigB"
 sigIP="172.16.0.12"
@@ -100,13 +100,13 @@ if ! grep -q sig${IAd}-1 topology.json; then
 fi
 
 if ! grep -q sig${IAd}-1 ${SC}/gen/ISD${ISD}/AS${AS}/endhost/topology.json; then
-    sudo sed -i '/\"ISD_AS\"/e cat topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/endhost/topology.json    
+    sudo sed -i '/$IAd/e cat topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/endhost/topology.json    
 fi
 if ! grep -q sig${IAd}-1 ${SC}/gen/ISD${ISD}/AS${AS}/br${IA}-1/topology.json; then
-   sudo sed -i '/\"ISD_AS\"/e cat topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/br${IA}-1/topology.json
+   sudo sed -i '/$IAd/e cat topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/br${IA}-1/topology.json
 fi
 if ! grep -q sig${IAd}-1 ${SC}/gen/ISD${ISD}/AS${AS}/cs${IA}-1/topology.json; then
-   sudo sed -i '/\"ISD_AS\"/e cat topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/cs${IA}-1/topology.json
+   sudo sed -i '/$IAd/e cat topology.json' ${SC}/gen/ISD${ISD}/AS${AS}/cs${IA}-1/topology.json
 fi
 
 # setup
@@ -116,7 +116,7 @@ sudo modprobe dummy
 if ! $(ip link | grep -q dummy12); then
     sudo ip link add dummy12 type dummy
     sudo ip addr add ${sigIP}/32 brd + dev dummy12 label dummy12:0
-    sudo ip rule add to ${remote_sig_IPnet} lookup 11 prio 11
+    sudo ip rule add to ${remote_sig_IPnet}/24 lookup 11 prio 11
 fi
 
 #startup SIG

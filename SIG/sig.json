@@ -2,7 +2,7 @@
     "ASes": {
         "${remote_sig_AS}": {
             "Nets": [
-                "${remote_sig_IPnet}"
+                "${remote_sig_IPnet}/24"
             ]
         }
     },
