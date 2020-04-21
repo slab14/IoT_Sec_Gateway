@@ -11,7 +11,7 @@ public class HelloWorld {
 		//new NativeStuff().helloNative();
 		cfunc.helloNative();
 
-		System.out.println("Adding result = " + cfunc.add(1,2));
+		System.out.println("Adding result = %d", cfunc.add(1,2));
 
 	}
 }

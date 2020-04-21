@@ -10,7 +10,7 @@ public class NativeStuff {
     
     public native void helloNative();
 
-    public native int add(int in_a, int in_b);
+    public int add(int in_a, int in_b);
 
 }
 	      

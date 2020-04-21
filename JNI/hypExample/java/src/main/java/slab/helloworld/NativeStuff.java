@@ -12,5 +12,7 @@ public class NativeStuff {
 
     public native int add(int in_a, int in_b);
 
+    public native byte[] hypcall(byte[] in, int len);
+
 }
 	      

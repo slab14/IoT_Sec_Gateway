@@ -1,5 +1,6 @@
 package slab.helloworld;
 
+import java.util.Arrays;
 import slab.helloworld.NativeStuff;
 
 public class HelloWorld {
@@ -12,6 +13,15 @@ public class HelloWorld {
 		cfunc.helloNative();
 
 		System.out.println("Adding result = " + cfunc.add(1,2));
+
+	        byte[] inData = "abcdefghijklmnop".getBytes();
+		int len=inData.length;
+
+		byte[] outData = new byte[len];
+		
+		outData = cfunc.hypcall(inData, len);
+
+		System.out.println("HypCall Result = " + Arrays.toString(outData));
 
 	}
 }

@@ -1,0 +1,29 @@
+#surefire
+#Mon Apr 20 21:03:58 MDT 2020
+testClassesDirectory=/users/slab/temp/hypJNI/java/target/test-classes
+classPathUrl.4=/users/slab/.m2/repository/com/github/fommil/jniloader/1.1/jniloader-1.1.jar
+classPathUrl.3=/users/slab/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar
+classPathUrl.2=/users/slab/.m2/repository/junit/junit/4.12/junit-4.12.jar
+useManifestOnlyJar=true
+classPathUrl.1=/users/slab/temp/hypJNI/java/target/classes
+reportsDirectory=/users/slab/temp/hypJNI/java/target/surefire-reports
+classPathUrl.0=/users/slab/temp/hypJNI/java/target/test-classes
+dirscanner.0=directoryScannerOptions
+providerConfiguration=org.apache.maven.surefire.junit4.JUnit4Provider
+testSuiteDefinitionTestSourceDirectory=/users/slab/temp/hypJNI/java/src/test/java
+surefireClassPathUrl.1=/users/slab/.m2/repository/org/apache/maven/surefire/surefire-api/2.7/surefire-api-2.7.jar
+surefireClassPathUrl.0=/users/slab/.m2/repository/org/apache/maven/surefire/surefire-junit4/2.7/surefire-junit4-2.7.jar
+report.2=org.apache.maven.surefire.report.XMLReporter
+useSystemClassLoader=true
+report.1=org.apache.maven.surefire.report.BriefFileReporter
+report.0=org.apache.maven.surefire.report.ForkingConsoleReporter
+excludes0=**/*$*
+isTrimStackTrace=true
+dirscanner.0.params=/users/slab/temp/hypJNI/java/target/test-classes|[**/Test*.java, **/*Test.java, **/*TestCase.java]|[**/*$*]
+enableAssertions=true
+includes2=**/*TestCase.java
+failIfNoTests=false
+includes1=**/*Test.java
+dirscanner.0.types=java.io.File|java.util.ArrayList|java.util.ArrayList
+includes0=**/Test*.java
+childDelegation=false
