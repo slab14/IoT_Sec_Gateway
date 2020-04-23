@@ -41,28 +41,15 @@
 #ifndef __UHCALL_H__
 #define __UHCALL_H__
 
-#include <stdbool.h>
-#include <stdint.h>
+//#include <stdbool.h>
+//#include <stdint.h>
 
 
 #define UHCALL_PM_PAGE_SHIFT    12
 #define UHCALL_PM_PAGE_SIZE     4096
 #define UHCALL_PM_LENGTH        8
-#define DIGEST_SIZE             20
-#define UAPP_UHSIGN_FUNCTION_SIGN 0x69
 
 #ifndef __ASSEMBLY__
-
-typedef unsigned int u32;
-typedef unsigned char u8;
-typedef unsigned long long u64;
-
-typedef struct {
-  uint8_t pkt[1600];
-  uint32_t pkt_size;
-  uint8_t digest[20];
-}uhsign_param_t;
-
 
 typedef struct {
 	unsigned long uhcall_function;

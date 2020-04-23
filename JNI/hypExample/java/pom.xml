@@ -74,9 +74,9 @@
                   <artifactId>demoproc-native</artifactId>
 		  <version>1.0.0-SNAPSHOT</version>
                   <type>so</type>
-                  <overWrite>false</overWrite>
+                  <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/classes</outputDirectory>
-                  <destFileName>libexample.so</destFileName>
+                  <destFileName>libHypExample.so</destFileName>
                 </artifactItem>
               </artifactItems>
             </configuration>

@@ -5,7 +5,7 @@ import slab.helloworld.utils.JavaUtils;
 public class NativeStuff {
 
     static {
-	JavaUtils.loadLibrary("libexample.so");
+	JavaUtils.loadLibrary("libHypExample.so");
     }
     
     public native void helloNative();

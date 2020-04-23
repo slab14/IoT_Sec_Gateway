@@ -10,8 +10,8 @@
 
 #include <jni.h>
 
-#include "uhcall.h"
-#include "uhcalltest.h"
+#include "include/uhcall.h"
+#include "include/uhcalltest.h"
 
 
 __attribute__((aligned(4096))) __attribute__((section(".data"))) uhcalltest_param_t uhcp;
@@ -28,11 +28,12 @@ JNIEXPORT jint JNICALL Java_slab_helloworld_NativeStuff_add(JNIEnv *env, jobject
 JNIEXPORT jbyteArray JNICALL Java_slab_helloworld_NativeStuff_hypcall(JNIEnv *env, jobject obj, jbyteArray in, jint len){
   uhcalltest_param_t *ptr_uhctp = (uhcalltest_param_t *)&uhcp;
   memcpy(ptr_uhctp->in, in, len);
-  
+  printf("In hypcall\n");
   if(!uhcall(UAPP_UHCALLTEST_FUNCTION_TEST, ptr_uhctp, sizeof(uhcalltest_param_t)))
  	   printf("hypercall FAILED\n");
     else
  	   printf("hypercall SUCCESS\n");
+  printf("completed hypercall\n");
   jbyteArray returnArray = (*env) -> NewByteArray(env,len);
   (*env)->SetByteArrayRegion(env, returnArray, 0, len, ptr_uhctp->out);
   return (returnArray);
