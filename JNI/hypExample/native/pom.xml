@@ -41,7 +41,8 @@
             </source>
           </sources>
           <compilerStartOptions>
-            <compilerStartOption>-I ${JAVA_HOME}/include/</compilerStartOption>
+            <compilerStartOption>-fPIC</compilerStartOption>	    
+            <compilerStartOption>-I ${JAVA_HOME}/include/</compilerStartOption>	    
             <compilerStartOption>-I ${JAVA_HOME}/include/linux/</compilerStartOption>
             <compilerStartOption>-I ${basedir}/src/main/c/include/</compilerStartOption>	    
           </compilerStartOptions>
@@ -49,7 +50,7 @@
 	    <linkerStartOption>-shared</linkerStartOption>
 	  </linkerStartOptions>	  
 	  <linkerEndOptions>
-	    <linkerEndOption>-L ${basedir}/src/main/c/lib/libuhcall.a</linkerEndOption>
+	    <linkerEndOption>-ldl ${basedir}/src/main/c/lib/libuhcall.a</linkerEndOption>
 	  </linkerEndOptions>
         </configuration>
       </plugin>
