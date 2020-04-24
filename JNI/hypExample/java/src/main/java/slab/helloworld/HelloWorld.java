@@ -16,6 +16,7 @@ public class HelloWorld {
 
 	        byte[] inData = "abcdefghijklmnop".getBytes();
 		int len=inData.length;
+		System.out.println("hypercall input: "+Arrays.toString(inData));
 
 		byte[] outData = new byte[len];
 		
