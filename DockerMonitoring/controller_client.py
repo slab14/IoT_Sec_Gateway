@@ -16,6 +16,8 @@ data = s.recv(1024)
 
 if data == "No containers running":
     exit()
+print('Received',data)
+
 container_dict = ast.literal_eval(data)
 
 #perform logic for deciding which container to checkpoint
