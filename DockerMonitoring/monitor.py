@@ -46,6 +46,12 @@ def enable_checkpoint(container_name, checkpoint_name):
     else:
         return "Failure"
 
+def restore_checkpoint(container_name, checkpoint_name):
+    cmd = "docker start --checkpoint {} {}".format(checkpoint_name,container_name).split(" ")
+    cmd_out = subprocess.check_output(cmd).strip()
+    #cannot check success or failure since no output on terminal for either possibility
+    return "Success"
+
 if __name__ == "__main__":
     print get_container_stats()
 

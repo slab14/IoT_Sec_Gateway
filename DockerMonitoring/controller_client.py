@@ -19,16 +19,28 @@ if data == "No containers running":
 print('Received',data)
 
 container_dict = ast.literal_eval(data)
-
+checkpointed_containers = []
 #perform logic for deciding which container to checkpoint
 for cont_id in container_dict:
     l = container_dict[cont_id]
-    checkpoint_name = l[0] + "_check"
     container_name = l[1]
     if container_name != "iperf_dontkillme":
-        continue
+        continue 
+    checkpoint_name = l[0] + "_check"
     cmd = bytes("CHECKPOINT {} {}".format(container_name,checkpoint_name))
     s.sendall(cmd)
     data = s.recv(1024)
     print('Received', data)
+    if data == "Success":
+        #save this information
+        checkpointed_containers.append((container_name,checkpoint_name))
+print checkpointed_containers
 #end of logic, assume container name already available
+
+for i in checkpointed_containers:
+    container_name = i[0]
+    checkpoint_name = i[1]
+    cmd = bytes("RESTORE {} {}".format(container_name,checkpoint_name))
+    s.sendall(cmd)
+    data = s.recv(1024)
+    print('Received', data)
