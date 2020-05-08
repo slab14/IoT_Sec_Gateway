@@ -16,7 +16,8 @@ def parse(input_data):
         return enable_checkpoint(input_data.split()[1], input_data.split()[2])
     elif input_data.startswith('RESTORE'):
         print "Restore requested"
-        return 
+        return restore_checkpoint(input_data.split()[1], input_data.split()[2])
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 while True:
     try:

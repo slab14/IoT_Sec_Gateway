@@ -17,7 +17,7 @@ data = s.recv(1024)
 
 if data == "No containers running":
     exit()
-print('Received',data)
+
 print "Sleep"
 time.sleep(1)
 
@@ -52,7 +52,7 @@ time.sleep(2)
 for i in checkpointed_containers:
     container_name = i[0]
     checkpoint_name = i[1]
-    cmd = bytes("RESTORE {} {}".format(container_name,checkpoint_name))
+    cmd = bytes("RESTORE {} {}".format(checkpoint_name,container_name))
     s.sendall(cmd)
     data = s.recv(1024)
     print('Received', data)
