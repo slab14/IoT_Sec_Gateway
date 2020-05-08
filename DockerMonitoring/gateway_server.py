@@ -7,7 +7,7 @@ PORT = 65432        # Port to listen on (non-privileged ports are > 1023)
 #supported commands
 #GET 
 #CHECKPOINT <container name>
-#RESTORE <container_name>
+#RESTORE <>
 def parse(input_data):
     if input_data == 'GET':
         return str(get_container_stats())
@@ -16,10 +16,15 @@ def parse(input_data):
         return enable_checkpoint(input_data.split()[1], input_data.split()[2])
     elif input_data.startswith('RESTORE'):
         print "Restore requested"
-        return restore_checkpoint(input_data.split()[1], input_data.split()[2])
-
+        return 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((HOST, PORT))
+while True:
+    try:
+        s.bind((HOST, PORT))
+        break
+    except:
+        PORT = PORT + 1
+
 s.listen(5)
 while True:
     conn, addr = s.accept()
