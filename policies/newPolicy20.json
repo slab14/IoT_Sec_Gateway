@@ -1,0 +1,90 @@
+{
+    "n": 2,
+    "devices": [
+	{
+	    "name" : "device0",
+	    "inMAC": "90:e2:ba:b3:bb:3c",
+	    "outMAC": "*",
+	    "states": ["normal", "attack"],
+	    "transition": "alert",
+	    "protections": [
+		{
+		    "state": "normal",
+		    "chain": "P",
+		    "images": ["snort_base"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_cont1",
+			    "ip": "",
+			    "hostFS": "/mnt/snort/log",
+			    "contFS": "/var/log/snort/",
+			    "archives": [
+				{
+				    "tar": "/mnt/rules_a.tar",
+				    "path": "/etc/snort/rules"
+				},
+				{
+				    "tar": "/mnt/config.tar",
+				    "path": "/etc/snort"
+				}
+			    ]
+			}
+		    ]
+		},
+		{
+		    "state": "normal",
+		    "chain": "P",
+		    "images": ["snort_base"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_cont1",
+			    "ip": "",
+			    "hostFS": "/mnt/snort/log",
+			    "contFS": "/var/log/snort/",
+			    "archives": [
+				{
+				    "tar": "/mnt/rules_b.tar",
+				    "path": "/etc/snort/rules"
+				},
+				{
+				    "tar": "/mnt/config.tar",
+				    "path": "/etc/snort"
+				}
+			    ]
+			}
+		    ]
+		}
+	    ]
+	},
+	{
+	    "name" : "device1",
+	    "inMAC": "90:e2:ba:24:d1:30",
+	    "outMAC": "90:e2:ba:24:d0:bc",
+	    "states": ["normal"],
+	    "transition": "",
+	    "protections": [
+		{
+		    "state": "normal",	    
+		    "chain": "P-A",
+		    "images": ["snort_direct_block_v2", "squid_proxy"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_cont2",
+			    "ip": "",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [{}]		    
+			},
+			{
+			    "contName": "squid_http_cont2",
+			    "ip": "10.10.2.100",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [{}]		    
+			}		
+		    ]
+		}
+	    ]
+	}
+    ]
+}
