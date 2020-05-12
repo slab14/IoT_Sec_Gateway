@@ -16,7 +16,7 @@
 #include <openssl/aes.h>
 #include <openssl/evp.h>
 
-#define DIGEST_SIZE 16
+#define DIGEST_SIZE 20
 
 void reverseData(char *payload, int payloadLen){
   for(unsigned int i = 0; i < payloadLen/2; ++i) {
@@ -31,13 +31,13 @@ unsigned char * calcHmac(char *key, struct nfq_data *tb) {
   char *data;
   int len;
   len = nfq_get_payload(tb, &data);
-  digest=HMAC(EVP_md5(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
+  digest=HMAC(EVP_sha1(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
   return digest;
 }
 
 unsigned char * newCalcHmac(char *key, uint8_t *data, uint32_t len) {
   unsigned char *digest;
-  digest=HMAC(EVP_md5(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
+  digest=HMAC(EVP_sha1(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
   return digest;
 }
 
@@ -68,7 +68,8 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
       pktb_put(pkBuff,DIGEST_SIZE);
       char *payload=nfq_tcp_get_payload(tcp, pkBuff);
       //memmove(payload+DIGEST_SIZE, payload, payloadLen);
-      memcpy(payload+payloadLen, hash, DIGEST_SIZE);
+      //raspberry pi adding 2 bytes to the end of a packet
+      memcpy(payload+payloadLen+2, hash, DIGEST_SIZE);
       ip->tot_len=htons(pktb_len(pkBuff));	  
       nfq_tcp_compute_checksum_ipv4(tcp,ip);
       nfq_ip_set_checksum(ip);

@@ -17,10 +17,11 @@
 #include <openssl/evp.h>
 #include <inttypes.h>
 
-#define DIGEST_SIZE 16
+#define DIGEST_SIZE 20
 
 int compare(unsigned char *a, unsigned char *b, int size) {
     while(size-- > 0) {
+      printf("%x | %x \n", *a, *b);
         if ( *a != *b ) { return (*a < *b ) ? -1 : 1; }
         a++; b++;
     }
@@ -40,13 +41,13 @@ unsigned char * calcHmac(char *key, struct nfq_data *tb) {
   char *data;
   int len;
   len = nfq_get_payload(tb, &data);
-  digest=HMAC(EVP_md5(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
+  digest=HMAC(EVP_sha1(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
   return digest;
 }
 
 unsigned char * newCalcHmac(char *key, uint8_t *data, uint32_t len) {
   unsigned char *digest;
-  digest=HMAC(EVP_md5(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
+  digest=HMAC(EVP_sha1(), key, strlen(key), (unsigned char*)data, len, NULL, NULL);
   return digest;
 }
 
@@ -73,7 +74,8 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
       /* received hash */
       unsigned char oldHash[DIGEST_SIZE];
       char *payload = nfq_tcp_get_payload(tcp, pkBuff);
-      memcpy(oldHash, payload+payloadLen-DIGEST_SIZE, DIGEST_SIZE);
+      //raspberry pi adding 2 bytes to end of packet
+      memcpy(oldHash, payload+payloadLen-DIGEST_SIZE+2, DIGEST_SIZE);
       /* Remove first 16 data Bytes */
       //memmove(payload, payload, payloadLen-DIGEST_SIZE);
       
@@ -87,6 +89,10 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
       /* Cacl hash of data */
       hash = newCalcHmac(key, pktb_data(pkBuff), pktb_len(pkBuff));
       //hash = newCalcHmac(key, payload, payloadLen-DIGEST_SIZE);
+      int k=0;
+      for (k=0; k<DIGEST_SIZE; k++){
+	printf("%x | %x \n", oldHash[k], hash[k]);
+      }
       if(compare(hash, oldHash, DIGEST_SIZE)==0) {
         return nfq_set_verdict(qh, id, NF_ACCEPT, pktb_len(pkBuff), pktb_data(pkBuff));
       }else {
