@@ -85,6 +85,29 @@
 		    ]
 		}
 	    ]
-	}
+	},
+	{
+	    "name" : "piTest",
+	    "inMAC": "00:50:b6:ed:ab:59"
+	    "outMAC": "*"
+	    "states": ["normal"],
+	    "transition": "",
+	    "protections": [
+		{
+		    "state": "normal",	    
+		    "chain": "P",
+		    "images": ["snort_demo"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_demo_cont",
+			    "ip": "",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [{}]		    
+			}
+		    ]
+		}
+	    ]
+	}	
     ]
 }
