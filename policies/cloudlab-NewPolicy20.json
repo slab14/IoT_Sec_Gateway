@@ -1,5 +1,5 @@
 {
-    "n": 2,
+    "n": 3,
     "devices": [
 	{
 	    "name" : "device0",
@@ -88,15 +88,15 @@
 	},
 	{
 	    "name" : "TestNode0",
-	    "inMAC": "90:e2:ba:82:2c:7c"
-	    "outMAC": "*"
+	    "inMAC": "90:e2:ba:82:2c:7c",
+	    "outMAC": "*",
 	    "states": ["normal"],
 	    "transition": "",
 	    "protections": [
 		{
 		    "state": "normal",	    
 		    "chain": "P",
-		    "images": ["snort_demo"],
+		    "images": ["snort_demoa"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_demo_cont",
