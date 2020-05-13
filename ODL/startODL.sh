@@ -11,6 +11,7 @@ fi
 FILE="$DIR/l2switch/distribution/karaf/target/assembly/system/org/apache/karaf/jaas/org.apache.karaf.jaas.boot/4.1.7/org.apache.karaf.jaas.boot-4.1.7.jar"
 # first check if we have already installed it.
 if [[ ! -f "$FILE" ]]; then
+    touch $FILE
     wget -q -O - https://repo1.maven.org/maven2/org/apache/karaf/jaas/org.apache.karaf.jaas.boot/4.1.7/org.apache.karaf.jaas.boot-4.1.7.jar > $DIR/l2switch/distribution/karaf/target/assembly/system/org/apache/karaf/jaas/org.apache.karaf.jaas.boot/4.1.7/org.apache.karaf.jaas.boot-4.1.7.jar
 fi
 
