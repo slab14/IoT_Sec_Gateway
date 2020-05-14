@@ -17,6 +17,10 @@ if [[ ! -s /etc/snort/rules/local.rules ]]; then
     mv /etc/snort/rules/local.rules.default /etc/snort/rules/local.rules    
 fi
 
+# setup alert path to controller
+touch ID
+DEMO_ID=2
+echo $DEMO_ID > ID
 python getAlerts.py &
 
 exec /usr/local/bin/snort "$@"

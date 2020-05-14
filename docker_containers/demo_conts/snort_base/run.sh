@@ -17,6 +17,7 @@ if [[ ! -s /etc/snort/rules/local.rules ]]; then
     mv /etc/snort/rules/local.rules.default /etc/snort/rules/local.rules    
 fi
 
+# setup alert path to controller
 python getAlerts.py &
 
 exec /usr/local/bin/snort "$@"

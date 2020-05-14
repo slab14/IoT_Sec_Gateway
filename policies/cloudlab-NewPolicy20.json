@@ -90,7 +90,7 @@
 	    "name" : "TestNode0",
 	    "inMAC": "90:e2:ba:82:2c:7c",
 	    "outMAC": "*",
-	    "states": ["normal"],
+	    "states": ["normal", "scared"],
 	    "transition": "",
 	    "protections": [
 		{
@@ -106,7 +106,21 @@
 			    "archives": [{}]		    
 			}
 		    ]
-		}
+		},
+		{
+		    "state": "scared",	    
+		    "chain": "P",
+		    "images": ["snort_demob"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_demo_cont2",
+			    "ip": "",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [{}]		    
+			}
+		    ]
+		}		
 	    ]
 	}	
     ]

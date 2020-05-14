@@ -2,6 +2,7 @@ import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import socket
+import re
 
 class AlertSender(FileSystemEventHandler):
     def __init__(self, fileName):
@@ -9,28 +10,39 @@ class AlertSender(FileSystemEventHandler):
         self.baseData=''
         with open(fileName, 'r') as f:
             self.baseData=f.read()
+        self.protectionID=''
+        with open("/ID", 'r') as f:
+            self.protectionID=f.read()
+            
                 
     def on_modified(self, event):
-        super(SlabLogger, self).on_modified(event)
+        super(AlertSender, self).on_modified(event)
 
-        if event.src_path == self.fileName:
+        if self.fileName == event.src_path:
             newData=''
-            with open(event.src_path, 'r') as f:
+            diff=''
+            with open(self.fileName, 'r') as f:
                 newData=f.read()
-            diff=newData.split(self.baseData)[1]
+            if self.baseData=='':
+                diff=newData
+            else:
+                findNew=newData.split(self.baseData)
+                if len(findNew)>1:
+                    diff=findNew[1]
             self.baseData=newData
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             #s.connect(('192.168.1.86', 9696))
             s.connect(('128.105.145.205', 9696))
             # process data and send in appropriate format
-            s.sendall(diff)
+            s.sendall("Policy ID:"+self.protectionID)
+            s.sendall("Alert:"+diff)
             s.close()
         
 
 if __name__ == "__main__":
-    event_handler = AlertSender('./alert.csv')
+    event_handler = AlertSender('/var/log/snort/alert.csv')
     observer = Observer()
-    observer.schedule(event_handler, '/var/log/snort/alert')
+    observer.schedule(event_handler, '/var/log/snort/')
     observer.start()
     try:
         while True:
