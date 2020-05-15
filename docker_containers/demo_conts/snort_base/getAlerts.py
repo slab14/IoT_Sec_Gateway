@@ -10,6 +10,10 @@ class AlertSender(FileSystemEventHandler):
         self.baseData=''
         with open(fileName, 'r') as f:
             self.baseData=f.read()
+        self.protectionID=''
+        with open("/ID", 'r') as f:
+            self.protectionID=f.read()
+            
                 
     def on_modified(self, event):
         super(AlertSender, self).on_modified(event)
@@ -30,7 +34,8 @@ class AlertSender(FileSystemEventHandler):
             #s.connect(('192.168.1.86', 9696))
             s.connect(('128.105.145.205', 9696))
             # process data and send in appropriate format
-            s.sendall(diff)
+            s.sendall("Policy ID:"+self.protectionID)
+            s.sendall("Alert:"+diff)
             s.close()
         
 

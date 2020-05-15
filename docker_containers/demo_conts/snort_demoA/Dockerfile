@@ -30,7 +30,7 @@ RUN apt-get update && \
     rm ragel-6.10.tar.gz && \
     cd ragel-6.10/ && \
     ./configure && make && make install && \
-    rm -rf ~/snort_src/rage-6.10 && \
+    rm -rf ~/snort_src/ragel-6.10
 
 # -DAQ
 RUN cd ~/snort_src && \

@@ -30,18 +30,7 @@ RUN apt-get update && \
     rm ragel-6.10.tar.gz && \
     cd ragel-6.10/ && \
     ./configure && make && make install && \
-    rm -rf ~/snort_src/rage-6.10 && \
-# -flatbuffers
-     cd ~/snort_src && \
-     wget https://github.com/google/flatbuffers/archive/master.tar.gz -O flatbuffers-master.tar.gz && \
-     tar -xvzf flatbuffers-master.tar.gz && \
-     rm flatbuffers-master.tar.gz && \
-     mkdir -p flatbuffers-build && \
-     cd flatbuffers-build/ && \
-     cmake ../flatbuffers-master && \
-     make -j 8 && make install && \
-     rm -rf ~/snort_src/flatbuffers-master && \
-     rm -rf ~/snort_src/flatbuffers-build 
+    rm -rf ~/snort_src/ragel-6.10 
 
 # -DAQ
 RUN cd ~/snort_src && \

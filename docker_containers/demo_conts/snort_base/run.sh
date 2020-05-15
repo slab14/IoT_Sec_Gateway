@@ -18,6 +18,8 @@ if [[ ! -s /etc/snort/rules/local.rules ]]; then
 fi
 
 # setup alert path to controller
+touch ID
+echo $PROTECTION_ID > ID
 python getAlerts.py &
 
 exec /usr/local/bin/snort "$@"
