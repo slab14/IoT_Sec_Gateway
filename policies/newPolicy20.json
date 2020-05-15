@@ -1,5 +1,5 @@
 {
-    "n": 2,
+    "n": 3,
     "devices": [
 	{
 	    "name" : "device0",
@@ -90,13 +90,13 @@
 	    "name" : "piTest",
 	    "inMAC": "00:50:b6:ed:ab:59",
 	    "outMAC": "*",
-	    "states": ["normal"],
+	    "states": ["normal", "suspicious", "attack"],
 	    "transition": "",
 	    "protections": [
 		{
 		    "state": "normal",	    
 		    "chain": "P",
-		    "images": ["snort_demo"],
+		    "images": ["snort_demoa"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_demo_cont",
@@ -106,7 +106,35 @@
 			    "archives": [{}]		    
 			}
 		    ]
-		}
+		},
+		{
+		    "state": "suspicious",	    
+		    "chain": "P",
+		    "images": ["snort_demob"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_demo_cont2",
+			    "ip": "",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [{}]		    
+			}
+		    ]
+		},
+		{
+		    "state": "attack",	    
+		    "chain": "P",
+		    "images": ["snort_demob"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_demo_cont3",
+			    "ip": "",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [{}]		    
+			}
+		    ]
+		}		
 	    ]
 	}	
     ]
