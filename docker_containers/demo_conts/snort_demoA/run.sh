@@ -19,8 +19,7 @@ fi
 
 # setup alert path to controller
 touch ID
-DEMO_ID=2
-echo $DEMO_ID > ID
+echo $PROTECTION_ID > ID
 python getAlerts.py &
 
 exec /usr/local/bin/snort "$@"
