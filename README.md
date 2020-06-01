@@ -18,20 +18,40 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
 - Device 3: "Node_1" emulates an IoT device (IP address: 10.1.1.2)
 
 
-Running the experiment:
-1. Initial device setup:
+## Steps for running the experiment in CloudLab
 
---A) Run setup-node.sh on the systems emulating the user/attacker and the IoT device (Device 1 & Device 3).
-
----- Runs apt-get update, docker, (modified version of) ovs (includes ovs-docker-remote) and ensures that the ip routing is setup to use the proper NIC for transmitting packets through the software-defined security gateway.
-
-  ------ Hosts may require removing routes that are specified 'via' the dataplane host. 
-
---B) Run setup-data-plane.sh on the system emulating the software-defined security gateway (Device 2).
-
----- Runs apt-get update, docker, & (modified version of) OVS (includes ovs-docker-remote). Builds snort containers for this emonstration (docker_containers/*). Disables GRO, and sets up a bridge (br0) between the NIC connected to Device 1 (enp6s0f0) and the NIC connected to Device 3 (enps6s0f1).
-
----- NOTE: at this point, Device 1 and Device 3 should be able to send packets (i.e. ping) between each other. However, the IP addresses associated with Device 2's NICs will no longer be usable.
-
-2. Ensure that desired JSON policy is specified (policy/*).
+  - **1) Initial setup**
+      - Run the following command on all 3 nodes:
+      `git clone https://github.com/slab14/IoT_Sec_Gateway.git`
+      
+  - **2) Setup each node**
+  
+      - On "Node_0" and "Node_1", `cd` into __IoT_Sec_Gateway__ and run the following:
+      `./setup-node.sh`
+      - On "Dataplane", `cd` into __IoT_Sec_Gateway__ and run the following:
+      `./setup-data-plane.sh`
+      
+  - **3) Configure JSON policy** 
+      - On "Dataplane", `cd` into __IoT_Sec_Gateway/policies/__
+      - Open __cloudlab-NewPolicy20.json__ 
+      - Scroll down to the name __TestNode0__ and change the __inMac__ variable to the MAC address of either Node_0 or Node_1
+        - Note: Referring to the MAC at iface enp6s0f0/enp6s0f1 
+        
+  - **4) Configure demo containers**
+      - On "Dataplane", `cd` into __IoT_Sec_Gateway/docker_containers/demo_conts/__
+      - In each of the 3 folders, there is a script called __getAlerts.py__ - you will need to edit all 3 scripts
+      - In __getAlerts.py__, change the IP address to the public-facing IP address of the "Dataplane" node in CloudLab
+        - Note: This is the address that CloudLab uses to ssh into the node (128.x.x.x)
+      - Run the following commands to recompile the Docker containers with the new IP address:
+        - `sudo docker build -t snort_demoa ~/IoT_Sec_Gateway/docker_cont/demo_cont/snort_demoA`
+        - `sudo docker build -t snort_demob ~/IoT_Sec_Gateway/docker_cont/demo_cont/snort_demoB`
+ 
+  - **5) Start ODL on Data Plane**
+      - On "Dataplane", you should now see the __l2switch__ folder in root
+      - On "Dataplane", run the following command: 
+      `./l2switch/startODL.sh`
+      - If an error occurs, try running `./l2switch/build.sh` first and then rerun `./l2switch/startODL.sh`
+      
+      
+      
 
