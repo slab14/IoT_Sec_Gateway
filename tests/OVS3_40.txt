@@ -1,0 +1,51 @@
+iperf3: error - the server is busy running a test. try again later
+iperf3: error - the server is busy running a test. try again later
+Connecting to host 10.1.1.2, port 5202
+[  6] local 192.168.2.42 port 56180 connected to 10.1.1.2 port 5202
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-1.00   sec  3.16 MBytes  26.5 Mbits/sec                  (omitted)
+[  6]   1.00-2.00   sec  2.19 MBytes  18.4 Mbits/sec                  (omitted)
+[  6]   2.00-3.00   sec  2.14 MBytes  17.9 Mbits/sec                  (omitted)
+[  6]   3.00-4.00   sec  2.26 MBytes  19.0 Mbits/sec                  (omitted)
+[  6]   4.00-5.00   sec  2.64 MBytes  22.1 Mbits/sec                  (omitted)
+[  6]   5.00-6.00   sec  2.70 MBytes  22.6 Mbits/sec                  (omitted)
+[  6]   6.00-7.00   sec  2.72 MBytes  22.8 Mbits/sec                  (omitted)
+[  6]   7.00-8.00   sec  2.49 MBytes  20.9 Mbits/sec                  (omitted)
+[  6]   8.00-9.00   sec  2.66 MBytes  22.3 Mbits/sec                  (omitted)
+[  6]   9.00-10.00  sec  2.49 MBytes  20.9 Mbits/sec                  (omitted)
+[  6]   0.00-1.00   sec  2.71 MBytes  22.7 Mbits/sec                  
+[  6]   1.00-2.00   sec  2.52 MBytes  21.2 Mbits/sec                  
+[  6]   2.00-3.00   sec  2.77 MBytes  23.3 Mbits/sec                  
+[  6]   3.00-4.00   sec  2.49 MBytes  20.9 Mbits/sec                  
+[  6]   4.00-5.00   sec  2.75 MBytes  23.1 Mbits/sec                  
+[  6]   5.00-6.00   sec  2.78 MBytes  23.3 Mbits/sec                  
+[  6]   6.00-7.00   sec  3.11 MBytes  26.1 Mbits/sec                  
+[  6]   7.00-8.00   sec  3.52 MBytes  29.6 Mbits/sec                  
+[  6]   8.00-9.00   sec  3.39 MBytes  28.4 Mbits/sec                  
+[  6]   9.00-10.00  sec  3.12 MBytes  26.2 Mbits/sec                  
+[  6]  10.00-11.00  sec  3.40 MBytes  28.5 Mbits/sec                  
+[  6]  11.00-12.00  sec  2.64 MBytes  22.2 Mbits/sec                  
+[  6]  12.00-13.00  sec  2.41 MBytes  20.2 Mbits/sec                  
+[  6]  13.00-14.00  sec  2.77 MBytes  23.3 Mbits/sec                  
+[  6]  14.00-15.00  sec  3.23 MBytes  27.1 Mbits/sec                  
+[  6]  15.00-16.00  sec  3.23 MBytes  27.1 Mbits/sec                  
+[  6]  16.00-17.00  sec  3.17 MBytes  26.6 Mbits/sec                  
+[  6]  17.00-18.00  sec  2.93 MBytes  24.6 Mbits/sec                  
+[  6]  18.00-19.00  sec  2.57 MBytes  21.6 Mbits/sec                  
+[  6]  19.00-20.00  sec  2.48 MBytes  20.8 Mbits/sec                  
+[  6]  20.00-21.00  sec  2.53 MBytes  21.2 Mbits/sec                  
+[  6]  21.00-22.00  sec  2.62 MBytes  22.0 Mbits/sec                  
+[  6]  22.00-23.00  sec  2.65 MBytes  22.2 Mbits/sec                  
+[  6]  23.00-24.00  sec  2.99 MBytes  25.1 Mbits/sec                  
+[  6]  24.00-25.00  sec  3.35 MBytes  28.1 Mbits/sec                  
+[  6]  25.00-26.00  sec  3.13 MBytes  26.3 Mbits/sec                  
+[  6]  26.00-27.00  sec  3.14 MBytes  26.3 Mbits/sec                  
+[  6]  27.00-28.00  sec  3.30 MBytes  27.7 Mbits/sec                  
+[  6]  28.00-29.00  sec  3.21 MBytes  26.9 Mbits/sec                  
+[  6]  29.00-30.00  sec  3.19 MBytes  26.7 Mbits/sec                  
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate
+[  6]   0.00-30.00  sec  88.1 MBytes  24.6 Mbits/sec                  sender
+[  6]   0.00-30.00  sec  88.1 MBytes  24.6 Mbits/sec                  receiver
+
+iperf Done.
