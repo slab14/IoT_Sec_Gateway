@@ -8,7 +8,7 @@ Implementing a Software Defined Gateway for use with IoT devices
 **How it works:**
 
 0. The controller parses the [JSON policy file](https://github.com/brytul/IoT_Sec_Gateway/blob/master/policies/cloudlab-NewPolicy20.json).
-1. The initial Snort container (docker_containers/demo_cont/snort_demoA) allows only ping (ICMP) messages to be passed from the user/attacker to the IoT device. It will create a Snort alert when it detects an ICMP packet (a ping).
+1. The initial Snort container (docker_containers/demo_cont/snort_demoA) allows all packets to be passed from the user/attacker to the IoT device. It will create a Snort alert when it detects an ICMP packet (a ping).
 2.  When the controller receives an initial ARP packet, it starts up the middlebox and creates the routing rules. 
 3. The initial middlebox (DemoA) allows ICMP packets as per snort configuration
 4. Sending an ICMP packet will trigger a chnage of state for the IoT device and deploy a transitionary middlebox (DemoB)
@@ -22,7 +22,7 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
 ![alt text](https://i.ibb.co/JpkNXzv/image.png)
 
 - Device 1: "Node_0" emulates the user/attacker trying to access the IoT device (IP address: 192.1.1.2)
-- Device 2: "Dataplane" emulates the software-defined security gateway (both the controller and dataplane are on this host). It is running OVS to create a virtual switch for routing IP traffic through the middlebox specified in the [policy](https://github.com/brytul/IoT_Sec_Gateway/blob/master/policies/cloudlab-NewPolicy20.json). It runs a very basic "controller" (simple-controller.py) to dynamically change the middlebox and routing of IP traffic based upon events it receives from the middlebox.
+- Device 2: "Dataplane" emulates the software-defined security gateway (both the controller and dataplane are on this host). It is running OVS to create a virtual switch for routing IP traffic through the middlebox specified in the [policy](https://github.com/brytul/IoT_Sec_Gateway/blob/master/policies/cloudlab-NewPolicy20.json). The controller which is running OpenDayLight will dynamically change the middlebox whenever a ICMP/ARP alert is triggered.  The ARP alerts is used to deploy the intial middlebox and the ICMP alert is used to trigger the next middlebox according to the policy file.
 - Device 3: "Node_1" emulates an IoT device (IP address: 10.1.1.2)
 
 
@@ -36,8 +36,10 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
   
       - On "Node_0" and "Node_1", `cd` into __IoT_Sec_Gateway__ and run the following:
       `./setup-node.sh`
+        - This script will install our tree of OVS, and install the normal builds of Docker, Maven, etc.  It also adds the routing rules            to the apt network interface so that the nodes can talk to each other when we build the network bridge.  
       - On "Dataplane", `cd` into __IoT_Sec_Gateway__ and run the following:
       `./setup-data-plane.sh`
+        - This script follows similar setup to the above bash script with additional configuration for the "Dataplane"; it also starts             the ovsdb_server, builds the docker containers, sets up docker to recevie remote commands from the controller and builds the              last part of the network bridge for "Node_0" and "Node_1" to talk to each other.
       
   - **3) Configure JSON policy** 
       - On "Dataplane", `cd` into __IoT_Sec_Gateway/policies/__
@@ -62,7 +64,7 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
       - You should see a "Ready" message on the ODL console letting you know it is ready to receive ARP packets
       
   - **6) Test**
-      - Attempt to send a ping from "Node_0" to "Node_1"
+      - Attempt to send a ping from "Node_0" to "Node_1" to create the ARP request
       - On "Dataplane", Node_0's MAC address will match with the policy (as specified in step 3) and deploy middlebox demoA
       - Attempt to send another ping from "Node_0" to "Node_1" 
       - On "Dataplane", you should see messages affirming a new container was started
@@ -71,7 +73,9 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
      
 ## Important info
 
-We used a branched version of [l2switch](https://github.com/slab14/l2switch/tree/slab-demo).  Please refer to this repo for more info on ODL and custom scripts used to accomplish the demo
+We used a branched version of [l2switch](https://github.com/slab14/l2switch/tree/slab-demo) and [ovs](https://github.com/slab14/ovs/tree/slab).  Please refer to their repos for additional README info
+
+
       
       
       
