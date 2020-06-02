@@ -42,7 +42,7 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
   - **3) Configure JSON policy** 
       - On "Dataplane", `cd` into __IoT_Sec_Gateway/policies/__
       - Open __cloudlab-NewPolicy20.json__ 
-      - Scroll down to the name __TestNode0__ and change the __inMac__ variable to the MAC address of either Node_0 or Node_1
+      - Scroll down to the name __TestNode0__ and change the __inMac__ variable to the MAC address of Node_0
         - Note: Referring to the MAC at iface enp6s0f0/enp6s0f1 
         
   - **4) Configure demo containers**
@@ -59,6 +59,14 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
       - On "Dataplane", run the following command: 
       `./l2switch/startODL.sh`
       - If an error occurs, try running `sudo ./l2switch/build.sh` first and then rerun `./l2switch/startODL.sh`
+      - You should see a "Ready" message on the ODL console letting you know it is ready to receive ARP packets
+      
+  - **6) Test**
+      - Attempt to send a ping from "Node_0" to "Node_1"
+      - On "Dataplane", Node_0's MAC address will match with the policy (as specified in step 3) and deploy middlebox demoA
+      - Attempt to send another ping from "Node_0" to "Node_1" 
+      - On "Dataplane", you should see messages affirming a new container was started
+      - ICMP packets should now be dropped.  Use netcat to test that other packets like TCP can still be received.
       
      
 ## Important info
