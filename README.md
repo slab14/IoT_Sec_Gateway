@@ -7,7 +7,7 @@ Implementing a Software Defined Gateway for use with IoT devices
 
 **How it works:**
 
-0. The controller parses the policy JSON file (policy/cloudlab-NewPolicy20.json).
+0. The controller parses the [JSON policy file](https://github.com/brytul/IoT_Sec_Gateway/blob/master/policies/cloudlab-NewPolicy20.json).
 1. The initial Snort container (docker_containers/demo_cont/snort_demoA) allows only ping (ICMP) messages to be passed from the user/attacker to the IoT device. It will create a Snort alert when it detects an ICMP packet (a ping).
 2.  When the controller receives an initial ARP packet, it starts up the middlebox and creates the routing rules. 
 3. The initial middlebox (DemoA) allows ICMP packets as per snort configuration
@@ -22,7 +22,7 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
 ![alt text](https://i.ibb.co/JpkNXzv/image.png)
 
 - Device 1: "Node_0" emulates the user/attacker trying to access the IoT device (IP address: 192.1.1.2)
-- Device 2: "Dataplane" emulates the software-defined security gateway (both the controller and dataplane are on this host). It is running OVS to create a virtual switch for routing IP traffic through the middlebox specified in the policy (policy/newPolicy0.json). It runs a very basic "controller" (simple-controller.py) to dynamically change the middlebox and routing of IP traffic based upon events it receives from the middlebox.
+- Device 2: "Dataplane" emulates the software-defined security gateway (both the controller and dataplane are on this host). It is running OVS to create a virtual switch for routing IP traffic through the middlebox specified in the [policy](https://github.com/brytul/IoT_Sec_Gateway/blob/master/policies/cloudlab-NewPolicy20.json). It runs a very basic "controller" (simple-controller.py) to dynamically change the middlebox and routing of IP traffic based upon events it receives from the middlebox.
 - Device 3: "Node_1" emulates an IoT device (IP address: 10.1.1.2)
 
 
