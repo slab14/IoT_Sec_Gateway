@@ -1,3 +1,8 @@
+Appendix:
+[Important scripts](#important-files)
+
+
+
 # IoT_Sec_Gateway
 Implementing a Software Defined Gateway for use with IoT devices
 
@@ -59,6 +64,11 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
       - On "Dataplane", run the following command: 
       `./l2switch/startODL.sh`
       - If an error occurs, try running `sudo ./l2switch/build.sh` first and then rerun `./l2switch/startODL.sh`
+      
+     
+## Important files
+
+
       
       
       
