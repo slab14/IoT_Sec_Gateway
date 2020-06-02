@@ -35,7 +35,7 @@ class AlertSender(FileSystemEventHandler):
                     diff=findNew[1]
             self.baseData=newData
 
-            IDdata="Policy ID:"+self.protectionID+"\n"
+            IDdata="Policy ID:"+self.protectionID+"; "
             alertData="Alert:"+diff+"\n"
             sender.sendEncryptedAlert(IDdata, len(IDdata), alertData, len(alertData))
             
