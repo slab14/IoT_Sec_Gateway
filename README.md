@@ -1,17 +1,25 @@
 # IoT_Sec_Gateway
 Implementing a Software Defined Gateway for use with IoT devices
 
-Current version: v0.1
-- Implements a very basic static policy setup by an SDN Controller (OpenDayLight).
-Demo: 
-0. The controller parses the policy JSON file (policy/newPolicy0.json).
-1. The initial Snort container (docker_containers/snort_direct_block_v2) allows only ping (ICMP) messages to be passed from the user/attacker to the IoT device. It will create a Snort alert when it detects an ICMP packet (a ping).
-2.  When the controller receives an initial ARP packet, it starts up the middlebox and creates the routing rules. 
+**Current version:** v0.1 
 
+**Objective:** Implements a very basic static policy setup by an SDN Controller (OpenDayLight). 
+
+**How it works:**
+
+0. The controller parses the policy JSON file (policy/cloudlab-NewPolicy20.json).
+1. The initial Snort container (docker_containers/demo_cont/snort_demoA) allows only ping (ICMP) messages to be passed from the user/attacker to the IoT device. It will create a Snort alert when it detects an ICMP packet (a ping).
+2.  When the controller receives an initial ARP packet, it starts up the middlebox and creates the routing rules. 
+3. The initial middlebox (DemoA) allows ICMP packets as per snort configuration
+4. Sending an ICMP packet will trigger a chnage of state for the IoT device and deploy a transitionary middlebox (DemoB)
+5. The DemoB middlebox contains snort rules to now block ICMP packets
+6. Try sending an ICMP packet (ping) and a TCP packet (netcat).  Only TCP packets will make it through.
+7. Does not currently transition back to DemoA
 
 Demonstrated in Cloudlab, using 3 physical machines each running Ubuntu 16.04. The topology information can be found here: https://www.cloudlab.us/manage_profile.php?action=edit&uuid=0d1e3689-b5bb-11e7-b179-90e2ba22fee4
 
 Topology picture:   Device 1 -- Device 2 -- Device 3
+![alt text](https://i.ibb.co/JpkNXzv/image.png)
 
 - Device 1: "Node_0" emulates the user/attacker trying to access the IoT device (IP address: 192.1.1.2)
 - Device 2: "Dataplane" emulates the software-defined security gateway (both the controller and dataplane are on this host). It is running OVS to create a virtual switch for routing IP traffic through the middlebox specified in the policy (policy/newPolicy0.json). It runs a very basic "controller" (simple-controller.py) to dynamically change the middlebox and routing of IP traffic based upon events it receives from the middlebox.
@@ -50,7 +58,7 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
       - On "Dataplane", you should now see the __l2switch__ folder in root
       - On "Dataplane", run the following command: 
       `./l2switch/startODL.sh`
-      - If an error occurs, try running `./l2switch/build.sh` first and then rerun `./l2switch/startODL.sh`
+      - If an error occurs, try running `sudo ./l2switch/build.sh` first and then rerun `./l2switch/startODL.sh`
       
       
       
