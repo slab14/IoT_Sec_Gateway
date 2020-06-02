@@ -1,8 +1,3 @@
-Appendix:
-[Important scripts](#important-files)
-
-
-
 # IoT_Sec_Gateway
 Implementing a Software Defined Gateway for use with IoT devices
 
@@ -66,9 +61,9 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
       - If an error occurs, try running `sudo ./l2switch/build.sh` first and then rerun `./l2switch/startODL.sh`
       
      
-## Important files
+## Important info
 
-
+We used a branched version of [l2switch](https://github.com/slab14/l2switch/tree/slab-demo).  Please refer to this repo for more info on ODL and custom scripts used to accomplish the demo
       
       
       
