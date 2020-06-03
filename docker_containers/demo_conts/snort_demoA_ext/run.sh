@@ -1,6 +1,6 @@
 #!/bin/bash
 
-gcc -fPIC -shared -o send.so sendAlert.c
+gcc -fPIC -shared -o send.so sendAlert.c -lcrypto
 
 while true; do
     grep -q '^1$' "/sys/class/net/eth1/carrier" &&

@@ -6,7 +6,8 @@ import re
 import ctypes
 
 sender = ctypes.CDLL("/send.so")
-sender.sendEncryptedAlert.argtype=[ctypes.POINTER(ctypes.c_char), ctypes.c_int, ctypes.POINTER(ctypes.c_char), ctypes.c_int]
+sender.sendEncryptedAlert.argtype=[ctypes.POINTER(ctypes.c_char), ctypes.c_int]
+sender.sendEncryptedAlert.restype=ctypes.c_int
 
 class AlertSender(FileSystemEventHandler):
     def __init__(self, fileName):
@@ -16,7 +17,7 @@ class AlertSender(FileSystemEventHandler):
             self.baseData=f.read()
         self.protectionID=''
         with open("/ID", 'r') as f:
-            self.protectionID=f.read()
+            self.protectionID=f.read().rstrip()
             
                 
     def on_modified(self, event):
@@ -35,9 +36,13 @@ class AlertSender(FileSystemEventHandler):
                     diff=findNew[1]
             self.baseData=newData
 
-            IDdata="Policy ID:"+self.protectionID+"; "
-            alertData="Alert:"+diff+"\n"
-            sender.sendEncryptedAlert(IDdata, len(IDdata), alertData, len(alertData))
+            IDdata="Policy ID:"+str(self.protectionID)+"; "
+            alertData="Alert:"+str(diff).rstrip()
+            sendData=str(IDdata+alertData)
+            print("[python] raw: "+sendData+"\n")
+            print("[python] - input str len: "+str(len(sendData)))
+            cipherLen=sender.sendEncryptedAlert(sendData, len(sendData))
+            print("[python] - cipher len: "+str(cipherLen))
             
             '''
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
