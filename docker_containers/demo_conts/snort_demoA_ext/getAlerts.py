@@ -39,21 +39,8 @@ class AlertSender(FileSystemEventHandler):
             IDdata="Policy ID:"+str(self.protectionID)+"; "
             alertData="Alert:"+str(diff).rstrip()
             sendData=str(IDdata+alertData)
-            print("[python] raw: "+sendData+"\n")
-            print("[python] - input str len: "+str(len(sendData)))
             cipherLen=sender.sendEncryptedAlert(sendData, len(sendData))
-            print("[python] - cipher len: "+str(cipherLen))
             
-            '''
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            #s.connect(('192.168.1.86', 9696))
-            s.connect(('128.105.145.22', 9696))
-            # process data and send in appropriate format
-            s.sendall("Policy ID:"+self.protectionID)
-            s.sendall("Alert:"+diff)
-            s.close()
-            '''
-        
 
 if __name__ == "__main__":
     event_handler = AlertSender('/var/log/snort/alert.csv')
