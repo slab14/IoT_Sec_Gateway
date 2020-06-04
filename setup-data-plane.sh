@@ -58,11 +58,15 @@ install_ovs_fromGit() {
     cd ~
     git clone https://github.com/slab14/ovs.git
     cd ovs
-    git checkout slab
+    git checkout feature-kernsign
     ./boot.sh
     ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc --with-linux=/lib/modules/$(uname -r)/build
     make
     sudo make install
+    sudo rmmod openvswitch
+    sudo rm /lib/modules/$(uname -r)/extra/openvswitch.ko
+    sudo make modules_install
+    sudo modprobe -v openvswitch
     cd ~
 
     # Install ovs-docker-remote dependencies
