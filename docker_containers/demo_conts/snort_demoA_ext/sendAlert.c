@@ -2,7 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h> 
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <arpa/inet.h>
 #include <openssl/conf.h>
 #include <openssl/evp.h>
 #include <openssl/err.h>
@@ -60,8 +63,8 @@ int calcSize(int in){
 int sendEncryptedAlert(char * alertData, int alertLen){
   int sockfd;
   struct sockaddr_in servaddr;
-  //  char encryptedBuff[calcSize(alertLen)+4];
-  char encryptedBuff[2000];
+  char encryptedBuff[calcSize(alertLen)+4];
+  // char encryptedBuff[2000];
   int ciphertext_len = 0;
   unsigned char *key=(unsigned char *)"_My sUpEr sEcrEt kEy 1234567890_";
   unsigned char *iv=(unsigned char *)"0123456789012345";
@@ -74,7 +77,7 @@ int sendEncryptedAlert(char * alertData, int alertLen){
   // assign IP, PORT
   bzero(&servaddr, sizeof(servaddr));
   servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = inet_addr("128.105.145.22");
+  servaddr.sin_addr.s_addr = inet_addr("128.105.144.68");
   servaddr.sin_port = htons(9696);
 
   // connect the client socket to server socket
@@ -88,9 +91,9 @@ int sendEncryptedAlert(char * alertData, int alertLen){
 			  iv, &encryptedBuff[4]);
 
   memcpy((char*)encryptedBuff,(char*)&ciphertext_len,sizeof(int));
-  
+
   //send alert data to controller
-  send(sockfd, encryptedBuff, (ciphertext_len+4), 0);  
+  send(sockfd, encryptedBuff, (ciphertext_len+4), 0);
 
   close(sockfd);
 
