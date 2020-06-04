@@ -6,7 +6,7 @@
 	    "inMAC": "90:e2:ba:b3:bb:3c",
 	    "outMAC": "*",
 	    "states": ["normal", "attack"],
-	    "transition": "alert",
+	    "transition": ["snort:alert"],
 	    "protections": [
 		{
 		    "state": "normal",
@@ -61,7 +61,7 @@
 	    "inMAC": "90:e2:ba:24:d1:30",
 	    "outMAC": "90:e2:ba:24:d0:bc",
 	    "states": ["normal"],
-	    "transition": "",
+	    "transition": [""],
 	    "protections": [
 		{
 		    "state": "normal",	    
@@ -88,10 +88,10 @@
 	},
 	{
 	    "name" : "TestNode0",
-	    "inMAC": "90:e2:ba:82:2c:7c",
+	    "inMAC": "3c:fd:fe:a9:0e:c4",
 	    "outMAC": "*",
-	    "states": ["normal", "scared"],
-	    "transition": "",
+	    "states": ["normal", "scared", "panic"],
+	    "transition": ["snort:ICMP", "snort:Hello World"],
 	    "protections": [
 		{
 		    "state": "normal",	    
@@ -120,7 +120,21 @@
 			    "archives": [{}]		    
 			}
 		    ]
-		}		
+		},
+		{
+		    "state": "panic",	    
+		    "chain": "P",
+		    "images": ["snort_demob"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_demo_cont3",
+			    "ip": "",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [{}]		    
+			}
+		    ]
+		}				
 	    ]
 	}	
     ]
