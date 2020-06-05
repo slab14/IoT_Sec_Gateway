@@ -6,7 +6,7 @@
 	    "inMAC": "90:e2:ba:b3:bb:3c",
 	    "outMAC": "*",
 	    "states": ["normal", "attack"],
-	    "transition": "alert",
+	    "transition": ["snort:alert"],
 	    "protections": [
 		{
 		    "state": "normal",
@@ -61,7 +61,7 @@
 	    "inMAC": "90:e2:ba:24:d1:30",
 	    "outMAC": "90:e2:ba:24:d0:bc",
 	    "states": ["normal"],
-	    "transition": "",
+	    "transition": [""],
 	    "protections": [
 		{
 		    "state": "normal",	    
@@ -91,7 +91,7 @@
 	    "inMAC": "00:50:b6:ed:ab:59",
 	    "outMAC": "*",
 	    "states": ["normal", "suspicious", "attack"],
-	    "transition": "",
+	    "transition": ["snort:ICMP", "snort:Hello World"],
 	    "protections": [
 		{
 		    "state": "normal",	    
