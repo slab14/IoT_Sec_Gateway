@@ -31,8 +31,7 @@ class AlertSender(FileSystemEventHandler):
                     diff=findNew[1]
             self.baseData=newData
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            #s.connect(('192.168.1.86', 9696))
-            s.connect(('128.105.145.205', 9696))
+            s.connect(('192.168.1.86', 9696))
             # process data and send in appropriate format
             s.sendall("Policy ID:"+self.protectionID)
             s.sendall("Alert:"+diff)
