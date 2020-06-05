@@ -3,6 +3,11 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import socket
 import re
+import ctypes
+
+sender = ctypes.CDLL("/send.so")
+sender.sendEncryptedAlert.argtype=[ctypes.POINTER(ctypes.c_char), ctypes.c_int]
+sender.sendEncryptedAlert.restype=ctypes.c_int
 
 class AlertSender(FileSystemEventHandler):
     def __init__(self, fileName):
@@ -12,7 +17,7 @@ class AlertSender(FileSystemEventHandler):
             self.baseData=f.read()
         self.protectionID=''
         with open("/ID", 'r') as f:
-            self.protectionID=f.read()
+            self.protectionID=f.read().rstrip()
             
                 
     def on_modified(self, event):
@@ -30,13 +35,12 @@ class AlertSender(FileSystemEventHandler):
                 if len(findNew)>1:
                     diff=findNew[1]
             self.baseData=newData
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect(('192.168.1.86', 9696))
-            # process data and send in appropriate format
-            s.sendall("Policy ID:"+self.protectionID)
-            s.sendall("Alert:"+diff)
-            s.close()
-        
+
+            IDdata="Policy ID:"+str(self.protectionID)+"; "
+            alertData="Alert:"+str(diff).rstrip()
+            sendData=str(IDdata+alertData)
+            cipherLen=sender.sendEncryptedAlert(sendData, len(sendData))
+            
 
 if __name__ == "__main__":
     event_handler = AlertSender('/var/log/snort/alert.csv')
