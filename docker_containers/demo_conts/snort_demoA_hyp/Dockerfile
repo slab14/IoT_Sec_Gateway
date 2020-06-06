@@ -62,7 +62,7 @@ RUN pip install watchdog
 
 COPY snort.conf /etc/snort/snort.conf.default 
 COPY local.rules /etc/snort/rules/local.rules.default 
-COPY run.sh getAlerts.py sendHypAlert.c addHash.c checkHash.c libuhcall.a uhcall.h uagent.h ./
+COPY run.sh getAlerts.py sendHypAlert.c addHash.c checkHash.c libuhcall.a uhcall.h uagent.h uhsign.h ./
 
 CMD ["-Q", "--daq", "afpacket", "--daq-var", "buffer_size_mb=1", "-i", "eth1:eth2", "-c", "/etc/snort/snort.conf", "-l", "/var/log/snort/"]
 
