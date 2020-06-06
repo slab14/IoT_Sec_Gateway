@@ -41,6 +41,9 @@
 #ifndef __UHCALL_H__
 #define __UHCALL_H__
 
+#include <stdbool.h>
+#include <stdint.h>
+
 #define UHCALL_PM_PAGE_SHIFT 	12
 #define UHCALL_PM_PAGE_SIZE	4096
 #define UHCALL_PM_LENGTH	8

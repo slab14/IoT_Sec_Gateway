@@ -1,8 +1,6 @@
 #ifndef __UAGENT_H__
 #define __UAGENT_H__
 
-#include <stdint.h>
-
 #define UAPP_UAGENT_FUNCTION_SIGN    0x67
 #define MAX_SIZE 1600
 
