@@ -42,20 +42,13 @@ build_docker_containers(){
     echo "Docker containers built"
 }
 
-install_python_packages() {
-    echo "Installing Python..."
-    sudo apt-get install -yqq python python-ipaddress python-subprocess32 \
-	 python-pip
-    echo "Python Install Complete"
-}
-
-install_ovs() {
-    echo "Installing OVS..."
-    sudo apt-get install -yqq openvswitch-common openvswitch-switch \
-	 openvswitch-dbg
-    sudo systemctl start openvswitch-switch
-    sudo systemctl enable openvswitch-switch
-    echo "OVS Install Complete"
+get_kernel_headers(){
+    sudo apt-get update -qq
+    sudo apt-get install -yqq libncurses5-dev git bc bison flex libssl-dev
+    sudo wget https://raw.githubusercontent.com/notro/rpi-source/master/rpi-source -O /usr/local/bin/rpi-source
+    sudo chmod +x /usr/local/bin/rpi-source
+    /usr/local/bin/rpi-source -q --tag-update
+    rpi-source
 }
 
 install_ovs_fromGit() {
@@ -63,9 +56,9 @@ install_ovs_fromGit() {
     sudo apt-get update -qq
     sudo apt-get install -yqq make gcc \
 	 libcap-ng0 libcap-ng-dev python python-pip autoconf \
-	 libtool wget netcat curl clang sparse flake8 \
+	 libtool wget netcat curl clang  \
 	 graphviz automake python-dev python3-pip \
-	 graphviz build-essential pkg-config \
+	 build-essential pkg-config \
          libssl-dev gdb linux-headers-`uname -r`
     sudo pip3 -qq install --upgrade pip
     pip -qq install --user six pyftpdlib tftpy flake8 sparse
