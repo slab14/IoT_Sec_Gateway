@@ -59,7 +59,7 @@ int sendEncryptedAlert(char * alertData, int alertLen){
   uhcp_pkt.pkt_size=alertLen;
   uhcp_pkt.vaddr = (uint32_t)&uhcp_pkt;
   uhcp_pkt.op=1;
-  hypDecrpyt((void *) &uhcp_pkt);
+  hypEncrypt((void *) &uhcp_pkt);
 
   // copy encrypted data
   memcpy((char*)&encryptedBuff[4], (char*)&uhcp_pkt.pkt_data, ciphertext_len);
