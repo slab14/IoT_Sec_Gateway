@@ -1,10 +1,8 @@
 #!/bin/bash
 
-#borrowed form Jeff Helt
-
 BRIDGE_NAME=br0
-CLIENT_SIDE_IP=192.1.1.1
-SERVER_SIDE_IP=10.1.1.1
+CLIENT_SIDE=eth1
+SERVER_SIDE=eth2
 
 OVS_PORT=6677
 DOCKER_PORT=4243
@@ -12,23 +10,27 @@ DOCKER_PORT=4243
 update() {
     echo "Updating apt-get..."
     sudo apt-get update -qq
-    #    sudo apt-get install -yqq default-jre default-jdk maven jq
-    sudo apt-get install -yqq openjdk-8-jre openjdk-8-jdk maven jq
+    sudo apt-get install -yqq maven jq libxslt1.1 dpkg
+    cd ~
+    mkdir -p java11_deb
+    cd java11_deb
+    wget https://download.bell-sw.com/java/11.0.7+10/bellsoft-jdk11.0.7+10-linux-arm32-vfp-hflt.deb
+    wget https://download.bell-sw.com/java/11.0.7+10/bellsoft-jre11.0.7+10-linux-arm32-vfp-hflt.deb
+    sudo dpkg -i bellsoft-jdk11.0.7+10-linux-arm32-vfp-hflt.deb
+    sudo dpkg -i bellsoft-jre11.0.7+10-linux-arm32-vfp-hflt.deb
+    cd ~
     echo "Update complete"
 }
 
 install_docker() {
     echo "Installing Docker..."
-    sudo apt-get update -qq
-    sudo apt-get install -yqq docker-compose 
-    sudo apt-get install -yqq apt-transport-https ca-certificates \
-	 curl software-properties-common
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
-	| sudo apt-key add -
-    sudo apt-key fingerprint 0EBFCD88
-    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-    sudo apt-get update -qq
-    sudo apt-get install -yqq docker-ce
+    echo "Installing Docker..."
+
+    #Get Docker
+    curl -sSL https://get.docker.com | sh
+    cd /usr/bin
+    sudo wget https://raw.githubusercontent.com/openvswitch/ovs/master/utilities/ovs-docker
+    sudo chmod a+rwx ovs-docker   
 
     sudo systemctl start docker
     sudo systemctl enable docker
@@ -45,10 +47,26 @@ build_docker_containers(){
 get_kernel_headers(){
     sudo apt-get update -qq
     sudo apt-get install -yqq libncurses5-dev git bc bison flex libssl-dev
+    sudo wget -O /usr/src/linux-source.tar.gz https://github.com/raspberrypi/linux/archive/04c8e47067d4873c584395e5cb260b4f170a99ea.tar.gz
+    sudo tar -xzf /usr/src/linux-source.tar.gz -C /usr/src/
+    sudo touch 04c8e47067d4873c584395e5cb260b4f170a99ea/.scmversion
+    echo + | sudo tee -a /usr/src/linux-04c8e47067d4873c584395e5cb260b4f170a99ea/.scmversion
+    sudo ln -s /usr/src/linux-04c8e47067d4873c584395e5cb260b4f170a99ea /usr/src/linux
+    sudo ln -sf /usr/src/linux /lib/modules/$(uname -r)/build
+    sudo ln -sf /usr/src/linux /lib/modules/$(uname -r)/source
+    cd /usr/src/linux
+    sudo make modules
+    sudo make modules_install
+    sudo rm /usr/scr/linux-source.tar.gz
+    cd ~
+    /*
+    // generates kernel headers based upon kernel commit in changelog (incorrect headers for hypervisor, kernel version of original raspbian image, not upgraded one from hypervisor install)
+    // also sudo apt-get install raspberrypi-kernel-headers installs the wrong version (does not match uname -r)
     sudo wget https://raw.githubusercontent.com/notro/rpi-source/master/rpi-source -O /usr/local/bin/rpi-source
     sudo chmod +x /usr/local/bin/rpi-source
     /usr/local/bin/rpi-source -q --tag-update
     rpi-source
+    */
 }
 
 install_ovs_fromGit() {
@@ -72,6 +90,8 @@ install_ovs_fromGit() {
     ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc --with-linux=/lib/modules/$(uname -r)/build
     make
     sudo make install
+    sudo insmode datapath/linux/openvswitch.ko
+    sudo make modules_install
     cd ~
 
     # Install ovs-docker-remote dependencies
@@ -90,20 +110,8 @@ setup_maven() {
     wget -q -O - https://raw.githubusercontent.com/opendaylight/odlparent/6.0.x/settings.xml > ~/.m2/settings.xml
     export M2_HOME=/usr/share/maven/
     export M2=$M2_HOME
-    export MAVEN_OPTS='-Xmx1048m -XX:MaxPermSize=512m -Xms256m'
+    export MAVEN_OPTS='-Xmx768m -Xms256m'
     export PATH=$M2:$PATH
-}
-
-find_interface_for_ip() {
-  local ip="$1"
-
-  local interface=$(ip -o addr | grep "inet $ip" | awk -F ' ' '{ print $2 }')
-  if [[ -z $interface ]]; then
-    return 1
-  else
-    echo $interface
-    return 0
-  fi
 }
 
 setup_remote_ovsdb_server() {
@@ -117,8 +125,8 @@ setup_remote_docker() {
 }
 
 disable_gro() {
-    local client_side_if=$(find_interface_for_ip $CLIENT_SIDE_IP)
-    local server_side_if=$(find_interface_for_ip $SERVER_SIDE_IP)
+    local client_side_if=eth1
+    local server_side_if=eth2
     sudo ethtool -K $client_side_if gro off
     sudo ethtool -K $server_side_if gro off
 }
@@ -129,8 +137,8 @@ setup_bridge() {
     sudo ovs-vsctl --may-exist add-br $BRIDGE_NAME
     sudo ip link set $BRIDGE_NAME up
 
-    local client_side_if=$(find_interface_for_ip $CLIENT_SIDE_IP)
-    local server_side_if=$(find_interface_for_ip $SERVER_SIDE_IP)
+    local client_side_if=$CLIENT_SIDE
+    local server_side_if=$SERVER_SIDE
     
     sudo ovs-vsctl --may-exist add-port $BRIDGE_NAME $client_side_if \
 	 -- set Interface $client_side_if ofport_request=1
@@ -144,7 +152,6 @@ setup_bridge() {
 
 configure_ovs_switch() {
     sudo ovs-vsctl set-controller $BRIDGE_NAME tcp:127.0.0.1:6633 ptcp:6634
-    sudo ovs-vsctl set bridge $BRIDGE_NAME protocol=OpenFlow13
     sudo ovs-vsctl set-fail-mode $BRIDGE_NAME secure
 }
 
@@ -154,7 +161,7 @@ get_controller() {
     cd l2switch/
     git checkout slab-demo
     export JAVA_HOME=`type -p javac|xargs readlink -f|xargs dirname|xargs dirname`
-    mvn clean install -DskipTests
+    mvn clean install -Pq -DskipTests
     cd ~
 }
 
