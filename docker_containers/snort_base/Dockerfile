@@ -32,22 +32,22 @@ RUN apt-get update && \
     ./configure && make && make install && \
     rm -rf ~/snort_src/rage-6.10 && \
 # -Boost C++
-    cd ~/snort_src && \
-    wget https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz && \
-    tar -xvzf boost_1_65_1.tar.gz && \
-    rm boost_1_65_1.tar.gz && \
+#    cd ~/snort_src && \
+#    wget https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz && \
+#    tar -xvzf boost_1_65_1.tar.gz && \
+#    rm boost_1_65_1.tar.gz && \
 # -Hyperscan
-    cd ~/snort_src && \
-    wget https://github.com/intel/hyperscan/archive/v4.6.0.tar.gz && \
-    tar -xvzf v4.6.0.tar.gz && \
-    rm v4.6.0.tar.gz && \
-    mkdir -p ~/snort_src/hyperscan-4.6.0-build && \
-    cd ~/snort_src/hyperscan-4.6.0-build/ && \
-    cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DBOOST_ROOT=~/snort_src/boost_1_65_1/ ../hyperscan-4.6.0 && \
-    make -j 8 && make install && \
-    rm -rf ~/snort_src/hyperscan-4.6.0-build && \
-    rm -rf ~/snort_src/hyperscan-4.6.0 && \
-    rm -rf ~/snort_src/boost_1_65_1 && \
+#    cd ~/snort_src && \
+#    wget https://github.com/intel/hyperscan/archive/v4.6.0.tar.gz && \
+#    tar -xvzf v4.6.0.tar.gz && \
+#    rm v4.6.0.tar.gz && \
+#    mkdir -p ~/snort_src/hyperscan-4.6.0-build && \
+#    cd ~/snort_src/hyperscan-4.6.0-build/ && \
+#    cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DBOOST_ROOT=~/snort_src/boost_1_65_1/ ../hyperscan-4.6.0 && \
+#    make -j 8 && make install && \
+#    rm -rf ~/snort_src/hyperscan-4.6.0-build && \
+#    rm -rf ~/snort_src/hyperscan-4.6.0 && \
+#    rm -rf ~/snort_src/boost_1_65_1 && \
 # -flatbuffers
      cd ~/snort_src && \
      wget https://github.com/google/flatbuffers/archive/master.tar.gz -O flatbuffers-master.tar.gz && \
