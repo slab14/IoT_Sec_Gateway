@@ -96,6 +96,7 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
       
   - **5) Test**
       - Attempt to send 1 ping from "Node_0" to "Node_1" to create the ARP request (`ping 10.1.1.2 -c 1`)
+        - Note: This make a take up to 30 seconds for the next ARP packet in case we missed it 
       - On "Dataplane", Node_0's MAC address will match with the policy (as specified in step 1) and deploy middlebox iptables_demoA
       - Attempt to send another ping from "Node_0" to "Node_1" 
       - On "Dataplane", you should see messages affirming a new container was started
