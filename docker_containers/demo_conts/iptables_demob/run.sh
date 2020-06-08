@@ -18,6 +18,7 @@ ifconfig eth2 up
 ifconfig bridge0 up
 
 iptables -A FORWARD -p icmp -s 10.1.1.0/24 -j NFLOG --nflog-prefix "iptables: " --nflog-group 1
+iptables -A FORWARD -p icmp -s 10.1.1.0/24 -j DROP
 
 touch ID
 echo $PROTECTION_ID > ID
