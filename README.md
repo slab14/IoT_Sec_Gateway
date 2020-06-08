@@ -3,7 +3,7 @@ Implementing a Software Defined Gateway for use with IoT devices
 
 **Current version:** v0.1 
 
-**Objective:** Implements a very basic static policy setup by an SDN Controller (OpenDayLight). 
+**Objective:** Implements a very basic static policy setup by an SDN Controller (OpenDayLight). There are two demonstrations; the first uses snort rules to capture/drop/log packets.  The seconds uses iptables to capture/drop/log packets.  Both of which run a python script which checks for new logged packets that match the specified rule (in our case, ICMP packets) and triggers the necessary middleboxes to block future ICMP packets.  
 
 **How it works:**
 
@@ -26,7 +26,7 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
 - Device 3: "Node_1" emulates an IoT device (IP address: 10.1.1.2)
 
 
-## Steps for running the experiment in CloudLab
+## Steps for running the experiment in CloudLab using snort middlebox
 
   - **1) Initial setup**
       - Run the following command on all 3 nodes:
@@ -49,7 +49,7 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
         
   - **4) Configure demo containers**
       - On "Dataplane", `cd` into __IoT_Sec_Gateway/docker_containers/demo_conts/__
-      - In each of the 3 folders, there is a script called __getAlerts.py__ - you will need to edit all 3 scripts
+      - In the __snort_demo(a/b)__ folders, there is a script called __getAlerts.py__ - you will need to edit both scripts.
       - In __getAlerts.py__, change the IP address to the public-facing IP address of the "Dataplane" node in CloudLab
         - Note: This is the address that CloudLab uses to ssh into the node (128.x.x.x)
       - Run the following commands to recompile the Docker containers with the new IP address:
@@ -66,6 +66,37 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
   - **6) Test**
       - Attempt to send a ping from "Node_0" to "Node_1" to create the ARP request
       - On "Dataplane", Node_0's MAC address will match with the policy (as specified in step 3) and deploy middlebox demoA
+      - Attempt to send another ping from "Node_0" to "Node_1" 
+      - On "Dataplane", you should see messages affirming a new container was started
+      - ICMP packets should now be dropped.  Use netcat to test that other packets like TCP can still be received.
+      
+## Steps for running the experiment in CloudLab using iptables middlebox
+
+  - **1) Initial setup**
+      - Please follow steps 1 through 3 from above.
+  - **2) Further configure JSON for iptables**
+      - Open __IoT_Sec_Gateway/policies/cloudlab-NewPolicy20.json__ 
+      - Under "TestNode0", there are two protection states.  Change the __images__ variable for the __normal__ state to `iptables_demoa`. Change the __images__ variable for the __scared__ state to `iptables_demob`
+      - Save and close.        
+  - **3) Configure demo containers**
+      - On "Dataplane", `cd` into __IoT_Sec_Gateway/docker_containers/demo_conts/__
+      - In the __iptables_demo(a/b)__ folders, there is a script called __getAlerts.py__ - you will need to edit both scripts.
+      - In __getAlerts.py__, change the IP address to the public-facing IP address of the "Dataplane" node in CloudLab
+        - Note: This is the address that CloudLab uses to ssh into the node (128.x.x.x)
+      - Run the following commands to recompile the Docker containers with the new IP address:
+        - `sudo docker build -t iptables_demoa ~/IoT_Sec_Gateway/docker_cont/demo_cont/iptables_demoa`
+        - `sudo docker build -t iptables_demob ~/IoT_Sec_Gateway/docker_cont/demo_cont/iptables_demob`
+ 
+  - **4) Start ODL on Data Plane**
+      - On "Dataplane", you should now see the __l2switch__ folder in root
+      - On "Dataplane", run the following command: 
+      `./l2switch/startODL.sh`
+      - If an error occurs, try running `sudo ./l2switch/build.sh` first and then rerun `./l2switch/startODL.sh`
+      - You should see a "Ready" message on the ODL console letting you know it is ready to receive ARP packets
+      
+  - **5) Test**
+      - Attempt to send 1 ping from "Node_0" to "Node_1" to create the ARP request (`ping 10.1.1.2 -c 1`)
+      - On "Dataplane", Node_0's MAC address will match with the policy (as specified in step 1) and deploy middlebox iptables_demoA
       - Attempt to send another ping from "Node_0" to "Node_1" 
       - On "Dataplane", you should see messages affirming a new container was started
       - ICMP packets should now be dropped.  Use netcat to test that other packets like TCP can still be received.
