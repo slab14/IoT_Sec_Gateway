@@ -118,9 +118,11 @@ _This experiment demonstrates the "archive" property of the JSON policy file and
     - Under the first device, "device0", change the __inMac__ to the MAC address of your "Node_0" or "Node_1"
     - Look for the __archives__ section and you will notice two tar-path pairs.  The tar is the file on the controller and path               represent where it will be stored inside the middlebox
     - Save and close.        
- - **3) Configure archive files**
+ - **3) Configure middlebox files**
     - On "Dataplane", `cd` into __IoT_Sec_Gateway/docker_containers/demo_conts/snort_base__
     - Run the following command `sudo ./genTar.sh` to generate and move the snort rules and config file to your _/mnt/_ folder on your          controller/dataplane node.
+     - In __getAlerts.py__, change the IP address to the public-facing IP address of the "Dataplane" node in CloudLab
+        - Note: This is the address that CloudLab uses to ssh into the node (128.x.x.x)
  - **4) Start ODL on Data Plane**
       - On "Dataplane", you should now see the __l2switch__ folder in root
       - On "Dataplane", run the following command: 
