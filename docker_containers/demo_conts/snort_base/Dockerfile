@@ -69,9 +69,7 @@ RUN cd ~/snort_src && \
 
 # tools for sending alerts
 RUN pip install watchdog 
-
-COPY snort.conf /etc/snort/snort.conf.default 
-COPY local.rules /etc/snort/rules/local.rules.default 
+ 
 COPY run.sh /
 
 # app for sending alerts to controller
