@@ -39,8 +39,8 @@ install_docker() {
 
 build_docker_containers(){
     echo "Building Snort ICMP Packet Warning Container"
-    sudo docker build -t="snort_icmp_alert" docker_containers/snort_icmp_alert
-    sudo docker build -t="snort_icmp_block" docker_containers/snort_icmp_block
+    sudo docker build -t="snort_demoa" docker_containers/demo_conts/snort_demoA
+    sudo docker build -t="snort_demob" docker_containers/demo_conts/snort_demoB
     echo "Docker containers built"
 }
 
@@ -85,13 +85,13 @@ install_ovs_fromGit() {
     cd ~
     git clone https://github.com/slab14/ovs.git
     cd ovs
-    git checkout slab
+    git checkout feature-kernsign
     ./boot.sh
     ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc --with-linux=/lib/modules/$(uname -r)/build
     make
     sudo make install
-    sudo insmode datapath/linux/openvswitch.ko
     sudo make modules_install
+    sudo modprobe -v openvswitch
     cd ~
 
     # Install ovs-docker-remote dependencies
@@ -102,7 +102,7 @@ install_ovs_fromGit() {
 }
 
 setup_maven() {
-    export JAVA_HOME=`type -p javac|xargs readlink -f|xargs dirname|xargs dirname`
+    export JAVA_HOME=`type -p javac|xargs readlink -f|xargs dirname|xargs dirname|sed '/s/8/11'`
     export PATH=$PATH:$JAVA_HOME/bin/
     mkdir -p ~/.m2
     cp /usr/share/maven/conf/settings.xml ~/.m2/settings.xml
@@ -159,9 +159,9 @@ get_controller() {
     cd ~
     git clone https://github.com/slab14/l2switch.git
     cd l2switch/
-    git checkout slab-demo
+    git checkout rpi-hyp
     export JAVA_HOME=`type -p javac|xargs readlink -f|xargs dirname|xargs dirname`
-    mvn clean install -Pq -DskipTests
+    mvn clean install -Pq -DskipTests -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true
     cd ~
 }
 
@@ -169,6 +169,7 @@ get_controller() {
 echo "Beginning Dataplane Setup..."
 update
 install_docker
+build_docker_containers
 install_ovs_fromGit
 install_python_packages
 setup_maven

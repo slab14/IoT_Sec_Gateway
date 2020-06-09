@@ -31,7 +31,7 @@ RUN apt-get update && \
     rm ragel-6.10.tar.gz && \
     cd ragel-6.10/ && \
     ./configure && make && make install && \
-    rm -rf ~/snort_src/rage-6.10 
+    rm -rf ~/snort_src/ragel-6.10
 
 # -DAQ
 RUN cd ~/snort_src && \
@@ -63,8 +63,8 @@ RUN pip install watchdog
 
 COPY snort.conf /etc/snort/snort.conf.default 
 COPY local.rules /etc/snort/rules/local.rules.default 
-COPY run.sh getAlerts.py sendAlert.c addHash.c checkHash.c /
+COPY run.sh getAlerts.py sendAlert.c addHash.c checkHash.c ./
 
-ENV SNORT_CMD="-Q --daq afpacket --daq-var buffer_size_mb=1 -i eth1:eth2 -c /etc/snort/snort.conf -l /var/log/snort/"
+CMD ["-Q", "--daq", "afpacket", "--daq-var", "buffer_size_mb=1", "-i", "eth1:eth2", "-c", "/etc/snort/snort.conf", "-l", "/var/log/snort/"]
 
 ENTRYPOINT ["/run.sh"]

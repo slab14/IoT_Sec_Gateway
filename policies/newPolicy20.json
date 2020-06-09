@@ -91,47 +91,62 @@
 	    "inMAC": "00:50:b6:ed:ab:59",
 	    "outMAC": "*",
 	    "states": ["normal", "suspicious", "attack"],
-	    "transition": ["snort:icmp", "snort:hello word"],
+	    "transition": ["snort:ICMP", "snort:Hello World"],
 	    "protections": [
 		{
 		    "state": "normal",	    
 		    "chain": "P",
-		    "images": ["snort_demoa"],
+		    "images": ["snort_base"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_demo_cont",
 			    "ip": "",
 			    "hostFS": "",
 			    "contFS": "",
-			    "archives": [{}]		    
+			    "archives": [
+				{
+				    "tar": "/etc/psi/piTest/rules_a.tar",
+				    "path": "/etc/snort/rules"
+				}
+			    ]
 			}
 		    ]
 		},
 		{
 		    "state": "suspicious",	    
 		    "chain": "P",
-		    "images": ["snort_demob"],
+		    "images": ["snort_base"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_demo_cont2",
 			    "ip": "",
 			    "hostFS": "",
 			    "contFS": "",
-			    "archives": [{}]		    
+			    "archives": [
+				{
+				    "tar": "/etc/psi/piTest/rules_b.tar",
+				    "path": "/etc/snort/rules"
+				}
+			    ]
 			}
 		    ]
 		},
 		{
 		    "state": "attack",	    
 		    "chain": "P",
-		    "images": ["snort_demob"],
+		    "images": ["snort_base"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_demo_cont3",
 			    "ip": "",
 			    "hostFS": "",
 			    "contFS": "",
-			    "archives": [{}]		    
+			    "archives": [
+				{
+				    "tar": "/etc/psi/piTest/rules_c.tar",
+				    "path": "/etc/snort/rules"
+				}
+			    ]
 			}
 		    ]
 		}		
