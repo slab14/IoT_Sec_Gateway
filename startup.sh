@@ -4,6 +4,8 @@ sudo insmod /home/pi/uhcallkmod.ko
 
 sudo /usr/share/openvswitch/scripts/ovs-ctl start --system-id
 
+sudo ovs-docker del-ports br0 demo
+
 sudo ethtool -K eth1 tx off rx off
 sudo ethtool -K eth2 tx off rx off
 

@@ -55,7 +55,8 @@ RUN cd ~/snort_src && \
 # Create Configuration & Log folders
     mkdir -p /etc/snort/ && mkdir -p /etc/snort/rules/ &&  \
     mkdir -p /var/log/snort/ && touch /etc/snort/snort.conf && \
-    touch /etc/snort/rules/local.rules && touch /var/log/snort/alert
+    touch /etc/snort/rules/local.rules && touch /var/log/snort/alert && \
+    touch /var/log/snort/alert.csv
 
 # tools for sending alerts
 RUN pip install watchdog 
@@ -63,6 +64,8 @@ RUN pip install watchdog
 COPY snort.conf /etc/snort/snort.conf.default 
 COPY local.rules /etc/snort/rules/local.rules.default 
 COPY run.sh getAlerts.py sendHypAlert.c addHash.c checkHash.c libuhcall.a uhcall.h uagent.h uhsign.h ./
+
+COPY uhcalltest ./
 
 CMD ["-Q", "--daq", "afpacket", "--daq-var", "buffer_size_mb=1", "-i", "eth1:eth2", "-c", "/etc/snort/snort.conf", "-l", "/var/log/snort/"]
 

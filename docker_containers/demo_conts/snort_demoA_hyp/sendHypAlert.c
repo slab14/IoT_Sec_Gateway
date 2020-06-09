@@ -26,10 +26,11 @@ void hypEncrypt(void *bufptr) {
 
 
 int calcSize(int in){
+  int out = 0;
   int rem=in%16;
-  if(rem)
-    in+=(16-rem);
-  return in;
+  if(rem > 0)
+    out=in+(16-rem);
+  return out;
 }
 
 int sendEncryptedAlert(char * alertData, int alertLen){
@@ -46,14 +47,13 @@ int sendEncryptedAlert(char * alertData, int alertLen){
   // assign IP, PORT
   bzero(&servaddr, sizeof(servaddr));
   servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = inet_addr("192.168.1.86");
+  servaddr.sin_addr.s_addr = inet_addr("192.168.1.87");
   servaddr.sin_port = htons(9696);
 
   // connect the client socket to server socket
   if (connect(sockfd, (SA*)&servaddr, sizeof(servaddr)) != 0) {
     exit(0);
   }
-
 
   memcpy(&uhcp_pkt.pkt_data, alertData, alertLen);
   uhcp_pkt.pkt_size=alertLen;

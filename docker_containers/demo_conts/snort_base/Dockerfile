@@ -13,8 +13,7 @@ RUN apt-get update && \
 			 python python-pip libsqlite3-dev uuid-dev ethtool \
 			 iptables libnetfilter-queue1 && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    mkdir -p ~/snort_src && \
-    cd ~/snort_src && \
+    mkdir -p ~/snort_src && cd ~/snort_src && \
 # Install additional dependencies
 # -safec
     cd ~/snort_src && \
@@ -63,7 +62,7 @@ RUN pip install watchdog
 
 COPY snort.conf /etc/snort/snort.conf.default 
 COPY local.rules /etc/snort/rules/local.rules.default 
-COPY run.sh getAlerts.py sendAlert.c addHash.c checkHash.c /
+COPY run.sh getAlerts.py sendAlert.c addHash.c checkHash.c restart /
 
 ENV SNORT_CMD="-Q --daq afpacket --daq-var buffer_size_mb=1 -i eth1:eth2 -c /etc/snort/snort.conf -l /var/log/snort/"
 

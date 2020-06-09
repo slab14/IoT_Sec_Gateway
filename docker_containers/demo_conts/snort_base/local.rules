@@ -1,1 +1,1 @@
-alert icmp any any -> 10.1.1.0/24 any (msg:"ICMP Packet"; itype:8; sid:10000001; rev:1;)
+alert udp any any -> any any (msg:"UDP Packet"; itype:8; sid:10000001; rev:1;)

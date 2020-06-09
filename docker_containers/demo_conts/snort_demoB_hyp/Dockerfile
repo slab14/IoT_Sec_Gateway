@@ -55,7 +55,8 @@ RUN cd ~/snort_src && \
 # Create Configuration & Log folders
     mkdir -p /etc/snort/ && mkdir -p /etc/snort/rules/ &&  \
     mkdir -p /var/log/snort/ && touch /etc/snort/snort.conf && \
-    touch /etc/snort/rules/local.rules && touch /var/log/snort/alert
+    touch /etc/snort/rules/local.rules && touch /var/log/snort/alert && \
+    touch /var/log/snort/alert.csv
 
 # tools for sending alerts
 RUN pip install watchdog 
