@@ -29,7 +29,8 @@ output alert_csv
 include rules/local.rules" > snort.conf
 tar -cf config.tar snort.conf
 
-echo "moving to dataplane's /mnt/ folder"
-mv rules_a.tar /mnt/
-mv rules_b.tar /mnt/
-mv config.tar /mnt/
+echo "moving to dataplane's /etc/IoT_Sec/ folder"
+sudo mkdir -p /etc/IoT_Sec/
+mv rules_a.tar /etc/IoT_Sec/
+mv rules_b.tar /etc/IoT_Sec/
+mv config.tar /etc/IoT_Sec/

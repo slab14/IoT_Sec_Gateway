@@ -2,7 +2,7 @@ FROM ubuntu:xenial
 
 RUN apt-get update && \
     apt-get -y full-upgrade && \
-    apt-get install -yqq python python-pip ulogd vim net-tools bridge-utils iproute2 iptables arptables tcpdump
+    apt-get install -yqq ethtool python python-pip ulogd vim net-tools bridge-utils iproute2 iptables arptables tcpdump
 
 
 RUN pip install watchdog
