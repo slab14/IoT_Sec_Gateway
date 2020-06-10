@@ -10,10 +10,10 @@ RUN apt-get update && \
 			 libssl-dev libluajit-5.1-dev pkg-config make  wget \
 			 openssl zlib1g-dev libwlocate-dev cmake libtool \
 			 autoconf libnetfilter-queue-dev libnghttp2-dev \
-			 python python-pip libsqlite3-dev uuid-dev ethtool && \
+			 python python-pip libsqlite3-dev uuid-dev ethtool \
+			 iptables libnetfilter-queue1 && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    mkdir -p ~/snort_src && \
-    cd ~/snort_src && \
+    mkdir -p ~/snort_src && cd ~/snort_src && \
 # Install additional dependencies
 # -safec
     cd ~/snort_src && \
@@ -30,18 +30,7 @@ RUN apt-get update && \
     rm ragel-6.10.tar.gz && \
     cd ragel-6.10/ && \
     ./configure && make && make install && \
-    rm -rf ~/snort_src/rage-6.10 && \
-# -flatbuffers
-     cd ~/snort_src && \
-     wget https://github.com/google/flatbuffers/archive/master.tar.gz -O flatbuffers-master.tar.gz && \
-     tar -xvzf flatbuffers-master.tar.gz && \
-     rm flatbuffers-master.tar.gz && \
-     mkdir -p flatbuffers-build && \
-     cd flatbuffers-build/ && \
-     cmake ../flatbuffers-master && \
-     make -j 8 && make install && \
-     rm -rf ~/snort_src/flatbuffers-master && \
-     rm -rf ~/snort_src/flatbuffers-build 
+    rm -rf ~/snort_src/rage-6.10 
 
 # -DAQ
 RUN cd ~/snort_src && \
@@ -65,16 +54,18 @@ RUN cd ~/snort_src && \
 # Create Configuration & Log folders
     mkdir -p /etc/snort/ && mkdir -p /etc/snort/rules/ &&  \
     mkdir -p /var/log/snort/ && touch /etc/snort/snort.conf && \
-    touch /etc/snort/rules/local.rules && touch /var/log/snort/alert
+    touch /etc/snort/rules/local.rules && touch /var/log/snort/alert && \
+    touch /var/log/snort/alert.csv
 
 # tools for sending alerts
 RUN pip install watchdog 
- 
-COPY run.sh /
 
-# app for sending alerts to controller
-COPY getAlerts.py /
+COPY snort.conf /etc/snort/snort.conf.default 
+COPY local.rules /etc/snort/rules/local.rules.default 
+COPY run.sh getAlerts.py sendAlert.c addHash.c checkHash.c restart /
 
-CMD ["-Q", "--daq", "afpacket", "--daq-var", "buffer_size_mb=1", "-i", "eth1:eth2", "-c", "/etc/snort/snort.conf", "-l", "/var/log/snort/"]
+#CMD ["-Q", "--daq", "afpacket", "--daq-var", "buffer_size_mb=1", "-i", "eth1:eth2", "-c", "/etc/snort/snort.conf", "-l", "/var/log/snort/"]
+
+ENV SNORT_CMD="-Q --daq afpacket --daq-var buffer_size_mb=1 -i eth1:eth2 -c /etc/snort/snort.conf -l /var/log/snort/"
 
 ENTRYPOINT ["/run.sh"]
