@@ -4,4 +4,4 @@ for i in $(ps aux | grep "/bin/snort" | head -n 1 | awk -F ' ' '{ print $2 }'); 
     kill $i
 done
 
-/usr/local/bin/snort $SNORT_CMD
+exec /usr/local/bin/snort $SNORT_CMD

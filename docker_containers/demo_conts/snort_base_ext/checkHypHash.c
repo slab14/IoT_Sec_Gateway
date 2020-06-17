@@ -29,7 +29,6 @@ void uhsign(void *bufptr){
 
 int compare(unsigned char *a, unsigned char *b, int size) {
     while(size-- > 0) {
-      printf("%x | %x \n", *a, *b);
         if ( *a != *b ) { return (*a < *b ) ? -1 : 1; }
         a++; b++;
     }
@@ -55,7 +54,7 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
     struct tcphdr *tcp = nfq_tcp_get_hdr(pkBuff);    
     unsigned int payloadLen = nfq_tcp_get_payload_len(tcp, pkBuff);
     payloadLen -= 4*tcp->th_off;
-    if(payloadLen>DIGEST_SIZE){
+    if(payloadLen>=DIGEST_SIZE){
       /* received hash */
       unsigned char oldHash[DIGEST_SIZE];
       char *payload = nfq_tcp_get_payload(tcp, pkBuff);
@@ -70,18 +69,13 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
       ip->tot_len=htons(pktb_len(pkBuff));
       nfq_tcp_compute_checksum_ipv4(tcp,ip);
       nfq_ip_set_checksum(ip);
-
       /* Cacl hash of data */
       memcpy(&uhcp_hash2.pkt, pktb_data(pkBuff), pktb_len(pkBuff));
       uhcp_hash2.pkt_size=pktb_len(pkBuff);
       uhcp_hash2.vaddr=(uint32_t)&uhcp_hash2;
       uhsign((void *)&uhcp_hash2);
       memcpy(&hash, &uhcp_hash2.digest, DIGEST_SIZE);
-      int k=0;
-      for (k=0; k<DIGEST_SIZE; k++){
-	printf("%x | %x \n", oldHash[k], hash[k]);
-      }
-      if(compare(hash, oldHash, DIGEST_SIZE)==0) {
+      if(compare(hash, oldHash, (DIGEST_SIZE-2))==0) {
         return nfq_set_verdict(qh, id, NF_ACCEPT, pktb_len(pkBuff), pktb_data(pkBuff));
       }else {
         return nfq_set_verdict(qh, id, NF_DROP, 0, NULL);
