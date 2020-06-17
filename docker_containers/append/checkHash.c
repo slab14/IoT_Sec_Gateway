@@ -20,6 +20,7 @@
 #define DIGEST_SIZE 20
 
 int compare(unsigned char *a, unsigned char *b, int size) {
+  printf("compare\n");
     while(size-- > 0) {
       printf("%x | %x \n", *a, *b);
         if ( *a != *b ) { return (*a < *b ) ? -1 : 1; }
@@ -53,7 +54,7 @@ unsigned char * newCalcHmac(char *key, uint8_t *data, uint32_t len) {
 
 /* Callback function */
 static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *nfa, void *data) {
-  unsigned char * hash;
+ unsigned char *hash;
   char key[]="super_secret_key_for_hmac";
   u_int32_t id;
   struct nfqnl_msg_packet_hdr *ph;
@@ -70,7 +71,7 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
     struct tcphdr *tcp = nfq_tcp_get_hdr(pkBuff);    
     unsigned int payloadLen = nfq_tcp_get_payload_len(tcp, pkBuff);
     payloadLen -= 4*tcp->th_off;
-    if(payloadLen>DIGEST_SIZE){
+    if(payloadLen>=DIGEST_SIZE){
       /* received hash */
       unsigned char oldHash[DIGEST_SIZE];
       char *payload = nfq_tcp_get_payload(tcp, pkBuff);
@@ -90,10 +91,12 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
       hash = newCalcHmac(key, pktb_data(pkBuff), pktb_len(pkBuff));
       //hash = newCalcHmac(key, payload, payloadLen-DIGEST_SIZE);
       int k=0;
+      printf("----checking hash------\n");
       for (k=0; k<DIGEST_SIZE; k++){
-	printf("%x | %x \n", oldHash[k], hash[k]);
+	printf("%d:  %x | %x \n", k, oldHash[k], hash[k]);
       }
-      if(compare(hash, oldHash, DIGEST_SIZE)==0) {
+      printf("*****\n");
+      if(compare(hash, oldHash, DIGEST_SIZE-2)==0) {
         return nfq_set_verdict(qh, id, NF_ACCEPT, pktb_len(pkBuff), pktb_data(pkBuff));
       }else {
         return nfq_set_verdict(qh, id, NF_DROP, 0, NULL);

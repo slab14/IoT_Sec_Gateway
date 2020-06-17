@@ -23,10 +23,14 @@ ifconfig eth1 up
 ifconfig bridge0 up
 ifconfig eth0 mtu 1520
 ifconfig eth1 mtu 1520
+ethtool -K eth0 tx off rx off
+ethtool -K eth1 tx off rx off
+ethtool -K bridge0 tx off rx off
 
 #Send packets to NFQUEUE
-iptables -t raw -A PREROUTING -i eth0 -d 10.1.1.2 -j NFQUEUE --queue-num 2
-iptables -t raw -A PREROUTING -i eth1 -d 10.1.1.2 -j NFQUEUE --queue-num 1
+iptables -t filter -A FORWARD -i bridge0 -j NFQUEUE --queue-num 2
+iptables -t raw -A PREROUTING -i bridge0 -j NFQUEUE --queue-num 1
+
 
 #python -O pyscript.py
 

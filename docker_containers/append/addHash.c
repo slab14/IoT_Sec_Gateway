@@ -61,7 +61,7 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
     struct tcphdr *tcp = nfq_tcp_get_hdr(pkBuff);    
     unsigned int payloadLen = nfq_tcp_get_payload_len(tcp, pkBuff);
     payloadLen -= 4*tcp->th_off;
-    if(payloadLen>1){
+    if(payloadLen>=0){
       /* using mangle, updates ip & tcp headers */
       //nfq_tcp_mangle_ipv4(pkBuff, 0, 0, hash, DIGEST_SIZE);  
       /* alternative to mangle, performing same actions */
@@ -77,7 +77,6 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
     }
     return nfq_set_verdict(qh, id, NF_ACCEPT, pktb_len(pkBuff), pktb_data(pkBuff));
   }
-
   return nfq_set_verdict(qh, id, NF_ACCEPT, 0, NULL);
 }
 
