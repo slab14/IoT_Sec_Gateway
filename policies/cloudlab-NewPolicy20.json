@@ -96,42 +96,57 @@
 		{
 		    "state": "normal",	    
 		    "chain": "P",
-		    "images": ["snort_demoa"],
+		    "images": ["snort_base"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_demo_cont",
 			    "ip": "",
 			    "hostFS": "",
 			    "contFS": "",
-			    "archives": [{}]		    
+			    "archives": [
+				{
+				    "tar": "/etc/psi/rules_a.tar",
+				    "path": "/etc/snort/rules"
+				}
+			    ]
 			}
 		    ]
 		},
 		{
 		    "state": "scared",	    
 		    "chain": "P",
-		    "images": ["snort_demob"],
+		    "images": ["snort_base"],
 		    "imageOpts": [
 			{
-			    "contName": "snort_demo_cont2",
+			    "contName": "snort_demo_cont",
 			    "ip": "",
 			    "hostFS": "",
 			    "contFS": "",
-			    "archives": [{}]		    
+			    "archives": [
+				{
+				    "tar": "/etc/psi/rules_b.tar",
+				    "path": "/etc/snort/rules"
+				}
+			    ]			    
 			}
 		    ]
 		},
 		{
 		    "state": "panic",	    
 		    "chain": "P",
-		    "images": ["snort_demob"],
+		    "images": ["snort_base"],
 		    "imageOpts": [
 			{
-			    "contName": "snort_demo_cont3",
+			    "contName": "snort_demo_cont",
 			    "ip": "",
 			    "hostFS": "",
 			    "contFS": "",
-			    "archives": [{}]		    
+			    "archives": [
+				{
+				    "tar": "/etc/psi/rules_c.tar",
+				    "path": "/etc/snort/rules"
+				}
+			    ]			    
 			}
 		    ]
 		}				
