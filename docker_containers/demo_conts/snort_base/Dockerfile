@@ -11,7 +11,8 @@ RUN apt-get update && \
 			 openssl zlib1g-dev libwlocate-dev cmake libtool \
 			 autoconf libnetfilter-queue-dev libnghttp2-dev \
 			 python python-pip libsqlite3-dev uuid-dev ethtool \
-			 iptables libnetfilter-queue1 && \
+			 iptables libnetfilter-queue1 bridge-utils iproute2 \
+			 net-tools tcpdump && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     mkdir -p ~/snort_src && cd ~/snort_src && \
 # Install additional dependencies
@@ -58,7 +59,7 @@ RUN cd ~/snort_src && \
     touch /var/log/snort/alert.csv
 
 # tools for sending alerts
-RUN pip install watchdog 
+RUN pip install watchdog
 
 COPY snort.conf /etc/snort/snort.conf.default 
 COPY local.rules /etc/snort/rules/local.rules.default 
@@ -66,6 +67,6 @@ COPY run.sh getAlerts.py sendAlert.c addHash.c checkHash.c restart /
 
 #CMD ["-Q", "--daq", "afpacket", "--daq-var", "buffer_size_mb=1", "-i", "eth1:eth2", "-c", "/etc/snort/snort.conf", "-l", "/var/log/snort/"]
 
-ENV SNORT_CMD="-Q --daq afpacket --daq-var buffer_size_mb=1 -i eth1:eth2 -c /etc/snort/snort.conf -l /var/log/snort/"
+ENV SNORT_CMD="-Q --daq afpacket --daq-var buffer_size_mb=1 -i snort1:snort2 -c /etc/snort/snort.conf -l /var/log/snort/"
 
 ENTRYPOINT ["/run.sh"]
