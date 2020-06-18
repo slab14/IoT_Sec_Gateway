@@ -1,8 +1,8 @@
 #!/bin/bash
 
-gcc -fPIC -shared -o send.so sendAlert.c -lcrypto
-gcc -O1 -o checkHash checkHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl -lssl -lcrypto
-gcc -O1 -o addHash addHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl -lssl -lcrypto
+gcc -fPIC -shared -o send.so sendAlert.c -lcrypto -ldl -lcrypto
+gcc -O1 -o checkHash checkHypHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl -lssl -lcrypto
+gcc -O1 -o addHash addHypHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl -lssl -lcrypto
 
 # setup alert path to controller
 touch ID
