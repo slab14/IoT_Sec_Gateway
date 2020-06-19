@@ -25,7 +25,7 @@ def extendPCR(hashData, register='16'):
         
 def sha1Contbin(cli, contID):
     sleep(1)
-    execID=cli.exec_create(container=contID, cmd="sh -c 'find bin -type f -exec sha1sum {} \; | sha1sum'")
+    execID=cli.exec_create(container=contID, cmd="sh -c 'find sbin bin usr -type f -exec sha1sum {} \; | sha1sum'")
     outHash=cli.exec_start(execID)
     ret = outHash.split(b'  -')[0]
     print(ret)
