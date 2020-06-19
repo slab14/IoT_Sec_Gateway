@@ -12,6 +12,7 @@
 		    "state": "normal",
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["4a5c7ba10b9ad919bcaff68c384687ec5fec075d"],		    
 		    "imageOpts": [
 			{
 			    "contName": "snort_cont1",
@@ -35,6 +36,7 @@
 		    "state": "normal",
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["4a5c7ba10b9ad919bcaff68c384687ec5fec075d"],		    
 		    "imageOpts": [
 			{
 			    "contName": "snort_cont1",
@@ -67,6 +69,7 @@
 		    "state": "normal",	    
 		    "chain": "P-A",
 		    "images": ["snort_direct_block_v2", "squid_proxy"],
+		    "sha1": ["*", "*"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_cont2",
@@ -97,6 +100,7 @@
 		    "state": "normal",	    
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["4a5c7ba10b9ad919bcaff68c384687ec5fec075d"],		    
 		    "imageOpts": [
 			{
 			    "contName": "snort_demo_cont",
@@ -116,9 +120,10 @@
 		    "state": "suspicious",	    
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["4a5c7ba10b9ad919bcaff68c384687ec5fec075d"],		    
 		    "imageOpts": [
 			{
-			    "contName": "snort_demo_cont2",
+			    "contName": "snort_demo_cont",
 			    "ip": "",
 			    "hostFS": "",
 			    "contFS": "",
@@ -135,9 +140,10 @@
 		    "state": "attack",	    
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["4a5c7ba10b9ad919bcaff68c384687ec5fec075d"],
 		    "imageOpts": [
 			{
-			    "contName": "snort_demo_cont3",
+			    "contName": "snort_demo_cont",
 			    "ip": "",
 			    "hostFS": "",
 			    "contFS": "",
