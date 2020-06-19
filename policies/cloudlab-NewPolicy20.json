@@ -12,6 +12,7 @@
 		    "state": "normal",
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["*"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_cont1",
@@ -35,6 +36,7 @@
 		    "state": "normal",
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["*"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_cont1",
@@ -67,6 +69,7 @@
 		    "state": "normal",	    
 		    "chain": "P-A",
 		    "images": ["snort_direct_block_v2", "squid_proxy"],
+		    "sha1": ["*","*"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_cont2",
@@ -88,7 +91,7 @@
 	},
 	{
 	    "name" : "TestNode0",
-	    "inMAC": "3c:fd:fe:a9:0e:c4",
+	    "inMAC": "90:e2:ba:87:6a:d0",
 	    "outMAC": "*",
 	    "states": ["normal", "scared", "panic"],
 	    "transition": ["snort:ICMP", "snort:Hello World"],
@@ -97,6 +100,7 @@
 		    "state": "normal",	    
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["bd2d7062206424740a185125251768ea9b97e644"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_demo_cont",
@@ -105,7 +109,7 @@
 			    "contFS": "",
 			    "archives": [
 				{
-				    "tar": "/etc/psi/rules_a.tar",
+				    "tar": "/etc/sec_gate/testNode0/rules_a.tar",
 				    "path": "/etc/snort/rules"
 				}
 			    ]
@@ -116,6 +120,7 @@
 		    "state": "scared",	    
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["bd2d7062206424740a185125251768ea9b97e644"],		    
 		    "imageOpts": [
 			{
 			    "contName": "snort_demo_cont",
@@ -124,7 +129,7 @@
 			    "contFS": "",
 			    "archives": [
 				{
-				    "tar": "/etc/psi/rules_b.tar",
+				    "tar": "/etc/sec_gate/testNode0/rules_b.tar",
 				    "path": "/etc/snort/rules"
 				}
 			    ]			    
@@ -135,6 +140,7 @@
 		    "state": "panic",	    
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["bd2d7062206424740a185125251768ea9b97e644"],		    
 		    "imageOpts": [
 			{
 			    "contName": "snort_demo_cont",
@@ -143,7 +149,7 @@
 			    "contFS": "",
 			    "archives": [
 				{
-				    "tar": "/etc/psi/rules_c.tar",
+				    "tar": "/etc/sec_gate/testNode0/rules_c.tar",
 				    "path": "/etc/snort/rules"
 				}
 			    ]			    
