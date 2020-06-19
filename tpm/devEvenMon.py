@@ -25,10 +25,10 @@ def extendPCR(hashData, register='16'):
         
 def sha1Contbin(cli, contID):
     sleep(1)
-    execID=cli.exec_create(container=contID, cmd=["find", "bin", "-type", "f", "-exec", "sha1sum", "\{\}", "\\;", "|", "sha1sum"])['Id']
-
+    execID=cli.exec_create(container=contID, cmd="sh -c 'find bin -type f -exec sha1sum {} \; | sha1sum'")
     outHash=cli.exec_start(execID)
-    print(outHash)
+    ret = outHash.split(b'  -')[0]
+    print(ret)
 
         
 def main():
