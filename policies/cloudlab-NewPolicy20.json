@@ -88,7 +88,7 @@
 	},
 	{
 	    "name" : "TestNode0",
-	    "inMAC": "3c:fd:fe:a9:0e:c4",
+	    "inMAC": "90:e2:ba:87:6a:d0",
 	    "outMAC": "*",
 	    "states": ["normal", "scared", "panic"],
 	    "transition": ["snort:ICMP", "snort:Hello World"],
@@ -105,7 +105,7 @@
 			    "contFS": "",
 			    "archives": [
 				{
-				    "tar": "/etc/psi/rules_a.tar",
+				    "tar": "/etc/sec_gate/testNode0/rules_a.tar",
 				    "path": "/etc/snort/rules"
 				}
 			    ]
@@ -124,7 +124,7 @@
 			    "contFS": "",
 			    "archives": [
 				{
-				    "tar": "/etc/psi/rules_b.tar",
+				    "tar": "/etc/sec_gate/testNode0/rules_b.tar",
 				    "path": "/etc/snort/rules"
 				}
 			    ]			    
@@ -143,7 +143,7 @@
 			    "contFS": "",
 			    "archives": [
 				{
-				    "tar": "/etc/psi/rules_c.tar",
+				    "tar": "/etc/sec_gate/testNode0/rules_c.tar",
 				    "path": "/etc/snort/rules"
 				}
 			    ]			    
