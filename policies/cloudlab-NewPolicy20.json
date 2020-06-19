@@ -12,6 +12,7 @@
 		    "state": "normal",
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["*"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_cont1",
@@ -35,6 +36,7 @@
 		    "state": "normal",
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["*"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_cont1",
@@ -67,6 +69,7 @@
 		    "state": "normal",	    
 		    "chain": "P-A",
 		    "images": ["snort_direct_block_v2", "squid_proxy"],
+		    "sha1": ["*","*"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_cont2",
@@ -97,6 +100,7 @@
 		    "state": "normal",	    
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["bd2d7062206424740a185125251768ea9b97e644"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_demo_cont",
@@ -116,6 +120,7 @@
 		    "state": "scared",	    
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["bd2d7062206424740a185125251768ea9b97e644"],		    
 		    "imageOpts": [
 			{
 			    "contName": "snort_demo_cont",
@@ -135,6 +140,7 @@
 		    "state": "panic",	    
 		    "chain": "P",
 		    "images": ["snort_base"],
+		    "sha1": ["bd2d7062206424740a185125251768ea9b97e644"],		    
 		    "imageOpts": [
 			{
 			    "contName": "snort_demo_cont",
