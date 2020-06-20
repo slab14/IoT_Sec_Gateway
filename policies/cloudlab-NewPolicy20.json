@@ -3,29 +3,23 @@
     "devices": [
 	{
 	    "name" : "device0",
-	    "inMAC": "90:e2:ba:b3:bb:3c",
+	    "inMAC": "90:e2:ba:2f:64:50",
 	    "outMAC": "*",
 	    "states": ["normal", "attack"],
-	    "transition": ["snort:alert"],
+	    "transition": [""],
 	    "protections": [
 		{
 		    "state": "normal",
 		    "chain": "P",
-		    "images": ["snort_base"],
+		    "images": ["nmap_demo"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_cont1",
 			    "ip": "",
-			    "hostFS": "/mnt/snort/log",
-			    "contFS": "/var/log/snort/",
+			    "hostFS": "",
+			    "contFS": "",
 			    "archives": [
-				{
-				    "tar": "/mnt/rules_a.tar",
-				    "path": "/etc/snort/rules"
-				},
-				{
-				    "tar": "/mnt/config.tar",
-				    "path": "/etc/snort"
+				    {
 				}
 			    ]
 			}
@@ -34,22 +28,15 @@
 		{
 		    "state": "normal",
 		    "chain": "P",
-		    "images": ["snort_base"],
+		    "images": ["nmap_demo"],
 		    "imageOpts": [
 			{
-			    "contName": "snort_cont1",
+			    "contName": "snort_cont2",
 			    "ip": "",
-			    "hostFS": "/mnt/snort/log",
-			    "contFS": "/var/log/snort/",
+			    "hostFS": "",
+			    "contFS": "",
 			    "archives": [
-				{
-				    "tar": "/mnt/rules_b.tar",
-				    "path": "/etc/snort/rules"
-				},
-				{
-				    "tar": "/mnt/config.tar",
-				    "path": "/etc/snort"
-				}
+				    {}
 			    ]
 			}
 		    ]
