@@ -43,16 +43,6 @@ int encrypt(unsigned char *plaintext, int plaintext_len, unsigned char *key,
     return ciphertext_len;
 }
 
-
-
-void reverse_data(char *buf, int len) {
-    for(unsigned int i=0; i<len/2; ++i) {
-        char tmp = buf[i];
-        buf[i]=buf[len-1-i];
-        buf[len-1-i]=tmp;
-    }
-}
-
 int calcSize(int in){
   int rem=in%16;
   if(rem)
@@ -77,7 +67,7 @@ int sendEncrypted(char * data, int len){
   // assign IP, PORT
   bzero(&servaddr, sizeof(servaddr));
   servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = inet_addr("128.105.146.14");
+  servaddr.sin_addr.s_addr = inet_addr("192.168.1.87");
   servaddr.sin_port = htons(38687);
 
   // connect the client socket to server socket

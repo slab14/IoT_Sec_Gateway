@@ -11,9 +11,14 @@ from time import sleep
 from docker import Client
 from binascii import hexlify, unhexlify
 
-sender = ctypes.CDLL("/users/slab/IoT_Sec_Gateway/tpm/send.so")
+sender = ctypes.CDLL("/home/pi/IoT_Sec_Gateway/tpm/send.so")
 sender.sendEncrypted.argtype=[ctypes.POINTER(ctypes.c_char), ctypes.c_int]
 sender.sendEncrypted.restype=ctypes.c_int
+pcr = ctypes.CDLL("/home/pi/IoT_Sec_Gateway/tpm/pcr.so")
+pcr.hypReadPCR.argtype=ctypes.c_int
+pcr.hypReadPCR.restype=ctypes.POINTER(ctypes.c_char)
+pcr.hypExtendPCR.argtype=[ctypes.POINTER(ctypes.c_char), ctypes.c_int]
+
 
 def get_status(event):
     ret=''
@@ -25,13 +30,21 @@ def getNewContID(event):
     ID=event['id']
     return ID
 
-def extendPCR(hashData, register='16'):
-    if isinstance(hashData, six.string_types):
-        subprocess.check_call(["echo", register+':sha256='+hashData])
+def setupTPM():
+    pcr.setup()
+    pcr.initTPM()
+    
+def readPCR(PCR):
+    out=pcr.hypReadPCR(PCR)
+    PCRvalue=out[:20]
+    print(hexlify(PCRvalue))    
+
+def extendPCR(measure, PCR):
+    pcr.hypExtendPCR(unhexlify(measure), PCR)
         
 def sha1Contbin(cli, contID):
-    sleep(1)
-    execID=cli.exec_create(container=contID, cmd=["cat", "ID"])
+    sleep(5)
+    execID=cli.exec_create(container=contID, cmd="sh -c 'cat /ID'")
     execOut=cli.exec_start(execID)
     devID=execOut.split(b'\n')[0].decode("utf-8") 
     execID=cli.exec_create(container=contID, cmd="sh -c 'find sbin bin usr -type f -exec sha1sum {} \; | sha1sum'")
@@ -50,6 +63,7 @@ def sendData(msg):
     '''
         
 def main():
+    setupTPM()
     cli = Client(base_url='unix://var/run/docker.sock')
     for event in cli.events(decode=True):
         eventStatus=get_status(event)
@@ -59,7 +73,9 @@ def main():
             msg="ID: {};SHA1: {}".format(devID, imgHash)
             print(msg)
             sendData(bytes(msg, 'utf-8'))
-        
-
+            readPCR(int(devID))
+            extendPCR(imgHash, int(devID))
+            readPCR(int(devID))
+            
 if __name__=='__main__':
     main()
