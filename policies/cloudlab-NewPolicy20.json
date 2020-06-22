@@ -3,23 +3,29 @@
     "devices": [
 	{
 	    "name" : "device0",
-	    "inMAC": "90:e2:ba:2f:64:50",
+	    "inMAC": "90:e2:ba:b3:bb:3c",
 	    "outMAC": "*",
 	    "states": ["normal", "attack"],
-	    "transition": [""],
+	    "transition": ["snort:alert"],
 	    "protections": [
 		{
 		    "state": "normal",
 		    "chain": "P",
-		    "images": ["nmap_demo"],
+		    "images": ["snort_base"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_cont1",
 			    "ip": "",
-			    "hostFS": "",
-			    "contFS": "",
+			    "hostFS": "/mnt/snort/log",
+			    "contFS": "/var/log/snort/",
 			    "archives": [
-				    {
+				{
+				    "tar": "/mnt/rules_a.tar",
+				    "path": "/etc/snort/rules"
+				},
+				{
+				    "tar": "/mnt/config.tar",
+				    "path": "/etc/snort"
 				}
 			    ]
 			}
@@ -28,15 +34,22 @@
 		{
 		    "state": "normal",
 		    "chain": "P",
-		    "images": ["nmap_demo"],
+		    "images": ["snort_base"],
 		    "imageOpts": [
 			{
-			    "contName": "snort_cont2",
+			    "contName": "snort_cont1",
 			    "ip": "",
-			    "hostFS": "",
-			    "contFS": "",
+			    "hostFS": "/mnt/snort/log",
+			    "contFS": "/var/log/snort/",
 			    "archives": [
-				    {}
+				{
+				    "tar": "/mnt/rules_b.tar",
+				    "path": "/etc/snort/rules"
+				},
+				{
+				    "tar": "/mnt/config.tar",
+				    "path": "/etc/snort"
+				}
 			    ]
 			}
 		    ]
@@ -75,7 +88,7 @@
 	},
 	{
 	    "name" : "TestNode0",
-	    "inMAC": "3c:fd:fe:a9:0e:c4",
+	    "inMAC": "90:e2:ba:87:6a:d0",
 	    "outMAC": "*",
 	    "states": ["normal", "scared", "panic"],
 	    "transition": ["snort:ICMP", "snort:Hello World"],
@@ -92,7 +105,7 @@
 			    "contFS": "",
 			    "archives": [
 				{
-				    "tar": "/etc/psi/rules_a.tar",
+				    "tar": "/etc/sec_gate/testNode0/rules_a.tar",
 				    "path": "/etc/snort/rules"
 				}
 			    ]
@@ -111,7 +124,7 @@
 			    "contFS": "",
 			    "archives": [
 				{
-				    "tar": "/etc/psi/rules_b.tar",
+				    "tar": "/etc/sec_gate/testNode0/rules_b.tar",
 				    "path": "/etc/snort/rules"
 				}
 			    ]			    
@@ -130,7 +143,7 @@
 			    "contFS": "",
 			    "archives": [
 				{
-				    "tar": "/etc/psi/rules_c.tar",
+				    "tar": "/etc/sec_gate/testNode0/rules_c.tar",
 				    "path": "/etc/snort/rules"
 				}
 			    ]			    
