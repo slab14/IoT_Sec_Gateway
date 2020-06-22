@@ -60,10 +60,10 @@ int calcSize(int in){
   return in;
 }
 
-int sendEncryptedAlert(char * alertData, int alertLen){
+int sendEncrypted(char * data, int len){
   int sockfd;
   struct sockaddr_in servaddr;
-  char encryptedBuff[calcSize(alertLen)+4];
+  char encryptedBuff[calcSize(len)+4];
   // char encryptedBuff[2000];
   int ciphertext_len = 0;
   unsigned char *key=(unsigned char *)"_My sUpEr sEcrEt kEy 1234567890_";
@@ -78,19 +78,18 @@ int sendEncryptedAlert(char * alertData, int alertLen){
   bzero(&servaddr, sizeof(servaddr));
   servaddr.sin_family = AF_INET;
   servaddr.sin_addr.s_addr = inet_addr("128.105.146.14");
-  servaddr.sin_port = htons(9696);
+  servaddr.sin_port = htons(38687);
 
   // connect the client socket to server socket
   if (connect(sockfd, (SA*)&servaddr, sizeof(servaddr)) != 0) {
     exit(0);
   }
 
-  //reverse_data(alertData, alertLen);
-
-  ciphertext_len = encrypt(alertData, alertLen, key,
+  ciphertext_len = encrypt(data, len, key,
 			  iv, &encryptedBuff[4]);
 
   memcpy((char*)encryptedBuff,(char*)&ciphertext_len,sizeof(int));
+
 
   //send alert data to controller
   send(sockfd, encryptedBuff, (ciphertext_len+4), 0);

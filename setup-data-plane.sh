@@ -38,6 +38,7 @@ build_docker_containers(){
     echo "Building Snort ICMP Packet Warning Container"
     sudo docker build -t="snort_demoa" docker_containers/demo_conts/snort_demoA
     sudo docker build -t="snort_demob" docker_containers/demo_conts/snort_demoB
+    sudo docker build -t="snort_base" docker_containers/demo_conts/snort_base
     echo "Docker containers built"
 }
 
@@ -144,10 +145,19 @@ configure_ovs_switch() {
 
 get_controller() {
     cd ~
+    sudo mkdir -p /etc/sec_gate/policies
+    sudo cp IoT_Sec_Gateway/policies/cloudlab-NewPolicy20.json /etc/sec_gate/policies/cloudlab-NewPolicy20.json
+    sudo mkdir -p /etc/sec_gate/testNode0
+    sudo cp IoT_Sec_Gateway/docker_containers/demo_conts/snort_base/rules_* /etc/sec_gate/testNode0/
     git clone https://github.com/slab14/l2switch.git
     cd l2switch/
     git checkout slab-update
     export JAVA_HOME=`type -p javac|xargs readlink -f|xargs dirname|xargs dirname|sed '/s/8/11'`
+    export PATH=$PATH:$JAVA_HOME/bin/
+    export M2_HOME=/usr/share/maven/
+    export M2=$M2_HOME
+    export MAVEN_OPTS='-Xmx1048m -Xms256m'
+    export PATH=$M2:$PATH
     mvn clean install -Pq -DskipTests -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true
     cd ~
 }
