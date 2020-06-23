@@ -24,12 +24,12 @@
 		},
 		{
 		    "state": "attack",
-		    "chain": "A",
-		    "images": ["nmap_demo"],
+		    "chain": "P",
+		    "images": ["snort_base"],
 		    "imageOpts": [
 			{
-			    "contName": "nmap_cont2",
-			    "ip": "192.1.1.10",
+			    "contName": "snort_cont1",
+			    "ip": "",
 			    "hostFS": "",
 			    "contFS": "",
 			    "archives": [
@@ -52,7 +52,7 @@
 	    "protections": [
 		{
 		    "state": "normal",	    
-		    "chain": "A",
+		    "chain": "P",
 		    "images": ["snort_base"],
 		    "imageOpts": [
 			{
@@ -71,12 +71,12 @@
 		},
 		{
 		    "state": "attack",	    
-		    "chain": "A",
+		    "chain": "P",
 		    "images": ["snort_base"],
 		    "imageOpts": [
 			{
 			    "contName": "snort_cont2",
-			    "ip": "192.1.1.11",
+			    "ip": "",
 			    "hostFS": "",
 			    "contFS": "",
 			    "archives": [
