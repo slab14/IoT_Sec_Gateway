@@ -3,14 +3,14 @@
     "devices": [
 	{
 	    "name" : "device0",
-	    "inMAC": "90:e2:ba:2f:64:50",
+	    "inMAC": "90:e2:ba:29:f5:b4",
 	    "outMAC": "*",
 	    "states": ["normal", "attack"],
-	    "transition": ["nmap:openports_22,80,111"],
+	    "transition": ["nmap:openports_22,80,111", "snort:ICMP"],
 	    "protections": [
 		{
 		    "state": "normal",
-		    "chain": "A",
+		    "chain": "X",
 		    "images": ["nmap_demo"],
 		    "imageOpts": [
 			{
@@ -45,7 +45,7 @@
 	},
 	{
 	    "name" : "device1",
-	    "inMAC": "90:e2:ba:2f:64:51",
+	    "inMAC": "90:e2:ba:29:f5:b3",
 	    "outMAC": "*",
 	    "states": ["normal", "attack"],
 	    "transition": ["snort:ICMP"],
@@ -57,7 +57,7 @@
 		    "imageOpts": [
 			{
 			    "contName": "snort_cont1",
-			    "ip": "192.1.1.10",
+			    "ip": "",
 			    "hostFS": "",
 			    "contFS": "",
 			    "archives": [
