@@ -6,7 +6,7 @@
 	    "inMAC": "90:e2:ba:29:f5:b4",
 	    "outMAC": "*",
 	    "states": ["normal", "attack"],
-	    "transition": ["nmap:openports_22,80,111", "snort:ICMP"],
+	    "transition": ["nmap:openports_22,80,111"],
 	    "protections": [
 		{
 		    "state": "normal",
