@@ -48,7 +48,7 @@ _Although we recommend going in order_
         - This script follows similar setup to the above bash script with additional configuration for the "Dataplane"; it also starts             the ovsdb_server, builds the docker containers, sets up docker to recevie remote commands from the controller and builds the              last part of the network bridge for "Node_0" and "Node_1" to talk to each other.
       
   - **3) Configure JSON policy** 
-      - On "Dataplane", `cd` into __IoT_Sec_Gateway/policies/__
+      - On "Dataplane", `cd` into __/etc/sec_gateway/policy/__
       - Open __cloudlab-NewPolicy20.json__ 
       - Scroll down to the name __TestNode0__ and change the __inMac__ variable to the MAC address of Node_0
         - Note: Referring to the MAC at iface enp6s0f0/enp6s0f1 
@@ -81,7 +81,7 @@ _Although we recommend going in order_
   - **1) Initial setup**
       - Please follow steps 1 through 3 from [above](#steps-for-running-the-experiment-in-cloudlab-using-2-snort-middleboxes).
   - **2) Further configure JSON for iptables**
-      - Open __IoT_Sec_Gateway/policies/cloudlab-NewPolicy20.json__ 
+      - Open __etc/sec_gateway/policy/cloudlab-NewPolicy20.json__ 
       - Under "TestNode0", there are two protection states.  Change the __images__ variable for the __normal__ state to `iptables_demoa`. Change the __images__ variable for the __scared__ state to `iptables_demob`
       - Save and close.        
   - **3) Configure demo containers**
@@ -108,13 +108,13 @@ _Although we recommend going in order_
       - On "Dataplane", you should see messages affirming a new container was started
       - ICMP packets should now be dropped.  Use netcat to test that other packets like TCP can still be received.
       
-## Steps for running the experiment in CloudLab using 1 snort middlebox and multiple archive files)
+## Steps for running the experiment in CloudLab using 1 snort middlebox and multiple archive files
 _This experiment demonstrates the "archive" property of the JSON policy file and how you can transition to the same middlebox with a different set of configurations/rules.  The experiment starts when an ARP request is received by the dataplane by either "Node_0" or "Node_1" to deploy a Snort middlebox designed to log ICMP packets.  Instead of switching to another static middlebox, when an ICMP packet is received, the current middlebox logs the packet, triggers an alert and causes a transition where the middlebox deployed is the same but a new local.rules (the archive file) is being copied over to the middlebox.  This implementation requires only a few line changes in the JSON file._
 
 - **1) Initial setup**
     - Please follow steps 1 and 2 from [above](#steps-for-running-the-experiment-in-cloudlab-using-2-snort-middleboxes).
 - **2) Further configure JSON**
-    - Open __IoT_Sec_Gateway/policies/cloudlab-NewPolicy20.json__ 
+    - Open __etc/sec_gateway/policy/cloudlab-NewPolicy20.json__ 
     - Under the first device, "device0", change the __inMac__ to the MAC address of your "Node_0" or "Node_1"
     - Look for the __archives__ section and you will notice two tar-path pairs.  The tar is the file on the controller and path               represent where it will be stored inside the middlebox
     - Save and close.        
@@ -138,6 +138,10 @@ _This experiment demonstrates the "archive" property of the JSON policy file and
       - On "Dataplane", you should see messages affirming a new container was started
       - The same middlebox is redeployed but with rules_b.tar.
       - ICMP packets should now be dropped.  Use netcat to test that other packets like TCP can still be received.
+      
+## Steps for running the experiment in CloudLab using 1 Nmap middlebox which transitions to a snort middlebox
+_This experiment demonstrates the capabilities of the 'transition' field in the policy.JSON file.  Here, we start an Nmap middlebox which scans for all open ports  of the IoT device and compares with the allowed ports in the transition field.  If an open port is not on the list, we automatically transition to a snort container with a new local.rules which drop the packets of the offending port._
+
 
 
 ## Important info
