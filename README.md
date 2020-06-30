@@ -31,6 +31,7 @@ _Although we recommend going in order_
 - [2 Snort middleboxes](#steps-for-running-the-experiment-in-cloudlab-using-2-snort-middleboxes)
 - [2 Iptables middleboxes](#steps-for-running-the-experiment-in-cloudlab-using-iptables-middlebox)
 - [1 Snort middlebox w/ multiple archive files](#steps-for-running-the-experiment-in-cloudlab-using-1-snort-middlebox-and-multiple-archive-files)
+- [NMAP middlebox transitioning to Snort middlebox](#steps-for-running-the-experiment-in-cloudLab-using-nmap-to-snort-middleboxes)
 
 ## Steps for running the experiment in CloudLab using 2 snort middleboxes
 
@@ -48,7 +49,7 @@ _Although we recommend going in order_
         - This script follows similar setup to the above bash script with additional configuration for the "Dataplane"; it also starts             the ovsdb_server, builds the docker containers, sets up docker to recevie remote commands from the controller and builds the              last part of the network bridge for "Node_0" and "Node_1" to talk to each other.
       
   - **3) Configure JSON policy** 
-      - On "Dataplane", `cd` into __IoT_Sec_Gateway/policies/__
+      - On "Dataplane", `cd` into __/etc/sec_gate/policies/__
       - Open __cloudlab-NewPolicy20.json__ 
       - Scroll down to the name __TestNode0__ and change the __inMac__ variable to the MAC address of Node_0
         - Note: Referring to the MAC at iface enp6s0f0/enp6s0f1 
@@ -81,7 +82,7 @@ _Although we recommend going in order_
   - **1) Initial setup**
       - Please follow steps 1 through 3 from [above](#steps-for-running-the-experiment-in-cloudlab-using-2-snort-middleboxes).
   - **2) Further configure JSON for iptables**
-      - Open __IoT_Sec_Gateway/policies/cloudlab-NewPolicy20.json__ 
+      - Open __/etc/sec_gate/policies/cloudlab-NewPolicy20.json__ 
       - Under "TestNode0", there are two protection states.  Change the __images__ variable for the __normal__ state to `iptables_demoa`. Change the __images__ variable for the __scared__ state to `iptables_demob`
       - Save and close.        
   - **3) Configure demo containers**
@@ -102,20 +103,20 @@ _Although we recommend going in order_
       
   - **5) Test**
       - Attempt to send 1 ping from "Node_0" to "Node_1" to create the ARP request (`ping 10.1.1.2 -c 1`)
-        - __Note:__ This make take up to 15 seconds for the next ARP packet in case we missed it 
+        - __Note:__ This may take up to 15 seconds for the next ARP packet in case we missed it 
       - On "Dataplane", Node_0's MAC address will match with the policy (as specified in step 1) and deploy middlebox iptables_demoA
       - Attempt to send another ping from "Node_0" to "Node_1" 
       - On "Dataplane", you should see messages affirming a new container was started
       - ICMP packets should now be dropped.  Use netcat to test that other packets like TCP can still be received.
       
-## Steps for running the experiment in CloudLab using 1 snort middlebox and multiple archive files)
+## Steps for running the experiment in CloudLab using 1 snort middlebox and multiple archive files
 _This experiment demonstrates the "archive" property of the JSON policy file and how you can transition to the same middlebox with a different set of configurations/rules.  The experiment starts when an ARP request is received by the dataplane by either "Node_0" or "Node_1" to deploy a Snort middlebox designed to log ICMP packets.  Instead of switching to another static middlebox, when an ICMP packet is received, the current middlebox logs the packet, triggers an alert and causes a transition where the middlebox deployed is the same but a new local.rules (the archive file) is being copied over to the middlebox.  This implementation requires only a few line changes in the JSON file._
 
 - **1) Initial setup**
     - Please follow steps 1 and 2 from [above](#steps-for-running-the-experiment-in-cloudlab-using-2-snort-middleboxes).
 - **2) Further configure JSON**
-    - Open __IoT_Sec_Gateway/policies/cloudlab-NewPolicy20.json__ 
-    - Under the first device, "device0", change the __inMac__ to the MAC address of your "Node_0" or "Node_1"
+    - Open __/etc/sec_gate/policies/cloudlab-NewPolicy20.json__ 
+    - Under the first device, "device0", change the __inMac__ to the MAC address of your "Node_0"
     - Look for the __archives__ section and you will notice two tar-path pairs.  The tar is the file on the controller and path               represent where it will be stored inside the middlebox
     - Save and close.        
  - **3) Configure middlebox files**
@@ -132,17 +133,73 @@ _This experiment demonstrates the "archive" property of the JSON policy file and
       
   - **5) Test**
       - Attempt to send 1 ping from "Node_0" to "Node_1" to create the ARP request (`ping 10.1.1.2 -c 1`)
-        - __Note:__ This make take up to 15 seconds for the next ARP packet in case we missed it 
+        - __Note:__ This may take up to 15 seconds for the next ARP packet in case we missed it 
       - On "Dataplane", Node_0's MAC address will match with the policy (as specified in step 1) and deploy middlebox snort_base loaded         with rules_a.tar which logs and allows ICMP packets.
       - Attempt to send another ping from "Node_0" to "Node_1" 
       - On "Dataplane", you should see messages affirming a new container was started
       - The same middlebox is redeployed but with rules_b.tar.
       - ICMP packets should now be dropped.  Use netcat to test that other packets like TCP can still be received.
+      
+## Steps for running the experiment in CloudLab using nmap to snort middleboxes
+_This experiment demonstrates the capabilities of the 'transition' field in the JSON policy file.  Here, we start an Nmap middlebox which scans for all open ports  of the IoT device and compares with the allowed ports in the transition field.  If an open port is not on the whitelist, we automatically transition to a snort middlebox with a new local.rules which drops the packets of the offending port._
 
-
+  - **1) Initial setup**
+      - Please follow steps 1 through 2 from [above](#steps-for-running-the-experiment-in-cloudlab-using-2-snort-middleboxes).
+  - **2) JSON configuration**
+      - Open __/etc/sec_gate/policies/cloudlab-NewPolicy20.json__
+      - Search for the device entry, "nmap0".
+      - Configure your __inMAC__ with the Mac address of "Node_0".
+        - __Note:__ Verify no other devices in the policy have the same inMAC or the wrong device may activate.
+      - In the __transition__ field, configure your whitelist of ports with the following syntax: `nmap:openports_{1,2,3..}` (remove braces).
+        - During the NMAP scan, if a port is not on this whitelist, the controller has a reason to transition to the Snort middlebox.
+  - **3) Open a bad port**
+      - To test the functionality, use `nc -k -l -p {any port not on the whitelist} &` to create an TCP listening server on "Node_0".
+        - __Note:__ You may need to `sudo apt-get install netcat` to enable this command.
+  - **4) Start ODL on Data Plane**
+      - On "Dataplane", you should now see the __l2switch__ folder in root.
+      - On "Dataplane", run the following command: `./l2switch/startODL.sh`
+      - If an error occurs, try running `./l2switch/build.sh` first and then rerun `./l2switch/startODL.sh`
+      - You should see a "Ready" message on the ODL console letting you know it is ready to receive ARP packets.
+  - **5) Test**
+      - Attempt to send a ping from "Node_0" to "Node_1" to create the ARP request (`ping 10.1.1.2`)
+        - __Note:__ This may take up to 15 seconds for the next ARP packet in case we missed it. 
+      - From the "Dataplane", you should see output affirming that an Nmap middlebox has started and is scanning your inMac device.
+      - From the "Dataplane", you should see output for a newly generated Snort rule.  This rule will drop all TCP packets from the offending port you chose in Step 3.
+      - After the Snort middlebox has been deployed, attempt to communicate with the netcat server from "Node_1" using the following command `nc 192.1.1.2 {offending port}`.           This attempt should be unsuccessful.  If you try to create a UDP server on "Node_0" using the same port, or attempt to open another port, you should have no problems             communicating between "Node_0" and "Node_1".
+      
 ## Important info
 
 We used a branched version of [l2switch](https://github.com/slab14/l2switch/tree/slab-demo) and [ovs](https://github.com/slab14/ovs/tree/slab).  Please refer to their repos for additional README info
+
+## JSON Syntax
+
+In this section, we talk about the various fields in the JSON policy file.  
+
+Field | Defintion
+:----:|----------
+n | The number of unique devices in your policy file
+devices | Contains the full breakdown of each device and its properties
+name | Arbitrary identifier for each device
+inMac | The ARP packet's source Mac address we want to match (* for any)
+outMac | The ARP packet's destination Mac address we want to match (* for any)
+states | Identifies the condition of being that the device is in (normal, vulnerable, etc.)
+transition | Takes the form <middlebox>:<regex> for message analysis.  Defines the parameters for when to transition to the next middlebox
+protections | Contains the full breakdown of the middleboxes to be used by the device
+state | Not to be confused with states (plural).  Break down of the states field to match state to a middlebox.  
+chain | There are currently 3 types of chains: P, A and X.  P is for passthrough middleboxes (like Snort).  A is for addressable middleboxes that act as proxies for your internal network (like squid_proxy).  X is for addressable middleboxes that require an IP to operate on the IOT device (NMAP scanner).  Know which chain to use is imperative to proper function of the middleboxes deployed.  
+images | specifies the compiled Docker image that is saved on your Dataplane
+sha1 | verify the integriy of the middlebox on deployment
+imageOpts | Contains the full breakdown of image properties that your middlebox may need to properly function
+contName | Arbitrary name given to started middleboxes (The Docker container name)
+ip | Specifies an IP address for your Docker container (used for X and A type containers)
+hostFS | Specifies files you wish to pull from your Dataplane into your middlebox
+contFS | Specifies the directory on the middlebox in which to place the hostFS files
+archives | Contains the breakdown of tar files to be pulled from the Dataplane to your middlebox.  This is similar to how hostFS/contFS works except designed specifically for tar files (Snort middleboxes)
+tar | Specifies tar file on the Dataplane to be pulled into middlebox
+path | Specifies the directory on the middlebox in which to place the tar file
+
+
+
 
 
       
