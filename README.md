@@ -171,6 +171,36 @@ _This experiment demonstrates the capabilities of the 'transition' field in the 
 
 We used a branched version of [l2switch](https://github.com/slab14/l2switch/tree/slab-demo) and [ovs](https://github.com/slab14/ovs/tree/slab).  Please refer to their repos for additional README info
 
+## JSON Syntax
+
+In this section, we talk about the various fields in the JSON policy file.  
+
+Field | Defintion
+:----:|----------
+n | The number of unique devices in your policy file
+devices | Contains the full breakdown of each device and its properties
+name | Arbitrary identifier for each device
+inMac | The ARP packet's source Mac address we want to match (* for any)
+outMac | The ARP packet's destination Mac address we want to match (* for any)
+states | Identifies the condition of being that the device is in (normal, vulnerable, etc.)
+transition | Takes the form <middlebox>:<regex> for message analysis.  Defines the parameters for when to transition to the next middlebox
+protections | Contains the full breakdown of the middleboxes to be used by the device
+state | Not to be confused with states (plural).  Break down of the states field to match state to a middlebox.  
+chain | There are currently 3 types of chains: P, A and X.  P is for passthrough middleboxes (like Snort).  A is for addressable middleboxes that act as proxies for your internal network (like squid_proxy).  X is for addressable middleboxes that require an IP to operate on the IOT device (NMAP scanner).  Know which chain to use is imperative to proper function of the middleboxes deployed.  
+images | specifies the compiled Docker image that is saved on your Dataplane
+sha1 | verify the integriy of the middlebox on deployment
+imageOpts | Contains the full breakdown of image properties that your middlebox may need to properly function
+contName | Arbitrary name given to started middleboxes (The Docker container name)
+ip | Specifies an IP address for your Docker container (used for X and A type containers)
+hostFS | Specifies files you wish to pull from your Dataplane into your middlebox
+contFS | Specifies the directory on the middlebox in which to place the hostFS files
+archives | Contains the breakdown of tar files to be pulled from the Dataplane to your middlebox.  This is similar to how hostFS/contFS works except designed specifically for tar files (Snort middleboxes)
+tar | Specifies tar file on the Dataplane to be pulled into middlebox
+path | Specifies the directory on the middlebox in which to place the tar file
+
+
+
+
 
       
       
