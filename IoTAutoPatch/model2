@@ -1,0 +1,10 @@
+states
+s0,s1,s2,s3
+#initial
+s0
+#accepting
+s0,s1,s2,s3
+#alphabet
+ReadRegister_R3,ResponseRegister_R3,ReadCoils_CoilID,ResponseCoils_CoilID,ReadDiscreteInputs_InputID,ResponseDiscreteInputs_InputID
+#transitions
+s0>ReadRegister_R3>s1,s1>ResponseRegister_R3>s0,s0>ReadCoils_CoilID>s2,s2>ResponseCoils_CoilID>s0,s0>ReadDiscreteInputs_InputID>s3,s3>ResponseDiscreteInputs_InputID>s0

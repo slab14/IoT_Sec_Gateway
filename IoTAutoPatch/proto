@@ -1,0 +1,7 @@
+ReadRegister - content:"|03|"; offset:7; depth:1;
+ReadRegister_R3 - content:"|00 03 00 01|"; offset:8; depth:4;
+ResponseRegister - content:"|03|"; offset:7; depth:1;
+ReadCoils - content:"|01|"; offset:7; depth:1;
+ResponseCoils - content:"|01|"; offset:7; depth:1;
+ReadDiscreteInputs - content:"|02|"; offset:7; depth:1;
+ResponseDiscreteInputs - content:"|02|"; offset:7; depth:1;

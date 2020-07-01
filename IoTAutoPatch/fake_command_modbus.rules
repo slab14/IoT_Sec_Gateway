@@ -1,0 +1,168 @@
+# $Id: local.rules,v 1.11 2004/07/23 20:15:44 bmc Exp $
+# ----------------
+# LOCAL RULES
+# ----------------
+# This file intentionally does not come with signatures.  Put your local
+# additions here.
+
+# between s0 and s1
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_1 502 (flow:established; content:"|03 00 08 00 04|"; flowbits:isnotset,all,modbus_1; flowbits:set,s1_1,modbus_1; flowbits:set,allow_1; msg:"1:Modbus TCP - Read Register 3 #server1"; tag:session, exclusive; sid: 1000001;)
+
+
+alert tcp $MODBUS_SERVER_1 502 -> $MODBUS_CLIENT any (flow:established; content:"|03|"; offset:7; depth:1; flowbits:isset,s1_1; flowbits:unset,all,modbus_1; flowbits:set,allow_1; msg:"2:Modbus TCP - Response Register 3 #server1"; tag:session, exclusive; sid: 1000003;)
+
+# between s0 and s2
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_1 502 (flow:established; content:"|01 00 00 00 04|"; flowbits:isnotset,all,modbus_1; flowbits:set,s2_1,modbus_1; flowbits:set,allow_1; msg:"3:Modbus TCP - Read Coils 1 #server1"; tag:session, exclusive; sid: 1000004;)
+
+
+alert tcp $MODBUS_SERVER_1 502 -> $MODBUS_CLIENT any (flow:established; content:"|01|"; offset:7; depth:1; flowbits:isset,s2_1; flowbits:unset,all,modbus_1; flowbits:set,allow_1; msg:"4:Modbus TCP - Response Coils 1 #server1"; tag:session, exclusive; sid: 1000006;)
+
+# between s0 and s3
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_1 502 (flow:established; content:"|02 00 04 00 04|"; flowbits:isnotset,all,modbus_1; flowbits:set,s3_1,modbus_1; flowbits:set,allow_1; msg:"5:Modbus TCP - Read Discrete Inputs #server1"; tag:session, exclusive; sid: 1000007;)
+
+
+alert tcp $MODBUS_SERVER_1 502 -> $MODBUS_CLIENT any (flow:established; content:"|02|"; offset:7; depth:1; flowbits:isset,s3_1; flowbits:unset,all,modbus_1; flowbits:set,allow_1; msg:"6:Modbus TCP - Response Discrete Inputs #server1"; tag:session, exclusive; sid: 1000009;)
+
+# Block all other ADU from to 502
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_1 502 (flow:established; msg:"7:Block request #server1"; flowbits:isnotset,allow_1; tag:session, exclusive; sid: 1000010;)
+
+alert tcp $MODBUS_SERVER_1 502 -> $MODBUS_CLIENT any (flow:established; msg:"8:Block response #server1"; flowbits:isnotset,allow_1; tag:session, exclusive; sid: 1000011;)
+
+# between s0 and s1
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_2 502 (flow:established; content:"|03 00 08 00 04|"; flowbits:isnotset,all,modbus_2; flowbits:set,s1_2,modbus_2; flowbits:set,allow_2; msg:"1:Modbus TCP - Read Register 3 #server2"; tag:session, exclusive; sid: 2000001;)
+
+
+alert tcp $MODBUS_SERVER_2 502 -> $MODBUS_CLIENT any (flow:established; content:"|03|"; offset:7; depth:1; flowbits:isset,s1_2; flowbits:unset,all,modbus_2; flowbits:set,allow_2; msg:"2:Modbus TCP - Response Register 3 #server2"; tag:session, exclusive; sid: 2000003;)
+
+# between s0 and s2
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_2 502 (flow:established; content:"|01 00 00 00 04|"; flowbits:isnotset,all,modbus_2; flowbits:set,s2_2,modbus_2; flowbits:set,allow_2; msg:"3:Modbus TCP - Read Coils 1 #server2"; tag:session, exclusive; sid: 2000004;)
+
+
+alert tcp $MODBUS_SERVER_2 502 -> $MODBUS_CLIENT any (flow:established; content:"|01|"; offset:7; depth:1; flowbits:isset,s2_2; flowbits:unset,all,modbus_2; flowbits:set,allow_2; msg:"4:Modbus TCP - Response Coils 1 #server2"; tag:session, exclusive; sid: 2000006;)
+
+# between s0 and s3
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_2 502 (flow:established; content:"|02 00 04 00 04|"; flowbits:isnotset,all,modbus_2; flowbits:set,s3_2,modbus_2; flowbits:set,allow_2; msg:"5:Modbus TCP - Read Discrete Inputs #server2"; tag:session, exclusive; sid: 2000007;)
+
+
+alert tcp $MODBUS_SERVER_2 502 -> $MODBUS_CLIENT any (flow:established; content:"|02|"; offset:7; depth:1; flowbits:isset,s3_2; flowbits:unset,all,modbus_2; flowbits:set,allow_2; msg:"6:Modbus TCP - Response Discrete Inputs #server2"; tag:session, exclusive; sid: 2000009;)
+
+# Block all other ADU from to 502
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_2 502 (flow:established; msg:"7:Block request #server2"; flowbits:isnotset,allow_2; tag:session, exclusive; sid: 2000010;)
+
+alert tcp $MODBUS_SERVER_2 502 -> $MODBUS_CLIENT any (flow:established; msg:"8:Block response #server2"; flowbits:isnotset,allow_2; tag:session, exclusive; sid: 2000011;)
+
+# between s0 and s1
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_3 502 (flow:established; content:"|03 00 08 00 04|"; flowbits:isnotset,all,modbus_3; flowbits:set,s1_3,modbus_3; flowbits:set,allow_3; msg:"1:Modbus TCP - Read Register 3 #server3"; tag:session, exclusive; sid: 3000001;)
+
+
+alert tcp $MODBUS_SERVER_3 502 -> $MODBUS_CLIENT any (flow:established; content:"|03|"; offset:7; depth:1; flowbits:isset,s1_3; flowbits:unset,all,modbus_3; flowbits:set,allow_3; msg:"2:Modbus TCP - Response Register 3 #server3"; tag:session, exclusive; sid: 3000003;)
+
+# between s0 and s2
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_3 502 (flow:established; content:"|01 00 00 00 04|"; flowbits:isnotset,all,modbus_3; flowbits:set,s2_3,modbus_3; flowbits:set,allow_3; msg:"3:Modbus TCP - Read Coils 1 #server3"; tag:session, exclusive; sid: 3000004;)
+
+
+alert tcp $MODBUS_SERVER_3 502 -> $MODBUS_CLIENT any (flow:established; content:"|01|"; offset:7; depth:1; flowbits:isset,s2_3; flowbits:unset,all,modbus_3; flowbits:set,allow_3; msg:"4:Modbus TCP - Response Coils 1 #server3"; tag:session, exclusive; sid: 3000006;)
+
+# between s0 and s3
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_3 502 (flow:established; content:"|02 00 04 00 04|"; flowbits:isnotset,all,modbus_3; flowbits:set,s3_3,modbus_3; flowbits:set,allow_3; msg:"5:Modbus TCP - Read Discrete Inputs #server3"; tag:session, exclusive; sid: 3000007;)
+
+
+alert tcp $MODBUS_SERVER_3 502 -> $MODBUS_CLIENT any (flow:established; content:"|02|"; offset:7; depth:1; flowbits:isset,s3_3; flowbits:unset,all,modbus_3; flowbits:set,allow_3; msg:"6:Modbus TCP - Response Discrete Inputs #server3"; tag:session, exclusive; sid: 3000009;)
+
+# Block all other ADU from to 502
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_3 502 (flow:established; msg:"7:Block request #server3"; flowbits:isnotset,allow_3; tag:session, exclusive; sid: 3000010;)
+
+alert tcp $MODBUS_SERVER_3 502 -> $MODBUS_CLIENT any (flow:established; msg:"8:Block response #server3"; flowbits:isnotset,allow_3; tag:session, exclusive; sid: 3000011;)
+
+# between s0 and s1
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_4 502 (flow:established; content:"|03 00 08 00 04|"; flowbits:isnotset,all,modbus_4; flowbits:set,s1_4,modbus_4; flowbits:set,allow_4; msg:"1:Modbus TCP - Read Register 3 #server4"; tag:session, exclusive; sid: 4000001;)
+
+
+alert tcp $MODBUS_SERVER_4 502 -> $MODBUS_CLIENT any (flow:established; content:"|03|"; offset:7; depth:1; flowbits:isset,s1_4; flowbits:unset,all,modbus_4; flowbits:set,allow_4; msg:"2:Modbus TCP - Response Register 3 #server4"; tag:session, exclusive; sid: 4000003;)
+
+# between s0 and s2
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_4 502 (flow:established; content:"|01 00 00 00 04|"; flowbits:isnotset,all,modbus_4; flowbits:set,s2_4,modbus_4; flowbits:set,allow_4; msg:"3:Modbus TCP - Read Coils 1 #server4"; tag:session, exclusive; sid: 4000004;)
+
+
+alert tcp $MODBUS_SERVER_4 502 -> $MODBUS_CLIENT any (flow:established; content:"|01|"; offset:7; depth:1; flowbits:isset,s2_4; flowbits:unset,all,modbus_4; flowbits:set,allow_4; msg:"4:Modbus TCP - Response Coils 1 #server4"; tag:session, exclusive; sid: 4000006;)
+
+# between s0 and s3
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_4 502 (flow:established; content:"|02 00 04 00 04|"; flowbits:isnotset,all,modbus_4; flowbits:set,s3_4,modbus_4; flowbits:set,allow_4; msg:"5:Modbus TCP - Read Discrete Inputs #server4"; tag:session, exclusive; sid: 4000007;)
+
+
+alert tcp $MODBUS_SERVER_4 502 -> $MODBUS_CLIENT any (flow:established; content:"|02|"; offset:7; depth:1; flowbits:isset,s3_4; flowbits:unset,all,modbus_4; flowbits:set,allow_4; msg:"6:Modbus TCP - Response Discrete Inputs #server4"; tag:session, exclusive; sid: 4000009;)
+
+# Block all other ADU from to 502
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_4 502 (flow:established; msg:"7:Block request #server4"; flowbits:isnotset,allow_4; tag:session, exclusive; sid: 4000010;)
+
+alert tcp $MODBUS_SERVER_4 502 -> $MODBUS_CLIENT any (flow:established; msg:"8:Block response #server4"; flowbits:isnotset,allow_4; tag:session, exclusive; sid: 4000011;)
+
+# between s0 and s1
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_5 502 (flow:established; content:"|03 00 08 00 04|"; flowbits:isnotset,all,modbus_5; flowbits:set,s1_5,modbus_5; flowbits:set,allow_5; msg:"1:Modbus TCP - Read Register 3 #server5"; tag:session, exclusive; sid: 5000001;)
+
+
+alert tcp $MODBUS_SERVER_5 502 -> $MODBUS_CLIENT any (flow:established; content:"|03|"; offset:7; depth:1; flowbits:isset,s1_5; flowbits:unset,all,modbus_5; flowbits:set,allow_5; msg:"2:Modbus TCP - Response Register 3 #server5"; tag:session, exclusive; sid: 5000003;)
+
+# between s0 and s2
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_5 502 (flow:established; content:"|01 00 00 00 04|"; flowbits:isnotset,all,modbus_5; flowbits:set,s2_5,modbus_5; flowbits:set,allow_5; msg:"3:Modbus TCP - Read Coils 1 #server5"; tag:session, exclusive; sid: 5000004;)
+
+
+alert tcp $MODBUS_SERVER_5 502 -> $MODBUS_CLIENT any (flow:established; content:"|01|"; offset:7; depth:1; flowbits:isset,s2_5; flowbits:unset,all,modbus_5; flowbits:set,allow_5; msg:"4:Modbus TCP - Response Coils 1 #server5"; tag:session, exclusive; sid: 5000006;)
+
+# between s0 and s3
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_5 502 (flow:established; content:"|02 00 04 00 04|"; flowbits:isnotset,all,modbus_5; flowbits:set,s3_5,modbus_5; flowbits:set,allow_5; msg:"5:Modbus TCP - Read Discrete Inputs #server5"; tag:session, exclusive; sid: 5000007;)
+
+
+alert tcp $MODBUS_SERVER_5 502 -> $MODBUS_CLIENT any (flow:established; content:"|02|"; offset:7; depth:1; flowbits:isset,s3_5; flowbits:unset,all,modbus_5; flowbits:set,allow_5; msg:"6:Modbus TCP - Response Discrete Inputs #server5"; tag:session, exclusive; sid: 5000009;)
+
+# Block all other ADU from to 502
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_5 502 (flow:established; msg:"7:Block request #server5"; flowbits:isnotset,allow_5; tag:session, exclusive; sid: 5000010;)
+
+alert tcp $MODBUS_SERVER_5 502 -> $MODBUS_CLIENT any (flow:established; msg:"8:Block response #server5"; flowbits:isnotset,allow_5; tag:session, exclusive; sid: 5000011;)
+
+# between s0 and s1
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_6 502 (flow:established; content:"|03 00 08 00 04|"; flowbits:isnotset,all,modbus_6; flowbits:set,s1_6,modbus_6; flowbits:set,allow_6; msg:"1:Modbus TCP - Read Register 3 #server6"; tag:session, exclusive; sid: 6000001;)
+
+
+alert tcp $MODBUS_SERVER_6 502 -> $MODBUS_CLIENT any (flow:established; content:"|03|"; offset:7; depth:1; flowbits:isset,s1_6; flowbits:unset,all,modbus_6; flowbits:set,allow_6; msg:"2:Modbus TCP - Response Register 3 #server6"; tag:session, exclusive; sid: 6000003;)
+
+# between s0 and s2
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_6 502 (flow:established; content:"|01 00 00 00 04|"; flowbits:isnotset,all,modbus_6; flowbits:set,s2_6,modbus_6; flowbits:set,allow_6; msg:"3:Modbus TCP - Read Coils 1 #server6"; tag:session, exclusive; sid: 6000004;)
+
+
+alert tcp $MODBUS_SERVER_6 502 -> $MODBUS_CLIENT any (flow:established; content:"|01|"; offset:7; depth:1; flowbits:isset,s2_6; flowbits:unset,all,modbus_6; flowbits:set,allow_6; msg:"4:Modbus TCP - Response Coils 1 #server6"; tag:session, exclusive; sid: 6000006;)
+
+# between s0 and s3
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_6 502 (flow:established; content:"|02 00 04 00 04|"; flowbits:isnotset,all,modbus_6; flowbits:set,s3_6,modbus_6; flowbits:set,allow_6; msg:"5:Modbus TCP - Read Discrete Inputs #server6"; tag:session, exclusive; sid: 6000007;)
+
+
+alert tcp $MODBUS_SERVER_6 502 -> $MODBUS_CLIENT any (flow:established; content:"|02|"; offset:7; depth:1; flowbits:isset,s3_6; flowbits:unset,all,modbus_6; flowbits:set,allow_6; msg:"6:Modbus TCP - Response Discrete Inputs #server6"; tag:session, exclusive; sid: 6000009;)
+
+# Block all other ADU from to 502
+
+alert tcp $MODBUS_CLIENT any -> $MODBUS_SERVER_6 502 (flow:established; msg:"7:Block request #server6"; flowbits:isnotset,allow_6; tag:session, exclusive; sid: 6000010;)
+
+alert tcp $MODBUS_SERVER_6 502 -> $MODBUS_CLIENT any (flow:established; msg:"8:Block response #server6"; flowbits:isnotset,allow_6; tag:session, exclusive; sid: 6000011;)
