@@ -14,9 +14,9 @@ fRules = open(fRules,"w")
 # read the model
 
 GROUPNAME = "modbus"
-SERVER_IP = '192.168.1.101'
+SERVER_IP = '192.1.1.2'
 SERVER_PORT = '502'
-CLIENT_IP = '192.168.1.100'
+CLIENT_IP = '10.1.1.2'
 CLIENT_PORT = 'any'
 
 class FSM():
@@ -33,7 +33,7 @@ class FSM():
         self.proto = {}
         
         # need for snort rule IDs
-        self.rule_id = 1000000
+        self.rule_id = 3000000
         
         #check if initial state is in states
         if self.initial not in self.states:
@@ -162,7 +162,7 @@ Initial state: {self.initial}
         rule_id = f'sid:{self.rule_id};'
         self.rule_id += 1
         return f'{header} ({rule_id})'
-   
+
     def generateAllRules(self):
         #generate rules based on FSM
         for sid, row in enumerate(self.transMatrix):
@@ -174,7 +174,7 @@ Initial state: {self.initial}
         fRules.write(self.allowSYNACK()+'\n')
         fRules.write(self.allowFIN()+'\n')
         fRules.write(self.allowACK()+'\n')
-        fRules.write(self.dropAll()+'\n')
+        #fRules.write(self.dropAll()+'\n')
         
 def readModel(fModel):
     """This function reads the model file and generate a FSM class out of it.""" 
