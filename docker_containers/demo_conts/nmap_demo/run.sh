@@ -36,7 +36,7 @@ fi
 
 python getAlerts.py &
 sleep 5
-nmap -iL IOT_IP -oX /var/log/nmap.log --send-ip > /dev/null #remove any printing
+nmap -iL IOT_IP -p 1-6000 -oX /var/log/nmap.log --send-ip > /dev/null #remove any printing
 
 << ////
 if [ -z "$MAX_CONN" ]; then
