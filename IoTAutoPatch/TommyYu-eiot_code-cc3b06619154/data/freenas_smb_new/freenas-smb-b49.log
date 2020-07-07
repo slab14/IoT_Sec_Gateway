@@ -1,0 +1,61 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	notice
+#open	2018-02-01-15-58-11
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	fuid	file_mime_type	file_desc	proto	note	msg	sub	src	dst	p	n	peer_descr	actions	suppress_for	dropped	remote_location.country_code	remote_location.region	remote_location.city	remote_location.latitude	remote_location.longitude
+#types	time	string	addr	port	addr	port	string	string	string	enum	enum	string	string	addr	addr	port	count	string	set[enum]	interval	bool	string	string	string	double	double
+1517337785.891343	-	-	-	-	-	-	-	-	-	SMB::EIoT	114, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.895153	-	-	-	-	-	-	-	-	-	SMB::EIoT	114, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.896539	-	-	-	-	-	-	-	-	-	SMB::EIoT	115, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.898518	-	-	-	-	-	-	-	-	-	SMB::EIoT	115, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.899001	-	-	-	-	-	-	-	-	-	SMB::EIoT	115, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.905842	-	-	-	-	-	-	-	-	-	SMB::EIoT	115, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.906266	-	-	-	-	-	-	-	-	-	SMB::EIoT	117, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.909422	-	-	-	-	-	-	-	-	-	SMB::EIoT	117, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.909984	-	-	-	-	-	-	-	-	-	SMB::EIoT	50, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.910917	-	-	-	-	-	-	-	-	-	SMB::EIoT	50, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.911243	-	-	-	-	-	-	-	-	-	SMB::EIoT	113, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.911564	-	-	-	-	-	-	-	-	-	SMB::EIoT	113, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.911781	-	-	-	-	-	-	-	-	-	SMB::EIoT	117, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.913823	-	-	-	-	-	-	-	-	-	SMB::EIoT	117, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.914084	-	-	-	-	-	-	-	-	-	SMB::EIoT	162, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.916245	-	-	-	-	-	-	-	-	-	SMB::EIoT	162, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.916510	-	-	-	-	-	-	-	-	-	SMB::EIoT	47, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.916690	-	-	-	-	-	-	-	-	-	SMB::EIoT	47, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.916902	-	-	-	-	-	-	-	-	-	SMB::EIoT	4, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.917381	-	-	-	-	-	-	-	-	-	SMB::EIoT	4, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.917633	-	-	-	-	-	-	-	-	-	SMB::EIoT	0, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.918345	-	-	-	-	-	-	-	-	-	SMB::EIoT	0, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.918566	-	-	-	-	-	-	-	-	-	SMB::EIoT	162, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.919191	-	-	-	-	-	-	-	-	-	SMB::EIoT	162, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.919421	-	-	-	-	-	-	-	-	-	SMB::EIoT	50, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.919818	-	-	-	-	-	-	-	-	-	SMB::EIoT	50, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.920021	-	-	-	-	-	-	-	-	-	SMB::EIoT	46, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.920359	-	-	-	-	-	-	-	-	-	SMB::EIoT	46, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.920559	-	-	-	-	-	-	-	-	-	SMB::EIoT	4, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.921214	-	-	-	-	-	-	-	-	-	SMB::EIoT	4, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.921535	-	-	-	-	-	-	-	-	-	SMB::EIoT	50, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.921951	-	-	-	-	-	-	-	-	-	SMB::EIoT	50, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.922197	-	-	-	-	-	-	-	-	-	SMB::EIoT	50, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.922605	-	-	-	-	-	-	-	-	-	SMB::EIoT	50, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.922841	-	-	-	-	-	-	-	-	-	SMB::EIoT	50, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.923238	-	-	-	-	-	-	-	-	-	SMB::EIoT	50, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.923550	-	-	-	-	-	-	-	-	-	SMB::EIoT	50, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.923967	-	-	-	-	-	-	-	-	-	SMB::EIoT	50, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.924245	-	-	-	-	-	-	-	-	-	SMB::EIoT	162, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.925785	-	-	-	-	-	-	-	-	-	SMB::EIoT	162, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.926091	-	-	-	-	-	-	-	-	-	SMB::EIoT	160, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.926440	-	-	-	-	-	-	-	-	-	SMB::EIoT	160, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.926690	-	-	-	-	-	-	-	-	-	SMB::EIoT	4, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.926922	-	-	-	-	-	-	-	-	-	SMB::EIoT	4, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.927218	-	-	-	-	-	-	-	-	-	SMB::EIoT	50, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.927695	-	-	-	-	-	-	-	-	-	SMB::EIoT	50, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.927956	-	-	-	-	-	-	-	-	-	SMB::EIoT	6, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.930141	-	-	-	-	-	-	-	-	-	SMB::EIoT	6, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.930610	-	-	-	-	-	-	-	-	-	SMB::EIoT	1, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.937093	-	-	-	-	-	-	-	-	-	SMB::EIoT	1, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.937699	-	-	-	-	-	-	-	-	-	SMB::EIoT	113, 24	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1517337785.938364	-	-	-	-	-	-	-	-	-	SMB::EIoT	113, 136	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+#close	2018-02-01-15-58-11

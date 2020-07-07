@@ -1,0 +1,57 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	notice
+#open	2018-06-25-01-54-00
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	fuid	file_mime_type	file_desc	proto	note	msg	sub	src	dst	p	n	peer_descr	actions	suppress_for	dropped	remote_location.country_code	remote_location.region	remote_location.city	remote_location.latitude	remote_location.longitude
+#types	time	string	addr	port	addr	port	string	string	string	enum	enum	string	string	addr	addr	port	count	string	set[enum]	interval	bool	string	string	string	double	double
+1529277279.165171	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.165171	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:false	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.183844	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.183844	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:true}	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.203373	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.203373	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:false}	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.217855	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.217855	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:true}	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.237869	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.237869	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:true}	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.259885	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.259885	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:false	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.276571	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.276571	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:true}	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.293079	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.293079	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:true}	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.316836	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.316836	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:false	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.346735	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.346735	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:true}	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.377183	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.377183	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:false	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.422898	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.422898	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:true}	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.452824	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.452824	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:false	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.468831	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.468831	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:true}	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.488365	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.488365	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:false	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.504496	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.504496	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:true}	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.521442	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.521442	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:false	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.551110	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.551110	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:true}	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.603614	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.603614	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:false	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.637214	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.637214	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:true}	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.657871	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.657871	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:false	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.676709	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.676709	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:true}	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.697430	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.697430	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:false	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.748282	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, /api/newdeveloper/groups/0/action	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1529277279.748282	-	-	-	-	-	-	-	-	-	HTTP::EIoT	PUT, {on:true}	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+#close	2018-06-25-01-54-00

@@ -1,0 +1,17 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	notice
+#open	2018-01-07-17-48-54
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	fuid	file_mime_type	file_desc	proto	note	msg	sub	src	dst	p	n	peer_descr	actions	suppress_for	dropped	remote_location.country_code	remote_location.region	remote_location.city	remote_location.latitude	remote_location.longitude
+#types	time	string	addr	port	addr	port	string	string	string	enum	enum	string	string	addr	addr	port	count	string	set[enum]	interval	bool	string	string	string	double	double
+1515307784.044329	-	-	-	-	-	-	-	-	-	HTTP::EIoT	GET, /	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1515307784.053636	-	-	-	-	-	-	-	-	-	HTTP::EIoT	401	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1515307784.064322	-	-	-	-	-	-	-	-	-	HTTP::EIoT	GET, /	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1515307784.073876	-	-	-	-	-	-	-	-	-	HTTP::EIoT	200	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1515307784.094865	-	-	-	-	-	-	-	-	-	HTTP::EIoT	GET, /	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1515307784.104217	-	-	-	-	-	-	-	-	-	HTTP::EIoT	200	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1515307784.114758	-	-	-	-	-	-	-	-	-	HTTP::EIoT	GET, /	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1515307784.124413	-	-	-	-	-	-	-	-	-	HTTP::EIoT	200	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+#close	2018-01-07-17-48-54

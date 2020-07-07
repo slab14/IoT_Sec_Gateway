@@ -1,0 +1,32 @@
+------------------------------------------------------------------------
+r13930 | mhall | 2016-12-19 13:40:18 +1300 (Mon, 19 Dec 2016) | 1 line
+Changed paths:
+   M /branches/stable-3-6/weka/src/main/java/weka/core/version.txt
+   M /branches/stable-3-6/wekadocs/README
+   A /branches/stable-3-6/wekadocs/changelogs/CHANGELOG-3-6-15
+
+README, changelog etc. for 3.6.15
+------------------------------------------------------------------------
+r13944 | mhall | 2016-12-19 14:35:58 +1300 (Mon, 19 Dec 2016) | 1 line
+Changed paths:
+   M /branches/stable-3-6/last-release.props
+   M /branches/stable-3-6/weka/src/main/java/weka/core/version.txt
+
+Updated last release date and version is now 3.6.16-SNAPSHOT
+------------------------------------------------------------------------
+r14130 | mhall | 2017-04-05 11:56:52 +1200 (Wed, 05 Apr 2017) | 1 line
+Changed paths:
+   M /branches/stable-3-6/weka/src/main/java/weka/classifiers/meta/ClassificationViaClustering.java
+
+Fixed bug: only every second instance was used to establish per cluster class counts and total cluster counts.
+------------------------------------------------------------------------
+r14274 | fracpete | 2017-06-01 11:28:53 +1200 (Thu, 01 Jun 2017) | 1 line
+Changed paths:
+   M /branches/stable-3-6/weka/src/main/java/weka/filters/unsupervised/attribute/NumericToNominal.java
+   M /branches/stable-3-8/weka/src/main/java/weka/filters/unsupervised/attribute/NumericToNominal.java
+   M /branches/waikato-3-8/weka/src/main/java/weka/filters/unsupervised/attribute/NumericToNominal.java
+   M /branches/waikato/weka/src/main/java/weka/filters/unsupervised/attribute/NumericToNominal.java
+   M /trunk/weka/src/main/java/weka/filters/unsupervised/attribute/NumericToNominal.java
+
+now skipping duplicate labels due to cut off of decimals using Utils.doubleToString(double,MAX_DECIMALS), e.g.: 2.00000001 and 2.0 now get merged into the same label
+------------------------------------------------------------------------

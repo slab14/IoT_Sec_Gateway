@@ -1,0 +1,18 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	notice
+#open	2018-06-11-02-43-20
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	fuid	file_mime_type	file_desc	proto	note	msg	sub	src	dst	p	n	peer_descr	actions	suppress_for	dropped	remote_location.country_code	remote_location.region	remote_location.city	remote_location.latitude	remote_location.longitude
+#types	time	string	addr	port	addr	port	string	string	string	enum	enum	string	string	addr	addr	port	count	string	set[enum]	interval	bool	string	string	string	double	double
+1523033970.122565	-	-	-	-	-	-	-	-	-	DNS::EIoT	dns_request dcape-na.amazon.com	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1523033970.830301	-	-	-	-	-	-	-	-	-	DNS::EIoT	dns_request d29r7idq0wxsiz.cloudfront.net	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1523033982.414851	-	-	-	-	-	-	-	-	-	DNS::EIoT	dns_request www.googleapis.com	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1523033983.655345	-	-	-	-	-	-	-	-	-	DNS::EIoT	dns_request www.googleadservices.com	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1523033983.978038	-	-	-	-	-	-	-	-	-	DNS::EIoT	dns_request lh4.googleusercontent.com	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1523034051.007273	-	-	-	-	-	-	-	-	-	DNS::EIoT	dns_request pindorama.amazon.com	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1523034056.006206	-	-	-	-	-	-	-	-	-	DNS::EIoT	dns_request pindorama.amazon.com	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1523034060.784659	-	-	-	-	-	-	-	-	-	DNS::EIoT	dns_request spectrum.s3.amazonaws.com	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+1523034061.017812	-	-	-	-	-	-	-	-	-	DNS::EIoT	dns_request pindorama.amazon.com	-	-	-	-	-	bro	Notice::ACTION_LOG	3600.000000	F	-	-	-	-	-
+#close	2018-06-11-02-43-20
