@@ -25,6 +25,77 @@ Topology picture:   Device 1 -- Device 2 -- Device 3
 - Device 2: "Dataplane" emulates the software-defined security gateway (both the controller and dataplane are on this host). It is running OVS to create a virtual switch for routing IP traffic through the middlebox specified in the [policy](https://github.com/brytul/IoT_Sec_Gateway/blob/master/policies/cloudlab-NewPolicy20.json). The controller which is running OpenDayLight will dynamically change the middlebox whenever a ICMP/ARP alert is triggered.  The ARP alerts is used to deploy the intial middlebox and the ICMP alert is used to trigger the next middlebox according to the policy file.
 - Device 3: "Node_1" emulates an IoT device (IP address: 10.1.1.2)
 
+## Important info
+
+We used a branched version of [l2switch](https://github.com/slab14/l2switch/tree/slab-demo) and [ovs](https://github.com/slab14/ovs/tree/slab).  Please refer to their repos for additional README info
+
+## JSON Syntax
+
+In this section, we talk about the various fields in the JSON policy file.  
+
+Field | Defintion
+:----:|----------
+n | The number of unique devices in your policy file
+devices | Contains the full breakdown of each device and its properties
+name | Arbitrary identifier for each device
+inMac | The ARP packet's source Mac address we want to match (* for any)
+outMac | The ARP packet's destination Mac address we want to match (* for any)
+states | Identifies the condition of being that the device is in (normal, vulnerable, etc.)
+transition | Takes the form <middlebox>:<regex> for message analysis.  Defines the parameters for when to transition to the next middlebox
+protections | Contains the full breakdown of the middleboxes to be used by the device
+state | Not to be confused with states (plural).  Break down of the states field to match state to a middlebox.  
+chain | There are currently 3 types of chains: P, A and X.  P is for passthrough middleboxes (like Snort).  A is for addressable middleboxes that act as proxies for your internal network (like squid_proxy).  X is for addressable middleboxes that require an IP to operate on the IOT device (NMAP scanner).  Know which chain to use is imperative to proper function of the middleboxes deployed.  
+images | specifies the compiled Docker image that is saved on your Dataplane
+sha1 | verify the integriy of the middlebox on deployment
+imageOpts | Contains the full breakdown of image properties that your middlebox may need to properly function
+contName | Arbitrary name given to started middleboxes (The Docker container name)
+ip | Specifies an IP address for your Docker container (used for X and A type containers)
+hostFS | Specifies files you wish to pull from your Dataplane into your middlebox
+contFS | Specifies the directory on the middlebox in which to place the hostFS files
+archives | Contains the breakdown of tar files to be pulled from the Dataplane to your middlebox.  This is similar to how hostFS/contFS works except designed specifically for tar files (Snort middleboxes)
+tar | Specifies tar file on the Dataplane to be pulled into middlebox
+path | Specifies the directory on the middlebox in which to place the tar file
+  
+## Information about our Docker containers
+
+In this section, we discuss inherent mechanisms of our middleboxes.  If you are using a snort, iptables or NMAP middlebox; you will find these features in all of them. 
+
+* DockerFile
+  > DockerFile contains the initial commands when building a Docker image.  We use [Ubuntu:Xenial](https://packages.ubuntu.com/xenial/docker) as our lightweight OS.  
+  - Within DockerFile, there are a few common packages required to create the SDN relationship between controller and dataplane elements.
+    - **Ethtool/iproute2/bridge-utils/net-tools:** Allows us to view and modify the NIC.  Particularly used when creating bridges for P-type middleboxes.
+    - **iptables:** Iptables allows us to create various packet queues which *checkHash.c* and *addHash.c* rely upon.
+    - **openssl:** We make use of its crypto library in conjunction with our *checkHash.c*, *addHash.c* and *sendAlert.c* scripts.
+    - **gcc/python:** Respective C/Python compilers for our automated scripts like *sendAlert.c* and *getAlerts.py*.
+    - **various lib* packages:** dependencies for installed programs such as snort, netcat, etc.    
+    - **watchdog:** python package used to monitor log files for changes that need to be reported to the controller.
+  - We also make use of the COPY command to transfer the *getAlerts.py*, *\*Hash.c* files into the middlebox.
+* Run.sh
+  > Run.sh is the main entrypoint for the DockerFile upon container activation.  It contains the commands to compile and run our scripts and bash commands.
+  - There is a fundamental check for eth interfaces using: `grep -q '^1$' "/sys/class/net/eth{#}/carrier"` to ensure that our interfaces were properly attached when starting the container from the controller.
+    - Typically we follow a predefined eth setup:
+      - Eth0: Sending messages to the controller
+      - Eth1/2/3/...: Processing packets on the dataplane and moving them across nodes.
+  - Once the eth interfaces have been detected using the `grep` command, we copy important information to the middlebox:
+    - **ProtectionID:** Provides a unique identifier to each middlebox so the controller knows who sent the message.  Used by *getAlerts.py*.
+    - **IOT_IP:** For A/X-Type containers, the controller provides the IoT device that attempted to join the network.  This is used for middleboxes such as NMAP to scan for open          ports or CVEs.
+  - If the middlebox is a P-type, we also set up a bridge, connecting eth1/2/3... so that multiple nodes can communicate with each other through the middlebox.  In other words, we turn the middlebox into a smart switch.  A bridge is not necessary for A/X type containers because the communication is limited between the middlebox and one IoT device.  The A/X container can still talk to the controller using encrypted alerts across the eth0 interface.
+  
+* CheckHash.c/AddHash.c
+  > CheckHash.c/AddHash.c were written to ensure integrity of communcation between controller and dataplane.  This does not ensure confidentialty as packets are still un-encrypted.
+  - **CheckHash.c:** Once compiled with gcc, this script monitors the nfqueue created by iptables to capture packets and verify the hash of incoming packets.  This ensures integrity of commands against MITM attacks.
+  - **AddHash.c:** Similar to *CheckHash.c*, this script monitors the nfqueue responsible for outgoing packets.  A SHA1 hash is calculated over the packet and attached to the end of the packet before being sent off.
+  
+* sendAlert.c
+  > sendAlert.c contains encryption information such as your secret key, iv and IP address of the controller.
+  - GCC compiles this into a Linux dynamic library called send.so 
+  - *getAlerts.py* passes data to this LDL which is then enrypted using SSL and sent over to the controller.
+  
+* getAlerts.py
+  > getAlerts.py makes use of the [watchdog package](https://pythonhosted.org/watchdog/) to monitor a predefined log file for alerts that need to be sent to the controller.  We can customize what the watchdog pays attention to
+  - This python script attaches the ProtectionID to each alert that is captured by watchdog.  It makes use of the send.so library, compiled from the *sendAlert.c* script to encrypt with SSL.
+    
+
 ## Apendix of experiments to test
 _Although we recommend going in order_
 
@@ -167,36 +238,7 @@ _This experiment demonstrates the capabilities of the 'transition' field in the 
       - From the "Dataplane", you should see output for a newly generated Snort rule.  This rule will drop all TCP packets from the offending port you chose in Step 3.
       - After the Snort middlebox has been deployed, attempt to communicate with the netcat server from "Node_1" using the following command `nc 192.1.1.2 {offending port}`.           This attempt should be unsuccessful.  If you try to create a UDP server on "Node_0" using the same port, or attempt to open another port, you should have no problems             communicating between "Node_0" and "Node_1".
       
-## Important info
 
-We used a branched version of [l2switch](https://github.com/slab14/l2switch/tree/slab-demo) and [ovs](https://github.com/slab14/ovs/tree/slab).  Please refer to their repos for additional README info
-
-## JSON Syntax
-
-In this section, we talk about the various fields in the JSON policy file.  
-
-Field | Defintion
-:----:|----------
-n | The number of unique devices in your policy file
-devices | Contains the full breakdown of each device and its properties
-name | Arbitrary identifier for each device
-inMac | The ARP packet's source Mac address we want to match (* for any)
-outMac | The ARP packet's destination Mac address we want to match (* for any)
-states | Identifies the condition of being that the device is in (normal, vulnerable, etc.)
-transition | Takes the form <middlebox>:<regex> for message analysis.  Defines the parameters for when to transition to the next middlebox
-protections | Contains the full breakdown of the middleboxes to be used by the device
-state | Not to be confused with states (plural).  Break down of the states field to match state to a middlebox.  
-chain | There are currently 3 types of chains: P, A and X.  P is for passthrough middleboxes (like Snort).  A is for addressable middleboxes that act as proxies for your internal network (like squid_proxy).  X is for addressable middleboxes that require an IP to operate on the IOT device (NMAP scanner).  Know which chain to use is imperative to proper function of the middleboxes deployed.  
-images | specifies the compiled Docker image that is saved on your Dataplane
-sha1 | verify the integriy of the middlebox on deployment
-imageOpts | Contains the full breakdown of image properties that your middlebox may need to properly function
-contName | Arbitrary name given to started middleboxes (The Docker container name)
-ip | Specifies an IP address for your Docker container (used for X and A type containers)
-hostFS | Specifies files you wish to pull from your Dataplane into your middlebox
-contFS | Specifies the directory on the middlebox in which to place the hostFS files
-archives | Contains the breakdown of tar files to be pulled from the Dataplane to your middlebox.  This is similar to how hostFS/contFS works except designed specifically for tar files (Snort middleboxes)
-tar | Specifies tar file on the Dataplane to be pulled into middlebox
-path | Specifies the directory on the middlebox in which to place the tar file
 
 
 
