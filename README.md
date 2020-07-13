@@ -238,7 +238,33 @@ _This experiment demonstrates the capabilities of the 'transition' field in the 
       - From the "Dataplane", you should see output for a newly generated Snort rule.  This rule will drop all TCP packets from the offending port you chose in Step 3.
       - After the Snort middlebox has been deployed, attempt to communicate with the netcat server from "Node_1" using the following command `nc 192.1.1.2 {offending port}`.           This attempt should be unsuccessful.  If you try to create a UDP server on "Node_0" using the same port, or attempt to open another port, you should have no problems             communicating between "Node_0" and "Node_1".
       
-
+ ## Steps for running the experiment in CloudLab using 1 RADIO middlebox 
+ _This experiment demonstrates how we can collect benign pcap data of communcation between IoT and internal network to generate a FSM of valid communication protocols.  The RADIO container captures a pcap, converts the information into ADU (using Zeek/Bro) and generates an FSM model.  The FSM is compared with a given whitelist of protocols and is converted into usable snort rules.  The rules are archived on the controller and the RADIO middlebox transitions to a snort middlebox.  The snort middlebox pulls the archived rules from the controller in its deployment.  Now, only communication that matches those specified in the whitelist protocol can communicate between IoT and the internal network, preventing manipulated communication protocols.  We speciifcally test this using modbus commands._
+ 
+> **Note:** There are two way to approach this demo.  The first way is by having a premade FSM model/proto pair which is saved as an archive on the controller.  The second way involves providing only the proto and using tcpdump to capture a pcap and generate a fresh FSM model. 
+ 
+- **1) Initial setup**
+    - Please follow steps 1 through 2 from [above](#steps-for-running-the-experiment-in-cloudlab-using-2-snort-middleboxes).
+- **2) JSON configuration**
+    - Open __/etc/sec_gate/policies/cloudlab-NewPolicy20.json__
+    - Look fo the device entry, "radio0"
+    - Configure your __inMAC__ with the Mac address of "Node_0".
+      - __Note:__ Verify no other devices in the policy file have the same inMAC or the wrong device may activate.
+    - Option 1: Make sure you've saved a model/proto pair and archived the files into a tar.  Specify the path of that tar file in the __tar__ field.  Make sure the __path__ field is "/etc/radio".
+    - Option 2: Make sure you'ved saved a proto and archived the file into a tar.  Specify the path of that tar file in the __tar__ field.  Make sure the __path__ field is "/etc/radio".
+      - __Note:__ If you fail to follow Option 1 or Option 2, the snort rules will not be generated properly and the snort container may fail to start Snort.
+    - In the second state, "protect", you can leave the two tar/paths as is.
+- **3) Start ODL on Data Plane**
+    - On "Dataplane", you should now see the __l2switch__ folder in root.
+    - On "Dataplane", run the following command: `./l2switch/startODL.sh`
+    - If an error occurs, try running `./l2switch/build.sh` first and then rerun `./l2switch/startODL.sh`
+    - You should see a "Ready" message on the ODL console letting you know it is ready to receive ARP packets.
+- **4) Test**
+    - Attempt to send 1 ping from "Node_0" to "Node_1" to create the ARP request (`ping 10.1.1.2 -c 1`)
+      - __Note:__ This may take up to 15 seconds for the next ARP packet in case we missed it 
+    - Option 1: The RADIO middlebox will deploy, detect that both a model and proto already exist and skip the pcap scan.  The model/proto are passed through the model2rule.py to generate the snort rules.  The rules are sent as an alert to the controller which will archive them based on the name of the tar used in the snort_base middlebox (the "protect" state).
+    - Option 2: IDK yet
+    - The snort middlebox is deployed with the newly created rules.  Attempting to send any other type of modbus communcation other than the one's captured in the pcap/model file will be blocked.
 
 
 
