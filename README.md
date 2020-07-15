@@ -64,7 +64,7 @@ In this section, we discuss inherent mechanisms of our middleboxes.  If you are 
   > DockerFile contains the initial commands when building a Docker image.  We use [Ubuntu:Xenial](https://packages.ubuntu.com/xenial/docker) as our lightweight OS.  
   - Within DockerFile, there are a few common packages required to create the SDN relationship between controller and dataplane elements.
     - **Ethtool/iproute2/bridge-utils/net-tools:** Allows us to view and modify the NIC.  Particularly used when creating bridges for P-type middleboxes.
-    - **iptables:** Iptables allows us to create various packet queues which *checkHash.c* and *addHash.c* rely upon.
+    - **iptables:** Iptables allows us to create various packet queues which *checkHash.c*, *addHash.c* and P-type middleboxes (like Snort) rely upon.
     - **openssl:** We make use of its crypto library in conjunction with our *checkHash.c*, *addHash.c* and *sendAlert.c* scripts.
     - **gcc/python:** Respective C/Python compilers for our automated scripts like *sendAlert.c* and *getAlerts.py*.
     - **various lib* packages:** dependencies for installed programs such as snort, netcat, etc.    
@@ -83,8 +83,8 @@ In this section, we discuss inherent mechanisms of our middleboxes.  If you are 
   
 * CheckHash.c/AddHash.c
   > CheckHash.c/AddHash.c were written to ensure integrity of communcation between controller and dataplane.  This does not ensure confidentialty as packets are still un-encrypted.
-  - **CheckHash.c:** Once compiled with gcc, this script monitors the nfqueue created by iptables to capture packets and verify the hash of incoming packets.  This ensures integrity of commands against MITM attacks.
-  - **AddHash.c:** Similar to *CheckHash.c*, this script monitors the nfqueue responsible for outgoing packets.  A SHA1 hash is calculated over the packet and attached to the end of the packet before being sent off.
+  - **CheckHash.c:** Once compiled with gcc, this script monitors the nfqueue created by iptables to capture packets and verify the hash of incoming packets.  This ensures integrity of commands against MITM attacks as well as the corrct middlebox destination.
+  - **AddHash.c:** Similar to *CheckHash.c*, this script monitors the nfqueue responsible for outgoing packets.  A SHA1 hash is calculated over the packet and attached to the end of the packet before being sent off.  
   
 * sendAlert.c
   > sendAlert.c contains encryption information such as your secret key, iv and IP address of the controller.
