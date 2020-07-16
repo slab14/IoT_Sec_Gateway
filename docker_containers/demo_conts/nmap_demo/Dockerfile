@@ -17,6 +17,6 @@ COPY run.sh run.sh
 
 COPY getAlerts.py /getAlerts.py
 
-COPY sendAlert.c sendAlert.c
+COPY sendAlert.c addHash.c checkHash.c /
 
 ENTRYPOINT ["/run.sh"]
