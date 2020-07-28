@@ -32,6 +32,11 @@ echo $iot_IP > IOT_IP
 touch /etc/radio/modbus.rules
 
 
+while grep -q 0.0.0.0 "IOT_IP"; do
+	sleep 1
+done
+
+
 if [ -f "$FILE" ]; then	
 	
 	python getAlerts.py &
