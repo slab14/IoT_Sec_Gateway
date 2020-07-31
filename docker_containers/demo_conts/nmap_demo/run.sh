@@ -14,14 +14,7 @@ while true; do
 
 done
 
-#make sure we can ping the IoT
 
-while ! ping -c1 '192.1.1.2' &>/dev/null
-        do 
-            echo "Ping Fail - `date`" > /tmp/pingtest.out
-            sleep 1
-done
-echo "Ping Success - `date`" > /tmp/pingtest.out 
 
 #------------------------#
 touch ID                 
@@ -32,6 +25,21 @@ cont_IP=$(hostname -I | awk '{print $NF}')  #prints the last word from 'hostname
 touch CONT_IP
 echo $cont_IP > CONT_IP
 #------------------------#
+
+
+while grep -q 0.0.0.0 "IOT_IP"; do
+    sleep 1
+done
+
+
+#make sure we can ping the IoT
+
+while ! ping -c1 '192.1.1.2' &>/dev/null
+        do 
+            echo "Ping Fail - `date`" > /tmp/pingtest.out
+            sleep 1
+done
+echo "Ping Success - `date`" > /tmp/pingtest.out 
 
 if [ ! -f "/var/log/nmap.log" ]; then
 	touch /var/log/nmap.log
