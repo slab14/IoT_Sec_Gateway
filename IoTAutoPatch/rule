@@ -1,0 +1,8 @@
+allow tcp $MODBUS_CLIENT any -> $MODBUS_SERVER 502 (flow:from_client,established; content:"|03 00|"; offset:5; depth:2; content:"|08 00 04|"; offset:7; depth:3; flowbits:readregreq,mobus; msg:"Modbus TCP - Read Register 3"; tag:session, exclusive;)
+allow tcp $MODBUS_SERVER 502 -> $MODBUS_CLIENT any (flow:to_client,established; content:"|03 00|"; offset:5; depth:2; content:"|08 00 04|"; offset:7; depth:3; flowbits:isreadregreq,mobus; msg:"Modbus TCP - Response Register 3"; tag:session, exclusive;)
+allow tcp $MODBUS_CLIENT any -> $MODBUS_SERVER 502 (flow:from_client,established; content:"|01 00|"; offset:5; depth:2; content:"|00 00 04|"; offset:7; depth:3; flowbits:readcoil,mobus; msg:"Modbus TCP - Read Coils 1"; tag:session, exclusive;)
+allow tcp $MODBUS_SERVER 502 -> $MODBUS_CLIENT any (flow:to_client,established; content:"|01 00|"; offset:5; depth:2; content:"|00 00 04|"; offset:7; depth:3; flowbits:isreadcoil,mobus; msg:"Modbus TCP - Response Coils 1"; tag:session, exclusive;)
+allow tcp $MODBUS_CLIENT any -> $MODBUS_SERVER 502 (flow:from_client,established; content:"|02 00|"; offset:5; depth:2; content:"|04 00 04|"; offset:7; depth:3; flowbits:readinput,mobus; msg:"Modbus TCP - Read Discrete Inputs"; tag:session, exclusive;)
+allow tcp $MODBUS_SERVER 502 -> $MODBUS_CLIENT any (flow:to_client,established; content:"|02 00|"; offset:5; depth:2; content:"|04 00 04|"; offset:7; depth:3; flowbits:isreadinput,mobus; msg:"Modbus TCP - Response Discrete Inputs"; tag:session, exclusive;)
+drop tcp $MODBUS_CLIENT any -> $MODBUS_SERVER 502 (flow:from_client,established; msg:"Block request"; tag:session, exclusive;)
+drop tcp $MODBUS_SERVER 502 -> $MODBUS_CLIENT any (flow:to_client,established; msg:"Block response"; tag:session, exclusive;)

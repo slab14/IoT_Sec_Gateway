@@ -1,0 +1,55 @@
+------------------------------------------------------------------------
+r12810 | mhall | 2016-04-14 10:46:21 +1200 (Thu, 14 Apr 2016) | 1 line
+Changed paths:
+   M /branches/stable-3-6/weka/src/main/java/weka/core/version.txt
+   M /branches/stable-3-6/wekadocs/README
+   M /branches/stable-3-6/wekadocs/manual/manual.tex
+
+Updated version number to 3.6.14 and various dates etc.
+------------------------------------------------------------------------
+r12839 | mhall | 2016-04-15 11:50:22 +1200 (Fri, 15 Apr 2016) | 1 line
+Changed paths:
+   M /branches/stable-3-6/weka/src/main/java/weka/core/version.txt
+
+Version is now at 3.6.14
+------------------------------------------------------------------------
+r13099 | mhall | 2016-07-04 14:55:02 +1200 (Mon, 04 Jul 2016) | 1 line
+Changed paths:
+   M /branches/stable-3-6/weka/src/main/java/weka/gui/arffviewer/ArffPanel.java
+
+Fixed an NPE that would occur under certain circumstances when replacing values with missing value
+------------------------------------------------------------------------
+r13379 | mhall | 2016-10-04 09:35:03 +1300 (Tue, 04 Oct 2016) | 1 line
+Changed paths:
+   M /branches/stable-3-6/weka/src/main/java/weka/attributeSelection/ReliefFAttributeEval.java
+
+Fixed a bug class prior computation and the process of finding neareset hits/misses (in the nominal class case) that occurs when instances have missing class values
+------------------------------------------------------------------------
+r13385 | mhall | 2016-10-05 21:31:54 +1300 (Wed, 05 Oct 2016) | 1 line
+Changed paths:
+   M /branches/stable-3-6/weka/src/main/java/weka/gui/AttributeVisualizationPanel.java
+
+Background colour is now explicitly set to white using fillRect() in attribute visualization panel, so that export to png, bmp, and jpg works properly.
+------------------------------------------------------------------------
+r13435 | mhall | 2016-10-26 11:29:56 +1300 (Wed, 26 Oct 2016) | 1 line
+Changed paths:
+   M /branches/stable-3-6/weka/src/main/java/weka/core/stemmers/SnowballStemmer.java
+
+Fixed a bug that prevented snowball classes from being found when static entries in GenericObjectEditor.props are being used (instead of dynamic class discovery)
+------------------------------------------------------------------------
+r13618 | fracpete | 2016-11-22 12:58:41 +1300 (Tue, 22 Nov 2016) | 1 line
+Changed paths:
+   M /branches/stable-3-6/weka/src/main/java/weka/filters/unsupervised/attribute/PartitionedMultiFilter.java
+   M /branches/waikato/weka/src/main/java/weka/filters/unsupervised/attribute/PartitionedMultiFilter.java
+   M /trunk/weka/src/main/java/weka/filters/unsupervised/attribute/PartitionedMultiFilter.java
+
+now handles string and relation-valued class attributes
+------------------------------------------------------------------------
+r13619 | fracpete | 2016-11-22 13:06:44 +1300 (Tue, 22 Nov 2016) | 1 line
+Changed paths:
+   M /branches/stable-3-6/weka/src/main/java/weka/filters/unsupervised/attribute/PartitionedMultiFilter.java
+   M /branches/waikato/weka/src/main/java/weka/filters/unsupervised/attribute/PartitionedMultiFilter.java
+   M /trunk/weka/src/main/java/weka/filters/unsupervised/attribute/PartitionedMultiFilter.java
+
+proper handling of missing values
+------------------------------------------------------------------------
