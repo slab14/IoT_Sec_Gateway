@@ -3,13 +3,13 @@
     "devices": [
 	{
 	    "name" : "device0",
-	    "inMAC": "90:e2:ba:29:f5:b4",
+	    "inMAC": "3c:fd:fe:b0:ef:b4",
 	    "outMAC": "*",
-	    "states": ["normal", "attack"],
+	    "states": ["scan", "protect"],
 	    "transition": ["nmap:openports_22,80,111"],
 	    "protections": [
 		{
-		    "state": "normal",
+		    "state": "scan",
 		    "chain": "X",
 		    "images": ["nmap_demo"],
 		    "imageOpts": [
@@ -23,7 +23,7 @@
 		    ]
 		},
 		{
-		    "state": "attack",
+		    "state": "protect",
 		    "chain": "P",
 		    "images": ["snort_base"],
 		    "imageOpts": [
@@ -34,7 +34,7 @@
 			    "contFS": "",
 			    "archives": [
 			    {
-				    "tar": "/mnt/rules_a.tar",
+				    "tar": "/etc/sec_gate/testNode0/rules_a.tar",
 				    "path": "/etc/snort/rules"
 				}
 				]		  
