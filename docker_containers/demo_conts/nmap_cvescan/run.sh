@@ -7,11 +7,8 @@ gcc -O1 -o addHash addHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl -l
 
 while true; do
     grep -q '^1$' "/sys/class/net/eth1/carrier" &&
-	
 	break
-
     sleep 1
-
 done
 
 
@@ -26,18 +23,15 @@ touch CONT_IP
 echo $cont_IP > CONT_IP
 #------------------------#
 
-
 while grep -q 0.0.0.0 "IOT_IP"; do
     sleep 1
 done
 
 
 #make sure we can ping the IoT
-
-while ! ping -c1 '192.1.1.2' &>/dev/null
-        do 
-            echo "Ping Fail - `date`" > /tmp/pingtest.out
-            sleep 1
+while ! ping -c1 '192.1.1.2' &>/dev/null;  do 
+    echo "Ping Fail - `date`" > /tmp/pingtest.out
+    sleep 1
 done
 echo "Ping Success - `date`" > /tmp/pingtest.out 
 
@@ -53,7 +47,7 @@ iptables -t raw -A OUTPUT -o eth1 -d $iot_IP -j NFQUEUE --queue-num 2
 
 python getAlerts.py &
 sleep 5
-nmap -iL IOT_IP -p 1-6000 -oX /var/log/nmap.log --send-ip > /dev/null #remove any printing
+nmap -Pn --script vuln IOT_IP -oX /var/log/nmap.log --send-ip > /dev/null #remove any printing
 
 
 /bin/bash
