@@ -14,10 +14,6 @@ RUN apt-get update && \
 	    
 RUN pip install watchdog
 
-COPY run.sh run.sh
-
-COPY getAlerts.py /getAlerts.py
-
-COPY sendAlert.c addHash.c checkHash.c /
+COPY sendAlert.c addHash.c checkHash.c run.sh getAlerts.py sendAlert.py /
 
 ENTRYPOINT ["/run.sh"]

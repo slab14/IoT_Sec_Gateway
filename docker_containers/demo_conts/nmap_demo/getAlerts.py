@@ -49,16 +49,6 @@ class AlertSender(FileSystemEventHandler):
                 cipherLen=sender.sendEncryptedAlert(sendData, len(sendData))
            
             
-'''
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            #s.connect(('192.168.1.86', 9696))
-            s.connect(('128.105.145.205', 9696))
-            # process data and send in appropriate format
-            s.sendall("Policy ID:"+self.protectionID)
-            s.sendall("Alert:"+diff)
-            s.close()
-'''
-        
 
 if __name__ == "__main__":
     event_handler = AlertSender('/var/log/nmap.log')

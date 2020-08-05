@@ -157,6 +157,17 @@ get_controller() {
     cd ~
 }
 
+load_policies(){
+    cd ~
+    sudo mkdir -p /etc/sec_gate/policy
+    sudo mkdir -p /etc/sec_gate/testNode0
+    sudo chown $USER: /etc/sec_gate
+    cp IoT_Sec_Gateway/policies/baseline /etc/sec_gate/policy/.
+    cp IoT_Sec_Gateway/policies/nmap /etc/sec_gate/policy/.
+    cp IoT_Sec_Gateway/policies/radio /etc/sec_gate/policy/.
+}
+    
+
 # Install packages
 echo "Beginning Dataplane Setup..."
 update
