@@ -51,7 +51,7 @@ iptables -t raw -A OUTPUT -o eth1 -d $iot_IP -j NFQUEUE --queue-num 2
 ./checkHash &
 ./addHash &
 
-nmap -iL IOT_IP -p 1-6000 -oX /var/log/nmap.log --send-ip > /dev/null #remove any printing
+nmap -T5 -iL IOT_IP -p- -oX /var/log/nmap.log --send-ip > /dev/null #remove any printing
 python sendAlert.py
 
 
