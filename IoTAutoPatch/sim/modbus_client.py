@@ -165,7 +165,7 @@ for i in range(1, 4):
     print("Sending Read Discrete Inputs...")
     P = MBPkt.ReadDiscreteInputs(0, i).send()
     print("Sending Read Multiple Holding Registers...")
-    P = MBPkt.ReadHoldingMultiple(8, 4).send()
+    P = MBPkt.ReadHoldingMultiple(3, 1).send()
     #print("Sending Read Input Registers...")
     #P = MBPkt.ReadInputs(0, i).send()
     #print("Sending Write Single Coil...")
