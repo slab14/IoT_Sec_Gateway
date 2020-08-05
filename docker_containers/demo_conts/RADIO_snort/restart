@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for i in $(ps aux | grep "/bin/snort" | head -n 1 | awk -F ' ' '{ print $2 }'); do
+    kill $i
+done
+
+/usr/local/bin/snort $SNORT_CMD
