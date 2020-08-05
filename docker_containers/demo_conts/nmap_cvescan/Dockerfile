@@ -12,7 +12,7 @@ RUN apt-get update && \
 	    python python-pip libsqlite3-dev uuid-dev ethtool \
 	    iptables libnetfilter-queue1 git
 			 
-RUN pip install watchdog
+#RUN pip install watchdog
 
 COPY sendAlert.c addHash.c checkHash.c run.sh getAlerts.py sendAlert.py /
 

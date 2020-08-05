@@ -32,17 +32,17 @@ while ! ping -c1 '192.1.1.2' &>/dev/null
 done
 echo "Ping Success - `date`" > /tmp/pingtest.out 
 
-if [ ! -f "/var/log/nmap.log" ]; then
-	touch /var/log/nmap.log
+if [ ! -f "/var/log/dos.log" ]; then
+	touch /var/log/dos.log
 fi
 
 # setup packet signature actions (q1 = verify // q2 = sign)
-iptables -t raw -A PREROUTING -i eth1 -s $iot_IP -j NFQUEUE --queue-num 1
-iptables -t raw -A OUTPUT -o eth1 -d $iot_IP -j NFQUEUE --queue-num 2
+#iptables -t raw -A PREROUTING -i eth1 -s $iot_IP -j NFQUEUE --queue-num 1
+#iptables -t raw -A OUTPUT -o eth1 -d $iot_IP -j NFQUEUE --queue-num 2
 ./checkHash &
 ./addHash &
 
-nmap -T5 -iL IOT_IP -p- -oX /var/log/nmap.log --send-ip > /dev/null #remove any printing
-python sendAlert.py
+python conn_tester.py --ip IOT_IP --port 1234
+python sendAlert.py --filename /var/log/dos.log
 
 /bin/bash

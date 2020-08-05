@@ -4,14 +4,11 @@ gcc -fPIC -shared -o send.so sendAlert.c -lcrypto
 gcc -O1 -o checkHash checkHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl -lssl -lcrypto
 gcc -O1 -o addHash addHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl -lssl -lcrypto
 
-
 while true; do
     grep -q '^1$' "/sys/class/net/eth1/carrier" &&
 	break
     sleep 1
 done
-
-
 
 #------------------------#
 touch ID                 

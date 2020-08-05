@@ -1,0 +1,48 @@
+{
+    "n": 1,
+    "devices": [
+	{
+	    "name" : "device0",
+	    "inMAC": "3c:fd:fe:b0:ef:b4",
+	    "outMAC": "*",
+	    "states": ["scan", "protect"],
+	    "transition": ["dos:conn1234_2"],
+	    "protections": [
+		{
+		    "state": "scan",
+		    "chain": "X",
+		    "images": ["dos_test"],
+		    "imageOpts": [
+			{
+			    "contName": "dos_cont1",
+			    "ip": "192.1.1.10",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [{}]		  
+			}
+		    ]
+		},
+		{
+		    "state": "protect",
+		    "chain": "P",
+		    "images": ["snort_base"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_cont1",
+			    "ip": "",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [
+				{
+				    "tar": "/etc/sec_gate/testNode0/rules_a.tar",
+				    "path": "/etc/snort/rules"
+				}
+			    ]		  
+			}
+		    ]
+		}
+	    ]
+	}
+		
+    ]
+}
