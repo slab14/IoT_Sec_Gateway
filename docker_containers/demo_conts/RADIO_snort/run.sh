@@ -46,8 +46,8 @@ ip link set bridge2 up
 #iptables -t filter -A FORWARD -i bridge1 -j NFQUEUE --queue-num 2
 #iptables -t raw -A PREROUTING -i bridge2 -j NFQUEUE --queue-num 1
 #iptables -t filter -A FORWARD -i bridge2 -j NFQUEUE --queue-num 2
-./checkHash &
-./addHash &
+#./checkHash &
+#./addHash &
 
 /usr/local/bin/snort $SNORT_CMD &
 

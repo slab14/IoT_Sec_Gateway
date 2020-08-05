@@ -1,0 +1,34 @@
+{
+    "n": 1,
+    "devices": [
+	{
+	    "name" : "TestNode0",
+	    "inMAC": "3c:fd:fe:b0:ef:b4",
+	    "outMAC": "*",
+	    "states": ["static_radio"],
+	    "transition": [""],
+	    "protections": [
+		{
+		    "state": "static_radio",	    
+		    "chain": "P",
+		    "images": ["snort_radio"],
+		    "sha1": ["*"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_radio_cont",
+			    "ip": "",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [
+				{
+				    "tar": "/etc/sec_gate/radio/rules_radio.tar",
+				    "path": "/etc/snort/rules"
+				}
+			    ]
+			}
+		    ]
+		}
+	    ]
+	}	
+    ]
+}

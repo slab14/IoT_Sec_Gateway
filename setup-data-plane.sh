@@ -39,6 +39,7 @@ build_docker_containers(){
     sudo docker build -t="snort_demoa" docker_containers/demo_conts/snort_demoA
     sudo docker build -t="snort_demob" docker_containers/demo_conts/snort_demoB
     sudo docker build -t="snort_base" docker_containers/demo_conts/snort_base
+    sudo docker build -t="nmap_base" docker_containers/demo_conts/nmap_base    
     echo "Docker containers built"
 }
 
@@ -152,13 +153,7 @@ get_controller() {
     git clone https://github.com/slab14/l2switch.git
     cd l2switch/
     git checkout slab-update
-    export JAVA_HOME=`type -p javac|xargs readlink -f|xargs dirname|xargs dirname|sed '/s/8/11'`
-    export PATH=$PATH:$JAVA_HOME/bin/
-    export M2_HOME=/usr/share/maven/
-    export M2=$M2_HOME
-    export MAVEN_OPTS='-Xmx1048m -Xms256m'
-    export PATH=$M2:$PATH
-    mvn clean install -Pq -DskipTests -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true
+    ./build.sh
     cd ~
 }
 
@@ -166,6 +161,7 @@ get_controller() {
 echo "Beginning Dataplane Setup..."
 update
 install_docker
+build_docker_containers
 build_docker_containers
 install_ovs_fromGit
 install_python_packages

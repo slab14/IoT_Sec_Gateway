@@ -8,4 +8,4 @@ pass tcp 192.1.1.2 any -> 10.1.1.2 502 (flags:S; sid:10000006; rev:1; priority:1
 pass tcp 10.1.1.2 502 -> 192.1.1.2 any (flags:SA; sid:10000007; rev:1; priority:10; msg:"SYNACK";)
 pass tcp 192.1.1.2 any <> 10.1.1.2 502 (flags:F+; sid:10000008; rev:1; priority:10; msg:"FINACK";)
 pass tcp 192.1.1.2 any <> 10.1.1.2 502 (msg:"ACK"; flags:A; dsize:0; sid:10000009; rev:1; priority:10;)
-drop ip any any <> any any (msg:"Outside of behavioral model"; sid:10000010;)
+sdrop ip any any <> any any (msg:"Outside of behavioral model"; sid:10000010;)
