@@ -6,7 +6,8 @@ RUN apt-get update && \
     	    bridge-utils iproute2  iptables arptables tcpdump \
 	    build-essential autotools-dev gcc \
 	    python python-pip ethtool libssl-dev \
-	    iptables libnetfilter-queue1 emacs
+	    iptables libnetfilter-queue1 libnetfilter-queue-dev \
+	    emacs
 	    
 RUN pip install psutil watchdog
 

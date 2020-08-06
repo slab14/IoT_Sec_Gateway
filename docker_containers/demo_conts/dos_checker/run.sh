@@ -25,7 +25,7 @@ while grep -q 0.0.0.0 "IOT_IP"; do
 done
 
 #make sure we can ping the IoT
-while ! ping -c1 '192.1.1.2' &>/dev/null; do 
+while ! ping -c1 $iot_IP &>/dev/null; do 
     echo "Ping Fail - `date`" > /tmp/pingtest.out
     sleep 1
 done
@@ -41,7 +41,7 @@ fi
 ./checkHash &
 ./addHash &
 
-python conn_tester.py --ip IOT_IP --port 5201
+python conn_tester.py --ip $iot_IP --port 5201
 python sendAlert.py --filename /var/log/dos.log
 
 /bin/bash

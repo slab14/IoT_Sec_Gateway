@@ -63,7 +63,7 @@ def main():
     parser.add_argument('--port', required=True, type=int)          
     args=parser.parse_args()
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((args.ip, args.port))    
+    s.connect((args.ip, args.port))
     test(args.ip, args.port, filename)
     s.close()
 
