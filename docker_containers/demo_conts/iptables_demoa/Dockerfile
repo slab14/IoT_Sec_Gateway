@@ -10,6 +10,6 @@ RUN pip install watchdog
 
 COPY run.sh run.sh
 COPY ulogd.conf /etc/ulogd.conf
-COPY getAlerts.py /getAlerts.py
+COPY getAlerts.py sendAlert.c /
 
 ENTRYPOINT ["/run.sh"]

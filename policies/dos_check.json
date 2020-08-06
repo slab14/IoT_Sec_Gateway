@@ -6,7 +6,7 @@
 	    "inMAC": "3c:fd:fe:b0:ef:b4",
 	    "outMAC": "*",
 	    "states": ["scan", "protect"],
-	    "transition": ["dos:connlimit-1234_2"],
+	    "transition": ["dos:connlimit-1234_4"],
 	    "protections": [
 		{
 		    "state": "scan",
@@ -35,7 +35,7 @@
 			    "archives": [
 				{
 				    "tar": "/etc/sec_gate/testNode0/iptables.tar",
-				    "path": "/"
+				    "path": "."
 				}
 			    ]		  
 			}
