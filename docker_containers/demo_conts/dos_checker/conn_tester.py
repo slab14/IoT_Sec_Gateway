@@ -10,32 +10,32 @@ import psutil
 
 filename='/var/log/dos.log'
 
-lock = threading.Lock()
 def worker(num, ip, port, send=False):
     connected=False
-    while (not connected):
-        try:
-            lock.acquire()
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect((ip, port))
-            connected=True
-            lock.release()
-        finally:
-            if lock.locked():
-                lock.release()
+    n=5
     try:
-        while True:
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(2.0)
+        s.connect((ip, port))
+        connected=True
+    except:
+        pass
+    try:
+        while connected and (n>0):
             if send:
                 s.send('a')
-            a=1
+                a=1
             sleep(1)
-    except KeyboardInterrupt:
+            n-=1
+    except:
+        pass
     finally:
         s.close()
 
-def run(ip, port, filename):
+
+def test(ip, port, filename):
     resource.setrlimit(resource.RLIMIT_NOFILE, (4000, 4000))
-    num_connections=2000
+    num_connections=20
     threads = []
 
     for i in range(num_connections):
@@ -45,18 +45,25 @@ def run(ip, port, filename):
         sleep(0.01)
 
     total_active=psutil.net_connections(kind='inet')
+    count=0
+    for active in total_active:
+        if active.status=='ESTABLISHED':
+            count+=1
     with open(filename, 'wr') as f:
-          f.write(total_active)
-          f.write("total="+str(len(total_active)))
+          f.write("total="+str(count))
 
     for i in range(num_connections):
-        threads[i].join(1000)
+        threads[i].join(10)
+
 
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--ip', required=True, type=str)
-    parser.add_argument('--port', required=True, type=str)          
+    parser.add_argument('--port', required=True, type=int)          
     args=parser.parse_args()
-    run(args.ip, args.port, filename)
+    test(args.ip, args.port, filename)
           
-    sys.exit()
+
+
+if __name__=='__main__':
+    main()

@@ -51,7 +51,7 @@ class AlertSender(FileSystemEventHandler):
             
 
 if __name__ == "__main__":
-    event_handler = AlertSender('/var/log/nmap.log')
+    event_handler = AlertSender('/var/log/dos.log')
     observer = Observer()
     observer.schedule(event_handler, '/var/log/')
     observer.start()

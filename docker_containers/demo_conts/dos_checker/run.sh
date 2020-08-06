@@ -42,7 +42,7 @@ fi
 ./checkHash &
 ./addHash &
 
-python conn_tester.py --ip IOT_IP --port 1234
+python conn_tester.py --ip IOT_IP --port 5201
 python sendAlert.py --filename /var/log/dos.log
 
 /bin/bash
