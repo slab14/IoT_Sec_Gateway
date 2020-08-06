@@ -25,15 +25,14 @@ while grep -q 0.0.0.0 "IOT_IP"; do
 done
 
 #make sure we can ping the IoT
-while ! ping -c1 '192.1.1.2' &>/dev/null
-        do 
-            echo "Ping Fail - `date`" > /tmp/pingtest.out
-            sleep 1
+while ! ping -c1 '192.1.1.2' &>/dev/null; do 
+    echo "Ping Fail - `date`" > /tmp/pingtest.out
+    sleep 1
 done
 echo "Ping Success - `date`" > /tmp/pingtest.out 
 
 if [ ! -f "/var/log/dos.log" ]; then
-	touch /var/log/dos.log
+    touch /var/log/dos.log
 fi
 
 # setup packet signature actions (q1 = verify // q2 = sign)

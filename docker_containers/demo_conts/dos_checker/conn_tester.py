@@ -44,8 +44,9 @@ def test(ip, port, filename):
         t.start()
         sleep(0.01)
 
-    total_active=psutil.net_connections(kind='inet')
+    sleep(3)
     count=0
+    total_active=psutil.net_connections(kind='inet')
     for active in total_active:
         if active.status=='ESTABLISHED':
             count+=1
@@ -61,8 +62,10 @@ def main():
     parser.add_argument('--ip', required=True, type=str)
     parser.add_argument('--port', required=True, type=int)          
     args=parser.parse_args()
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((args.ip, args.port))    
     test(args.ip, args.port, filename)
-          
+    s.close()
 
 
 if __name__=='__main__':
