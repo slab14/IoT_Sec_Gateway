@@ -31,7 +31,12 @@ class FSM():
         
     def __repr__(self):
         v = "\n".join(str(r) for r in self.transMatrix)
-        return f
+        return f'''\
+States: {" ".join(self.states)}
+Transitions:
+{v}
+Initial state: {self.initial}
+'''
 
     
     def generateFlowbitsOptions(self, sid, tid):
@@ -87,7 +92,7 @@ class FSM():
         
         #Assume transitions that contains read is query from client to server, transition that contains
         #response is from server to client
-        if "Read" in self.transMatrix[sid][tid]:
+        if "Query" in self.transMatrix[sid][tid]:
             header = self.generateHeader(True)
             return f'{header} (flow:established;{content}{flowbits}tag:session,exclusive;{rule_id})' 
         elif "Response" in self.transMatrix[sid][tid]:
@@ -112,16 +117,29 @@ class FSM():
         header = self.generateHeader(False)
         return f'{header} (flags:SA;)'    
     
-    def generateAllRules(self):
+    def generateAllRules(self, outfile):
         #generate rules based on FSM
+        rules=[]
         for sid, row in enumerate(self.transMatrix):
             for tid, v in enumerate(row):
                 if v:
-                    print(self.generateRule(sid, tid))
+                    if outfile==None:
+                        print(self.generateRule(sid, tid))
+                    else:
+                        rules.append(self.generateRule(sid, tid))
         #allow client to send SYN to server to enable connection
-        print(self.allowSYN())
-        print(self.allowFIN())
-        print(self.allowSYNACK())
+        if outfile==None:
+            print(self.allowSYN())
+            print(self.allowFIN())
+            print(self.allowSYNACK())
+        else:
+            rules.append(self.allowSYN())
+            rules.append(self.allowFIN())
+            rules.append(self.allowSYNACK())
+        with open(outfile, 'w') as f:
+            for rule in rules:
+                f.write(rule+"\n")
+            
 
     def setServerPort(self, port):
         self.SERVER_PORT=port
@@ -178,9 +196,10 @@ def main():
     args=parser.parse_args()
 
     F = readModel(args.model, args.proto)
+    print(F)
     F.setServerPort(args.port)
     F.setGroupName(args.name)    
-    F.generateAllRules()
+    F.generateAllRules(args.rules)
 
 
     
