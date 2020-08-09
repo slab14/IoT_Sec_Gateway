@@ -42,10 +42,10 @@ ip link set bridge1 up
 ip link set bridge2 up
 
 # setup packet signature actions
-#iptables -t raw -A PREROUTING -i bridge1 -j NFQUEUE --queue-num 1
-#iptables -t filter -A FORWARD -i bridge1 -j NFQUEUE --queue-num 2
-#iptables -t raw -A PREROUTING -i bridge2 -j NFQUEUE --queue-num 1
-#iptables -t filter -A FORWARD -i bridge2 -j NFQUEUE --queue-num 2
+iptables -t raw -A PREROUTING -i bridge1 -j NFQUEUE --queue-num 1
+iptables -t filter -A FORWARD -i bridge1 -j NFQUEUE --queue-num 2
+iptables -t raw -A PREROUTING -i bridge2 -j NFQUEUE --queue-num 1
+iptables -t filter -A FORWARD -i bridge2 -j NFQUEUE --queue-num 2
 ./checkHash &
 ./addHash &
 

@@ -1,12 +1,13 @@
 #!/bin/bash
 
+# setup alert path to controller
+touch ID
+echo $PROTECTION_ID > ID
+
 gcc -I. -fPIC -shared -o send.so sendHypAlert.c -ldl libuhcall.a
 gcc -O1 -I. -o checkHash checkHypHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl libuhcall.a
 gcc -O1 -I. -o addHash addHypHash.c -lnfnetlink -lnetfilter_queue -lpthread -lm -ldl libuhcall.a
 
-# setup alert path to controller
-touch ID
-echo $PROTECTION_ID > ID
 python getAlerts.py &
 
 if [[ ! -s /etc/snort/snort.conf ]]; then

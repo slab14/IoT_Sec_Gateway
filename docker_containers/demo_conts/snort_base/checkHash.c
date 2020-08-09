@@ -70,12 +70,12 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
     struct tcphdr *tcp = nfq_tcp_get_hdr(pkBuff);    
     unsigned int payloadLen = nfq_tcp_get_payload_len(tcp, pkBuff);
     payloadLen -= 4*tcp->th_off;
-    if(payloadLen>DIGEST_SIZE){
+    if(payloadLen>=DIGEST_SIZE){
       /* received hash */
       unsigned char oldHash[DIGEST_SIZE];
       char *payload = nfq_tcp_get_payload(tcp, pkBuff);
       //raspberry pi adding 2 bytes to end of packet
-      memcpy(oldHash, payload+payloadLen-DIGEST_SIZE, DIGEST_SIZE);
+      memcpy(oldHash, payload+payloadLen-DIGEST_SIZE+2, DIGEST_SIZE);
       /* Remove first 16 data Bytes */
       //memmove(payload, payload, payloadLen-DIGEST_SIZE);
       
@@ -89,11 +89,13 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
       /* Cacl hash of data */
       hash = newCalcHmac(key, pktb_data(pkBuff), pktb_len(pkBuff));
       //hash = newCalcHmac(key, payload, payloadLen-DIGEST_SIZE);
+      /*
       int k=0;
       for (k=0; k<DIGEST_SIZE; k++){
 	printf("%x | %x \n", oldHash[k], hash[k]);
       }
-      if(compare(hash, oldHash, DIGEST_SIZE)==0) {
+      */
+      if(compare(hash, oldHash, DIGEST_SIZE-2)==0) {
         return nfq_set_verdict(qh, id, NF_ACCEPT, pktb_len(pkBuff), pktb_data(pkBuff));
       }else {
         return nfq_set_verdict(qh, id, NF_DROP, 0, NULL);

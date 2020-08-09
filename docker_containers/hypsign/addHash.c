@@ -65,7 +65,7 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
 	pktb_put(pkBuff,DIGEST_SIZE);
 	char *payload=nfq_tcp_get_payload(tcp, pkBuff);
 	//memmove(payload+DIGEST_SIZE, payload, payloadLen);
-	memcpy(payload+payloadLen, hash, DIGEST_SIZE);
+	memcpy(payload+payloadLen+2, hash, DIGEST_SIZE);
 	ip->tot_len=htons(pktb_len(pkBuff));	  
 	nfq_tcp_compute_checksum_ipv4(tcp,ip);
 	nfq_ip_set_checksum(ip);

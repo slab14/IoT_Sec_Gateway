@@ -25,8 +25,8 @@ ifconfig eth0 mtu 1520
 ifconfig eth1 mtu 1520
 
 #Send packets to NFQUEUE
-iptables -t raw -A PREROUTING -i eth0 -d 10.1.1.2 -j NFQUEUE --queue-num 1
-iptables -t raw -A PREROUTING -i eth1 -d 10.1.1.2 -j NFQUEUE --queue-num 2
+iptables -t raw -A PREROUTING -i bridge0 -j NFQUEUE --queue-num 1
+iptables -t filter -A FORWARD -i bridge0 -j NFQUEUE --queue-num 2
 
 ./checkHash &
 ./addHash
