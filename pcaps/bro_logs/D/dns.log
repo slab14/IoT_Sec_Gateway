@@ -1,0 +1,87 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	dns
+#open	2020-08-13-17-53-57
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	trans_id	rtt	query	qclass	qclass_name	qtype	qtype_name	rcode	rcode_name	AA	TC	RD	RA	Z	answers	TTLs	rejected
+#types	time	string	addr	port	addr	port	enum	count	interval	string	count	string	count	string	count	string	bool	bool	bool	bool	count	vector[string]	vector[interval]	bool
+1552312687.205507	CcLzuv2lt7IU5wFhch	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	32769	qclass-32769	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312688.210810	CcLzuv2lt7IU5wFhch	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312691.220985	CcLzuv2lt7IU5wFhch	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312693.118728	CcLzuv2lt7IU5wFhch	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	32769	qclass-32769	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312694.122561	CcLzuv2lt7IU5wFhch	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312697.134214	CcLzuv2lt7IU5wFhch	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312706.157042	CcLzuv2lt7IU5wFhch	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312660.318367	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312660.903308	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312661.657322	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312661.969765	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312662.181832	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312663.181122	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312663.942366	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312665.182699	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312667.951856	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312669.185238	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312675.951485	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312677.190612	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312687.205453	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	32769	qclass-32769	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312688.210745	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312691.220792	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312691.952890	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312693.118604	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	32769	qclass-32769	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312693.193664	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312694.122522	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312697.134109	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312706.156974	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312711.956548	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312713.198674	CbVaVy3Vid2ik5fe82	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312733.329573	CiO8g42pA8HdkzEJQl	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312734.960176	CiO8g42pA8HdkzEJQl	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	32769	qclass-32769	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312735.964765	CiO8g42pA8HdkzEJQl	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312738.733512	CiO8g42pA8HdkzEJQl	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	32769	qclass-32769	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312739.740048	CiO8g42pA8HdkzEJQl	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312742.749778	CiO8g42pA8HdkzEJQl	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312751.772733	CYemCq37HSFvlTwSK9	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312731.961345	Ccmxgn2AgUuYrnNWw7	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312733.200587	Ccmxgn2AgUuYrnNWw7	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312733.329527	Ccmxgn2AgUuYrnNWw7	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312734.960123	Ccmxgn2AgUuYrnNWw7	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	32769	qclass-32769	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312735.964670	Ccmxgn2AgUuYrnNWw7	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312738.733457	Ccmxgn2AgUuYrnNWw7	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	32769	qclass-32769	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312739.739955	Ccmxgn2AgUuYrnNWw7	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312742.749727	Ccmxgn2AgUuYrnNWw7	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312751.772643	Ccmxgn2AgUuYrnNWw7	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312751.979082	Ccmxgn2AgUuYrnNWw7	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312753.205347	Ccmxgn2AgUuYrnNWw7	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312778.827869	CIyCF42f7dHAgs9Ubc	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312789.477774	CbYpl224jdU5Rzn0G6	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	32769	qclass-32769	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312790.480202	CbYpl224jdU5Rzn0G6	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312793.287394	CbYpl224jdU5Rzn0G6	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	32769	qclass-32769	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312794.293465	CbYpl224jdU5Rzn0G6	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312797.303711	CbYpl224jdU5Rzn0G6	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312806.324402	CbYpl224jdU5Rzn0G6	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312771.981338	CAU3ut2KVB6wXu7SCg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312773.209118	CAU3ut2KVB6wXu7SCg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312778.827760	CAU3ut2KVB6wXu7SCg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312789.477688	CAU3ut2KVB6wXu7SCg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	32769	qclass-32769	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312790.480137	CAU3ut2KVB6wXu7SCg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312791.985090	CAU3ut2KVB6wXu7SCg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312793.211369	CAU3ut2KVB6wXu7SCg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312793.287335	CAU3ut2KVB6wXu7SCg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	32769	qclass-32769	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312794.293353	CAU3ut2KVB6wXu7SCg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312797.303661	CAU3ut2KVB6wXu7SCg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312806.324340	CAU3ut2KVB6wXu7SCg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312811.986148	CAU3ut2KVB6wXu7SCg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312813.213972	CAU3ut2KVB6wXu7SCg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312831.987962	CugjFj1uKU8ALB059e	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312833.214445	CugjFj1uKU8ALB059e	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312833.378247	CugjFj1uKU8ALB059e	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312833.378322	CeYsnF431b9jdEcM59	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_adisk._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312844.599736	CaIVi83NbbeLUdnErd	fe80::148e:ead9:3080:8c2f	5353	ff02::fb	5353	udp	0	-	_apple-pairable._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312844.599429	Co790F2QUaMSu3vVeg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_apple-pairable._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312851.991505	Co790F2QUaMSu3vVeg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312853.220051	Co790F2QUaMSu3vVeg	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312871.996359	CIaGid87g2EYxk9b4	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_ultimaker._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+1552312873.225366	CIaGid87g2EYxk9b4	10.1.1.42	5353	224.0.0.251	5353	udp	0	-	_octoprint._tcp.local	1	C_INTERNET	12	PTR	-	-	F	F	F	F	0	-	-	F
+#close	2020-08-13-17-53-58

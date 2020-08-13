@@ -1,0 +1,13 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	ntlm
+#open	2020-08-13-17-10-37
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	username	hostname	domainname	server_nb_computer_name	server_dns_computer_name	server_tree_name	success
+#types	time	string	addr	port	addr	port	string	string	string	string	string	string	bool
+1549038273.812115	CNHOgx464701iCZDNg	128.2.56.95	65239	128.2.158.145	50023	MECHE-MS7$	MECHE-MS7	GOECE	PGH-DFSMYFA-21	PGH-DFSMYFA-21.andrew.ad.cmu.edu	ad.cmu.edu	-
+1549038293.818789	CI7Pce3lQ5fZZjmKyd	128.2.56.95	65249	128.2.158.145	50023	MECHE-MS7$	MECHE-MS7	GOECE	PGH-DFSMYFA-21	PGH-DFSMYFA-21.andrew.ad.cmu.edu	ad.cmu.edu	-
+1549038313.824875	CJei9f6wwZwCugh2h	128.2.56.95	65251	128.2.158.145	50023	MECHE-MS7$	MECHE-MS7	GOECE	PGH-DFSMYFA-21	PGH-DFSMYFA-21.andrew.ad.cmu.edu	ad.cmu.edu	-
+1549038333.831585	CaZ9BF1La1m72sByR6	128.2.56.95	65253	128.2.158.145	50023	MECHE-MS7$	MECHE-MS7	GOECE	PGH-DFSMYFA-21	PGH-DFSMYFA-21.andrew.ad.cmu.edu	ad.cmu.edu	-
+#close	2020-08-13-17-10-37

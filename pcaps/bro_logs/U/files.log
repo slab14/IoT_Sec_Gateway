@@ -1,0 +1,93 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	files
+#open	2020-08-13-17-10-37
+#fields	ts	fuid	tx_hosts	rx_hosts	conn_uids	source	depth	analyzers	mime_type	filename	duration	local_orig	is_orig	seen_bytes	total_bytes	missing_bytes	overflow_bytes	timedout	parent_fuid	md5	sha1	sha256	extracted	extracted_cutoff	extracted_size
+#types	time	string	set[addr]	set[addr]	set[string]	string	count	set[string]	string	string	interval	bool	bool	count	count	count	count	bool	string	string	string	string	string	bool	count
+1549038272.987710	FyUYOE2ymXBEt7rww5	93.174.104.27	128.2.56.95	Ch2HkA1lj9JiVuVIW1	HTTP	0	(empty)	text/json	-	0.000000	-	F	755	755	0	0	F	-	-	-	-	-	-	-
+1549038274.951732	FkobRt2imcftxXUR72	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/html	-	0.000000	-	F	492	-	0	0	F	-	-	-	-	-	-	-
+1549038276.103894	FQUpwu2DlwMv6gFlg5	93.174.104.27	128.2.56.95	Cw9BevaGCtXF3i8A8	HTTP	0	(empty)	text/plain	-	0.000000	-	F	15	15	0	0	F	-	-	-	-	-	-	-
+1549038276.314622	FxbHMJ1kH2IlBDlC0j	93.174.104.27	128.2.56.95	CNnLWv4h11yd6NZyZb	HTTP	0	(empty)	text/html	-	0.000000	-	F	327	327	0	0	F	-	-	-	-	-	-	-
+1549038278.060642	FRKqr2BEJbSJsKlK	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.003744	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038278.065569	FtmiiUDJlHVs68Yng	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004179	-	F	6355	6355	0	0	F	-	-	-	-	-	-	-
+1549038279.381963	F1SedN3BrNDeElVXla	128.2.59.58	128.2.56.95	CxYfDSfMsW1Nts1Cj	HTTP	0	(empty)	text/html	-	0.000000	-	F	492	-	0	0	F	-	-	-	-	-	-	-
+1549038279.363177	FJ8TLK2yS4oLCqxzC7	128.2.59.58	128.2.56.95	COIEJNJlFcso8bg5	HTTP	0	(empty)	text/html	-	0.000000	-	F	492	-	0	0	F	-	-	-	-	-	-	-
+1549038279.419817	FtfqjdvLE0NG3swy2	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.003519	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038279.470244	FnYy5v2hwDImbV3oEj	128.2.59.58	128.2.56.95	CCfGpH1knKMyLglEgk	HTTP	0	(empty)	text/html	-	0.000000	-	F	492	-	0	0	F	-	-	-	-	-	-	-
+1549038279.470539	FDNGha3my0j42skCe7	128.2.59.58	128.2.56.95	C6prRk11e14RUwdD77	HTTP	0	(empty)	text/html	-	0.000000	-	F	492	-	0	0	F	-	-	-	-	-	-	-
+1549038279.523550	FT8razfwObQ7nEHea	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004551	-	F	6357	6357	0	0	F	-	-	-	-	-	-	-
+1549038279.525993	FQ2GUw1EXLKJnaLTuc	128.2.59.58	128.2.56.95	COIEJNJlFcso8bg5	HTTP	0	(empty)	text/html	-	0.000000	-	F	492	-	0	0	F	-	-	-	-	-	-	-
+1549038279.528517	FlXS74wgPvgqsg5Ld	128.2.59.58	128.2.56.95	CCfGpH1knKMyLglEgk	HTTP	0	(empty)	text/html	-	0.000000	-	F	492	-	0	0	F	-	-	-	-	-	-	-
+1549038279.528214	FjWMmg2QRFVMfUvEDh	128.2.59.58	128.2.56.95	CxYfDSfMsW1Nts1Cj	HTTP	0	(empty)	text/html	-	0.000000	-	F	492	-	0	0	F	-	-	-	-	-	-	-
+1549038279.530103	F7Ww6eiBHulEvb7Le	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/html	-	0.000000	-	F	492	-	0	0	F	-	-	-	-	-	-	-
+1549038280.398606	FMHJ8j45VzHRtz9TZf	128.2.56.95	128.2.57.113	Cz9Pjd4vyVNy5VSDDf	HTTP	0	(empty)	text/plain	-	0.000000	-	T	798	798	0	0	F	-	-	-	-	-	-	-
+1549038280.398606	FSJPtF2keKYvK2CuMe	128.2.57.113	128.2.56.95	Cz9Pjd4vyVNy5VSDDf	HTTP	0	(empty)	text/plain	-	0.000001	-	F	1346	1346	0	0	F	-	-	-	-	-	-	-
+1549038280.966519	FnCgIn4Re4BFbmXpml	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.003304	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038280.979411	FSBDQp2qYaeaUnmmUg	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.005014	-	F	6355	6355	0	0	F	-	-	-	-	-	-	-
+1549038283.003365	FynS271xSFAB2nKxl6	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.005653	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038283.012589	F03pUhEqKFQ6r63bh	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004461	-	F	6356	6356	0	0	F	-	-	-	-	-	-	-
+1549038284.945147	FC5yyu4lZq27e8NKlh	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.003286	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038284.987790	F4AZZg22jRvCup4Wr3	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004198	-	F	6355	6355	0	0	F	-	-	-	-	-	-	-
+1549038287.554723	FyIIO63llYDhMZ5DM2	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.005677	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038287.582128	FsBwNh2BtPCtiytO59	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.003928	-	F	6354	6354	0	0	F	-	-	-	-	-	-	-
+1549038288.973084	FEl6Xe4AFQUxNr6JS1	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.005746	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038288.980150	FQTEci1KNrUAioYtw3	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004148	-	F	6352	6352	0	0	F	-	-	-	-	-	-	-
+1549038290.985827	FogGG33fc2vPQLbB1e	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.005894	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038290.988444	FASjdK1OZrQrKfClI9	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.006214	-	F	6355	6355	0	0	F	-	-	-	-	-	-	-
+1549038292.973053	FrKHVV2zHNpECT5C8	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.005803	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038292.970718	F3hs4t4ZPBhH5ceAD7	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.008800	-	F	6358	6358	0	0	F	-	-	-	-	-	-	-
+1549038294.989909	F72btn2oJRewl6A9g6	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.007548	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038294.993808	Fo3RpZ2FD6MxsoEjg4	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.006462	-	F	6357	6357	0	0	F	-	-	-	-	-	-	-
+1549038296.128596	FhGKerTRum2evMmJi	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/html	-	0.000000	-	F	492	-	0	0	F	-	-	-	-	-	-	-
+1549038296.982241	FfrDAg2pgyRnc2ahg2	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.003793	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038296.987162	FDfo1r4hIEJNfbmId	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004122	-	F	6356	6356	0	0	F	-	-	-	-	-	-	-
+1549038297.484020	FSXEpb2uAGNUYEPS94	35.195.54.16	128.2.56.95	CFum3mNxt5WBQQ3ek	SSL	0	MD5,X509,SHA1,SHA256	application/x-x509-user-cert	-	0.000000	-	F	1633	-	0	0	F	-	6bd991bbbb49838429728cb048e97da3	9c8301f7211aa954d14f9472436fa9625712b8a8	1b5491ff86a194733fee51220eb12baf9162c54085b6d85b7d62c90e6db70b76	-	-	-
+1549038297.484020	Ffzn6K2fSPIE5Qvg5e	35.195.54.16	128.2.56.95	CFum3mNxt5WBQQ3ek	SSL	0	MD5,X509,SHA1,SHA256	application/x-x509-ca-cert	-	0.000000	-	F	1174	-	0	0	F	-	b15409274f54ad8f023d3b85a5ecec5d	e6a3b45b062d509b3382282d196efe97d5956ccb	25847d668eb4f04fdd40b12b6b0740c567da7d024308eb6c2c96fe41d9de218d	-	-	-
+1549038298.966720	Fxi2vt3iZrknWg5CXh	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.004126	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038298.981150	FzNysY37z9qFOSrHGa	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004080	-	F	6355	6355	0	0	F	-	-	-	-	-	-	-
+1549038300.965724	FsE5ZG1ZXj8nbgNVB1	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.003426	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038300.980432	FkH4CI2TtTI4q4gbj3	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.008288	-	F	6353	6353	0	0	F	-	-	-	-	-	-	-
+1549038302.956625	FSlfZM16ZWcQBktcJ9	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.005639	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038302.971517	F0DwgquiGBxImwvC3	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004038	-	F	6355	6355	0	0	F	-	-	-	-	-	-	-
+1549038304.994064	F2O4yBQGGtS0cZ8A2	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.003443	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038304.999026	FIs1Lq3LBxmGudp9y1	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004034	-	F	6351	6351	0	0	F	-	-	-	-	-	-	-
+1549038306.936108	FOjNvq0uMCiWmQck5	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.006167	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038306.974868	F1YTou3iP1Jk94PUFh	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.003906	-	F	6352	6352	0	0	F	-	-	-	-	-	-	-
+1549038308.961965	Fer5tK3GoWycqL0yNk	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.005938	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038308.964602	FdEzL81yUAsC0wMNYa	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.006234	-	F	6355	6355	0	0	F	-	-	-	-	-	-	-
+1549038310.987909	F1CvXD3jPFeu2iKlma	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.005598	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038310.994908	FiOqYY3mw8n6xpHs9k	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004132	-	F	6350	6350	0	0	F	-	-	-	-	-	-	-
+1549038312.973397	FHnKDir3agPbsdzUl	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.006944	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038312.975662	FiEay62nazW90AkMk2	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.006527	-	F	6355	6355	0	0	F	-	-	-	-	-	-	-
+1549038314.970434	F2kYQv2lWgzufnumT5	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.003649	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038314.983052	FJGUOG6RcDsdkeq6a	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004065	-	F	6355	6355	0	0	F	-	-	-	-	-	-	-
+1549038315.166217	FYi7XD35N3x4fP6tv2	128.2.56.95	128.2.59.58	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/plain	-	0.000000	-	T	28	-	0	0	F	-	-	-	-	-	-	-
+1549038315.166217	FF8Yys4TXWgP09PMmg	128.2.56.95	128.2.59.58	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	-	-	0.000000	-	T	8	-	0	0	F	-	-	-	-	-	-	-
+1549038317.014084	Fqt87y2gseF5Jbr6W9	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.003375	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038317.018978	FIe5gRwxAVvTXiBsb	128.2.59.58	128.2.56.95	CxYfDSfMsW1Nts1Cj	HTTP	0	(empty)	text/json	-	0.004222	-	F	6352	6352	0	0	F	-	-	-	-	-	-	-
+1549038315.183252	F7DDct4ROQar5dayke	128.2.56.95	128.2.59.58	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	application/x-gzip	UM3E_3DBenchy.gcode.gz	2.505646	-	T	2339316	-	0	0	F	-	-	-	-	-	-	-
+1549038318.846656	FGxU7i3dLI0IbcMli	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.000000	-	F	725	725	0	0	F	-	-	-	-	-	-	-
+1549038318.939425	FHc5Tx1UYLre2PhPpg	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.003285	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038318.986683	FiRYAh2sZgzYB2SNaa	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.005610	-	F	7082	7082	0	0	F	-	-	-	-	-	-	-
+1549038319.486302	F5Bip51brmYBRs3Azc	128.2.56.95	128.2.57.113	CDTDJv3qfEfFFs7Qqf	HTTP	0	(empty)	text/plain	-	0.000000	-	T	798	798	0	0	F	-	-	-	-	-	-	-
+1549038319.486302	FZHpac1Bnbvum5H8ai	128.2.57.113	128.2.56.95	CDTDJv3qfEfFFs7Qqf	HTTP	0	(empty)	text/plain	-	0.000002	-	F	1346	1346	0	0	F	-	-	-	-	-	-	-
+1549038321.067193	FWWId11kj3vgBgJPN	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.003541	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038321.097209	FwRY8l4S3ejDel9Lyj	128.2.59.58	128.2.56.95	CxYfDSfMsW1Nts1Cj	HTTP	0	(empty)	text/html	-	0.000000	-	F	492	-	0	0	F	-	-	-	-	-	-	-
+1549038321.099999	F1Po604sOHKTbQne36	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004730	-	F	7082	7082	0	0	F	-	-	-	-	-	-	-
+1549038323.002603	FdqPGJSPUZngRpMK6	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.003316	-	F	5533	5533	0	0	F	-	-	-	-	-	-	-
+1549038323.010881	FoeOwKdQ6bzITXijj	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004664	-	F	7077	7077	0	0	F	-	-	-	-	-	-	-
+1549038325.026244	Fv9nH1ktSjah57qq3	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.004165	-	F	5537	5537	0	0	F	-	-	-	-	-	-	-
+1549038325.036063	F9eXqw3RX5FIeqJNA5	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004762	-	F	7118	7118	0	0	F	-	-	-	-	-	-	-
+1549038326.967780	F7G4D242KnJofSEcjb	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.005755	-	F	5537	5537	0	0	F	-	-	-	-	-	-	-
+1549038327.021008	FW4jY531nFBD2Divf	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.005010	-	F	7120	7120	0	0	F	-	-	-	-	-	-	-
+1549038328.971405	FzenWS3NiIynWLxjXk	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.003503	-	F	5537	5537	0	0	F	-	-	-	-	-	-	-
+1549038328.978258	F1QPQ92LXnPZHmTGDh	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004900	-	F	7122	7122	0	0	F	-	-	-	-	-	-	-
+1549038330.965164	FTIU5J1lBtXa4FNmBf	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.003430	-	F	5537	5537	0	0	F	-	-	-	-	-	-	-
+1549038330.969979	Fz0QJD1KQNM7QIwsL1	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.005584	-	F	7122	7122	0	0	F	-	-	-	-	-	-	-
+1549038332.988800	Fe1neO18KlMuDDeLFi	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.003389	-	F	5537	5537	0	0	F	-	-	-	-	-	-	-
+1549038333.010305	FRtgH93fMKFS5Xmqn6	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.004701	-	F	7121	7121	0	0	F	-	-	-	-	-	-	-
+1549038334.960748	FWQ81D4WLtPAytcPMg	128.2.59.58	128.2.56.95	C4TStJ34YW4tE8qsme	HTTP	0	(empty)	text/json	-	0.006825	-	F	5537	5537	0	0	F	-	-	-	-	-	-	-
+1549038334.963098	FF82dI18AfakY8Tip	128.2.59.58	128.2.56.95	ChXL4bUjyBBrw6Yn9	HTTP	0	(empty)	text/json	-	0.006962	-	F	7122	7122	0	0	F	-	-	-	-	-	-	-
+#close	2020-08-13-17-10-37
