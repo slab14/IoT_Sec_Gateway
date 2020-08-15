@@ -44,4 +44,8 @@ public class MealyFSM {
 	}
 	return false;
     }
+
+    public void setSymbolList(ArrayList<Integer> symbolList){
+	this.symbolList=symbolList;
+    }
 }
