@@ -6,7 +6,9 @@
 #open	2020-08-13-17-10-37
 #fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	trans_depth	method	host	uri	referrer	version	user_agent	origin	request_body_len	response_body_len	status_code	status_msg	info_code	info_msg	tags	username	password	proxied	orig_fuids	orig_filenames	orig_mime_types	resp_fuids	resp_filenames	resp_mime_types
 #types	time	string	addr	port	addr	port	count	string	string	string	string	string	string	string	count	count	count	string	count	string	set[enum]	string	string	set[string]	vector[string]	vector[string]	vector[string]	vector[string]	vector[string]	vector[string]
+1549038272.875598	Ch2HkA1lj9JiVuVIW1	128.2.56.95	65237	93.174.104.27	80	1	GET	software.ultimaker.com	/latest.json	-	1.1	cura - 3.6.0	-	0	755	200	OK	-	-	(empty)	-	-	-	-	-	-	FyUYOE2ymXBEt7rww5	-	text/json
 1549038274.917247	C4TStJ34YW4tE8qsme	128.2.56.95	65240	128.2.59.58	80	1	GET	128.2.59.58	/cluster-api/v1/materials/	-	1.1	cura/3.6.0 	-	0	492	200	OK	-	-	(empty)	-	-	-	-	-	-	FkobRt2imcftxXUR72	-	text/html
+1549038275.995933	Cw9BevaGCtXF3i8A8	128.2.56.95	65241	93.174.104.27	80	1	GET	software.ultimaker.com	/jedi/releases/latest.version?utm_source=cura&utm_medium=software&utm_campaign=resources	-	1.1	cura - 3.6.0	-	0	15	200	OK	-	-	(empty)	-	-	-	-	-	-	FQUpwu2DlwMv6gFlg5	-	text/plain
 1549038276.205875	CNnLWv4h11yd6NZyZb	128.2.56.95	65242	93.174.104.27	80	1	GET	software.ultimaker.com	/releases/firmware/9511/stable/version.txt	-	1.1	cura - 3.6.0	-	0	327	404	Not Found	-	-	(empty)	-	-	-	-	-	-	FxbHMJ1kH2IlBDlC0j	-	text/html
 1549038277.968777	C4TStJ34YW4tE8qsme	128.2.56.95	65240	128.2.59.58	80	2	GET	128.2.59.58	/cluster-api/v1/printers/	-	1.1	cura/3.6.0 	-	0	5533	200	OK	-	-	(empty)	-	-	-	-	-	-	FRKqr2BEJbSJsKlK	-	text/json
 1549038277.972236	ChXL4bUjyBBrw6Yn9	128.2.56.95	65243	128.2.59.58	80	1	GET	128.2.59.58	/cluster-api/v1/print_jobs/	-	1.1	cura/3.6.0 	-	0	6355	200	OK	-	-	(empty)	-	-	-	-	-	-	FtmiiUDJlHVs68Yng	-	text/json
@@ -20,6 +22,7 @@
 1549038279.470519	CCfGpH1knKMyLglEgk	128.2.56.95	65247	128.2.59.58	80	2	GET	128.2.59.58	/cluster-api/v1/print_jobs/250b5fb1-79c0-4cb3-b902-13670290f03f/preview_image	-	1.1	cura/3.6.0 	-	0	492	200	OK	-	-	(empty)	-	-	-	-	-	-	FlXS74wgPvgqsg5Ld	-	text/html
 1549038279.382359	CxYfDSfMsW1Nts1Cj	128.2.56.95	65244	128.2.59.58	80	2	GET	128.2.59.58	/cluster-api/v1/print_jobs/c279320f-c9b2-42d5-b666-4e238b981699/preview_image	-	1.1	cura/3.6.0 	-	0	492	200	OK	-	-	(empty)	-	-	-	-	-	-	FjWMmg2QRFVMfUvEDh	-	text/html
 1549038279.423861	C4TStJ34YW4tE8qsme	128.2.56.95	65240	128.2.59.58	80	4	GET	128.2.59.58	/cluster-api/v1/print_jobs/abbbb6c8-6724-441b-a99a-1d3a7229dd9e/preview_image	-	1.1	cura/3.6.0 	-	0	492	200	OK	-	-	(empty)	-	-	-	-	-	-	F7Ww6eiBHulEvb7Le	-	text/html
+1549038280.398606	Cz9Pjd4vyVNy5VSDDf	128.2.56.95	65248	128.2.57.113	1947	1	POST	-	/api	-	1.1	-	-	798	1346	200	OK	-	-	(empty)	-	-	-	FMHJ8j45VzHRtz9TZf	-	text/plain	FSJPtF2keKYvK2CuMe	-	text/plain
 1549038280.909552	C4TStJ34YW4tE8qsme	128.2.56.95	65240	128.2.59.58	80	5	GET	128.2.59.58	/cluster-api/v1/printers/	-	1.1	cura/3.6.0 	-	0	5533	200	OK	-	-	(empty)	-	-	-	-	-	-	FnCgIn4Re4BFbmXpml	-	text/json
 1549038280.909917	ChXL4bUjyBBrw6Yn9	128.2.56.95	65243	128.2.59.58	80	3	GET	128.2.59.58	/cluster-api/v1/print_jobs/	-	1.1	cura/3.6.0 	-	0	6355	200	OK	-	-	(empty)	-	-	-	-	-	-	FSBDQp2qYaeaUnmmUg	-	text/json
 1549038282.915226	C4TStJ34YW4tE8qsme	128.2.56.95	65240	128.2.59.58	80	6	GET	128.2.59.58	/cluster-api/v1/printers/	-	1.1	cura/3.6.0 	-	0	5533	200	OK	-	-	(empty)	-	-	-	-	-	-	FynS271xSFAB2nKxl6	-	text/json
@@ -62,6 +65,7 @@
 1549038315.166078	C4TStJ34YW4tE8qsme	128.2.56.95	65240	128.2.59.58	80	24	POST	128.2.59.58	/cluster-api/v1/print_jobs/	-	1.1	cura/3.6.0 	-	4679163	725	200	OK	-	-	(empty)	-	-	-	FYi7XD35N3x4fP6tv2,FF8Yys4TXWgP09PMmg,F7DDct4ROQar5dayke	UM3E_3DBenchy.gcode.gz	text/plain,application/x-gzip	FGxU7i3dLI0IbcMli	-	text/json
 1549038318.904722	C4TStJ34YW4tE8qsme	128.2.56.95	65240	128.2.59.58	80	25	GET	128.2.59.58	/cluster-api/v1/printers/	-	1.1	cura/3.6.0 	-	0	5533	200	OK	-	-	(empty)	-	-	-	-	-	-	FHc5Tx1UYLre2PhPpg	-	text/json
 1549038318.905080	ChXL4bUjyBBrw6Yn9	128.2.56.95	65243	128.2.59.58	80	22	GET	128.2.59.58	/cluster-api/v1/print_jobs/	-	1.1	cura/3.6.0 	-	0	7082	200	OK	-	-	(empty)	-	-	-	-	-	-	FiRYAh2sZgzYB2SNaa	-	text/json
+1549038319.486302	CDTDJv3qfEfFFs7Qqf	128.2.56.95	65252	128.2.57.113	1947	1	POST	-	/api	-	1.1	-	-	798	1346	200	OK	-	-	(empty)	-	-	-	F5Bip51brmYBRs3Azc	-	text/plain	FZHpac1Bnbvum5H8ai	-	text/plain
 1549038320.982076	C4TStJ34YW4tE8qsme	128.2.56.95	65240	128.2.59.58	80	26	GET	128.2.59.58	/cluster-api/v1/printers/	-	1.1	cura/3.6.0 	-	0	5533	200	OK	-	-	(empty)	-	-	-	-	-	-	FWWId11kj3vgBgJPN	-	text/json
 1549038320.982855	CxYfDSfMsW1Nts1Cj	128.2.56.95	65244	128.2.59.58	80	4	GET	128.2.59.58	/cluster-api/v1/print_jobs/1a16067e-91b4-404a-85b2-208666c2a4ff/preview_image	-	1.1	cura/3.6.0 	-	0	492	200	OK	-	-	(empty)	-	-	-	-	-	-	FwRY8l4S3ejDel9Lyj	-	text/html
 1549038320.982433	ChXL4bUjyBBrw6Yn9	128.2.56.95	65243	128.2.59.58	80	23	GET	128.2.59.58	/cluster-api/v1/print_jobs/	-	1.1	cura/3.6.0 	-	0	7082	200	OK	-	-	(empty)	-	-	-	-	-	-	F1Po604sOHKTbQne36	-	text/json
