@@ -50,14 +50,15 @@ public class MattModel {
 		    sequenceMap.put(splitted[1], new ArrayList<String>());
 		}
 		String[] lastURI=splitted[9].split("/");
-		String msgTo=splitted[7]+lastURI[lastURI.length-1];
-		String msgFrom=splitted[16]+splitted[17];
+		String msgTo=splitted[7]+"/"+lastURI[lastURI.length-1];
+		String msgFrom=splitted[16]+"/"+splitted[17];
 		//Create alphabet of transitions
 		if (!outMsgs.contains(msgFrom)){outMsgs.add(msgFrom);}
 		if (!dMap.containsKey(msgTo)){
 		    msgNo+=1;
 		    dMap.put(msgTo, ""+msgNo);
 		    symbolList.add(msgNo);
+		    System.out.println("alphabet: "+msgNo+" -> "+msgTo);
 		}
 		sequenceMap.get(splitted[1]).add(dMap.get(msgTo));
 	    }
@@ -65,6 +66,7 @@ public class MattModel {
 	} catch (IOException e)	{ e.printStackTrace(); }
 	FileWriter writer = new FileWriter("ms.csv");
 	for (ArrayList<String> seq: sequenceMap.values()){
+	    traces.add(seq);
 	    for(String s: seq){
 		writer.append(s);		
 		System.out.print(s+",");		
@@ -144,6 +146,112 @@ public class MattModel {
     }
 
 
+    public static MealyFSM mergeFSM2(MealyFSM fsm, boolean init) {
+	List<String> states = new ArrayList<String>();
+	if (!init) { for (String stateTemp : fsm.stateMap.keySet()) { states.add(stateTemp);}}
+	else { for (int i=0; i<fsm.stateMap.size(); i++) {states.add("s"+String.valueOf(i));}}
+	for (String state : states) {
+	    if ((!fsm.stateMap.containsKey(state)) || (fsm.delta.get(state)==null)) {continue; }
+	    for (String transition: fsm.delta.get(state).keySet()) {
+		String nextState = fsm.delta.get(state).get(transition);
+		if (nextState.equals(state)){continue;}
+		if ((fsm.delta.get(nextState)==null) || (fsm.delta.get(nextState).size()!=1)) {continue; }
+		String nextTransition = fsm.delta.get(nextState).entrySet().iterator().next().getKey();
+		while (transition.equals(nextTransition)) {
+		    String nextNextState = fsm.delta.get(nextState).get(nextTransition);
+		    fsm.delta.get(state).replace(transition, nextNextState);
+		    fsm.stateMap.remove(nextState);
+		    fsm.delta.remove(nextState);		    		    
+		    nextState = nextNextState;
+		    if (fsm.delta.get(nextState)==null){
+			Map<String, String> dmap = new HashMap<String, String>();
+			dmap.put(transition, nextState);
+			fsm.delta.put(nextState, dmap);			
+			break;
+		    }	
+		    if (fsm.delta.get(nextState).size()!=1) {break; }
+		    nextTransition = fsm.delta.get(nextState).entrySet().iterator().next().getKey();
+		    if (!transition.equals(nextTransition)) {fsm.delta.get(nextState).put(transition, nextState);}
+		}
+	    }
+	}
+	return fsm;
+    }
+    
+
+    public static MealyFSM mergeFSM(MealyFSM fsm, boolean init) {
+	List<String> statesToMerge = new ArrayList<String>();
+	List<String> red = new ArrayList<String>();
+	List<String> blue = new ArrayList<String>();
+	if (!init) { for (String stateTemp : fsm.stateMap.keySet()) { statesToMerge.add(stateTemp);}}
+	else { for (int i=0; i<fsm.stateMap.size(); i++) {statesToMerge.add("s"+String.valueOf(i));}}
+	// start from the end of the tree
+	//	Collections.reverse(statesToMerge);
+	for (String stateToMerge : statesToMerge) {
+	    if (!fsm.stateMap.containsKey(stateToMerge)) {continue; }
+	    red.add(stateToMerge);
+	    for (String stateTemp : fsm.stateMap.keySet()) {blue.add(stateTemp); }
+	    blue.remove(fsm.initialStateStr);
+	    while (!blue.isEmpty()) {
+		boolean isPromote = false;
+		String stateB = blue.get(0);
+		blue.remove(stateB);
+		for (String stateR: red) {
+		    // Promote the state if the merge will break determinism
+		    // Condition 1: child transition conflicts
+		    if ((fsm.delta.get(stateR) != null)	&& (fsm.delta.get(stateB) != null)) {
+			for (String xR : fsm.delta.get(stateR).keySet()) {
+			    for (String xB : fsm.delta.get(stateB).keySet()) {
+				String stateRR = fsm.delta.get(stateR).get(xR); // state R's child
+				String stateBB = fsm.delta.get(stateB).get(xB); // state B's child
+				// deterministic condition: 1) if different children
+				if ((stateRR.equals(stateBB)) && (xR.equals(xB))) {
+				    red.add(stateB);
+				    isPromote = true;
+				    break;
+				}
+			    }
+			    if (isPromote) {break;}
+			}
+		    } // end of condition 1
+		    if (isPromote) {break;}
+		    // merge states
+		    if (!isPromote) {
+			// merge stateB's children to state R
+			if (fsm.delta.get(stateB) != null) {
+			    for (String xB : fsm.delta.get(stateB).keySet()) {
+				String stateBB = fsm.delta.get(stateB).get(xB);
+				// if stateR already has transitions
+				if (fsm.delta.get(stateR) != null) { fsm.delta.get(stateR).put(xB, stateBB);}
+				// create new transitions for stateR				    
+				else {
+				    Map<String, String> dmap = new HashMap<String, String>();
+				    dmap.put(xB, stateBB);
+				    fsm.delta.put(stateR, dmap);
+				}
+			    }
+			    if (!stateR.equals(stateB)) {fsm.delta.remove(stateB);}
+			}
+			// merge stateB's parent to state R
+			for (String stateP : fsm.delta.keySet()) {
+			    if (fsm.delta.get(stateP) != null) {
+				for (String xP : fsm.delta.get(stateP).keySet()) {
+				    if (fsm.delta.get(stateP).get(xP).equals(stateB)) {
+					fsm.delta.get(stateP).put(xP, stateR);
+				    }
+				}
+			    }
+			}
+			// remove stateB after merge
+			if (!stateR.equals(stateB)) {fsm.stateMap.remove(stateB);}
+		    }
+		}
+	    }
+	}
+	return fsm;
+    }
+
+    
 
     public static BigInteger binomial(final int N, final int K) {
 	BigInteger ret = BigInteger.ONE;
@@ -166,22 +274,16 @@ public class MattModel {
     public static void printFSM (MealyFSM fsm)	{
 	System.out.println("###");
 	System.out.println("#states");
-	for (String statestr : fsm.stateMap.keySet()){
-	    System.out.println(statestr);
-	}
+	for (String statestr : fsm.stateMap.keySet()){ System.out.println(statestr); }
 	System.out.println("#initial");
 	System.out.println(fsm.initialStateStr);
-	System.out.println("#accepting");
 	System.out.println("#alphabet");
 	ArrayList<String> alphabet = new ArrayList<String>();
 	for (String sstate : fsm.delta.keySet() ){
 	    for (String x : fsm.delta.get(sstate).keySet()){
-		String dstate = fsm.delta.get(sstate).get(x);
-		// remove redundancy
-		String word = ""+x+"";
-		if (!alphabet.contains(word)){
-		    alphabet.add(word);
-		    System.out.println(""+x+"");
+		if (!alphabet.contains(x)){
+		    alphabet.add(x);
+		    System.out.println(x);
 		}
 	    }
 	}
@@ -200,7 +302,8 @@ public class MattModel {
     public static void genFSM (ArrayList<ArrayList<String>> traces){
 	MealyFSM FSM = new MealyFSM();
 	FSM = buildTreeFSM(traces);
-	printFSM(FSM);	
+	FSM = mergeFSM2(FSM, true);
+	printFSM(FSM);
     }
     
 
