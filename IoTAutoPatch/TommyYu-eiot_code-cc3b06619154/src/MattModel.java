@@ -233,7 +233,8 @@ public class MattModel {
 		    }
 		}
 	    }
-	}				    
+	}
+	printFSM(fsm);
 	return fsm;
     }
     
@@ -284,12 +285,50 @@ public class MattModel {
     }
 
 
+    public static void writeFSM(MealyFSM fsm) throws IOException{
+	try{
+	    FileWriter writer = new FileWriter("model.txt");
+	    writer.append("states\n");
+	    String outStr="";
+	    for (String statestr : fsm.stateMap.keySet()){outStr+=statestr+","; }
+	    outStr=outStr.substring(0, outStr.length()-1);
+	    writer.append(outStr+"\n");
+	    writer.append("#initial\n");
+	    writer.append(fsm.initialStateStr+"\n");
+	    writer.append("#alphabet\n");
+	    outStr="";
+	    ArrayList<String> alphabet = new ArrayList<String>();
+	    for (String sstate : fsm.delta.keySet() ){
+		for (String x : fsm.delta.get(sstate).keySet()){
+		    if (!alphabet.contains(x)){
+			alphabet.add(x);
+			outStr+=x+",";
+		    }
+		}
+	    }
+	    outStr=outStr.substring(0, outStr.length()-1);
+	    writer.append(outStr+"\n");
+	    writer.append("#transitions\n");
+	    outStr="";
+	    for (String sstate : fsm.delta.keySet() ){
+		for (String x : fsm.delta.get(sstate).keySet()){
+		    String dstate = fsm.delta.get(sstate).get(x);
+		    outStr+=sstate+">"+x+">"+dstate+",";
+		}
+	    }
+	    outStr=outStr.substring(0, outStr.length()-1);
+	    writer.append(outStr+"\n");	
+	    writer.flush();
+	    writer.close();
+	} catch (IOException e)	{ e.printStackTrace(); }
+    }
 
-    public static void genFSM (ArrayList<ArrayList<String>> traces){
+
+    public static void genFSM (ArrayList<ArrayList<String>> traces) throws Exception{
 	MealyFSM FSM = new MealyFSM();
 	FSM = buildTreeFSM(traces);
 	FSM = mergeFSM2(FSM, true);
-	printFSM(FSM);
+	writeFSM(FSM);
     }
     
 
