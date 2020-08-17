@@ -1,0 +1,10 @@
+#inputs
+6 - content:POST/print_jobs;
+5 - content:GET/preview_image;
+1 - content:GET/materials;
+4 - content:GET/print_jobs;
+2 - content:GET/version.txt;
+3 - content:GET/printers;
+#outputs
+content:200/OK;
+content:0/327;

@@ -76,7 +76,18 @@ public class MattModel {
 	    System.out.print("\n");
 	}
 	writer.flush();
-	writer.close();
+	writer.close();	
+	FileWriter f = new FileWriter("proto.txt");
+	f.append("#inputs\n");
+	for(String alpha: dMap.keySet()) {
+	    f.append(dMap.get(alpha)+" - "+"content:"+alpha+";\n");
+	}
+	f.append("#outputs\n");
+	for(String bets: outMsgs){
+	    f.append("content:"+bets+";\n");
+	}
+	f.flush();
+	f.close();
 	return new TraceData(traces, symbolList);
     }
 
