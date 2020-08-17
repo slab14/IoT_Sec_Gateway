@@ -175,83 +175,69 @@ public class MattModel {
 		}
 	    }
 	}
-	return fsm;
-    }
-    
-
-    public static MealyFSM mergeFSM(MealyFSM fsm, boolean init) {
-	List<String> statesToMerge = new ArrayList<String>();
-	List<String> red = new ArrayList<String>();
-	List<String> blue = new ArrayList<String>();
-	if (!init) { for (String stateTemp : fsm.stateMap.keySet()) { statesToMerge.add(stateTemp);}}
-	else { for (int i=0; i<fsm.stateMap.size(); i++) {statesToMerge.add("s"+String.valueOf(i));}}
-	// start from the end of the tree
-	//	Collections.reverse(statesToMerge);
-	for (String stateToMerge : statesToMerge) {
-	    if (!fsm.stateMap.containsKey(stateToMerge)) {continue; }
-	    red.add(stateToMerge);
-	    for (String stateTemp : fsm.stateMap.keySet()) {blue.add(stateTemp); }
-	    blue.remove(fsm.initialStateStr);
-	    while (!blue.isEmpty()) {
-		boolean isPromote = false;
-		String stateB = blue.get(0);
-		blue.remove(stateB);
-		for (String stateR: red) {
-		    // Promote the state if the merge will break determinism
-		    // Condition 1: child transition conflicts
-		    if ((fsm.delta.get(stateR) != null)	&& (fsm.delta.get(stateB) != null)) {
-			for (String xR : fsm.delta.get(stateR).keySet()) {
-			    for (String xB : fsm.delta.get(stateB).keySet()) {
-				String stateRR = fsm.delta.get(stateR).get(xR); // state R's child
-				String stateBB = fsm.delta.get(stateB).get(xB); // state B's child
-				// deterministic condition: 1) if different children
-				if ((stateRR.equals(stateBB)) && (xR.equals(xB))) {
-				    red.add(stateB);
-				    isPromote = true;
+	for (String state : states) {
+	    if ((!fsm.stateMap.containsKey(state)) || (fsm.delta.get(state)==null)) {continue; }
+	    boolean hasLoop=false;
+	    String loopTransition="";
+	    if (fsm.delta.get(state).size()>1) {
+		for (String transition: fsm.delta.get(state).keySet()) {
+		    String nextState = fsm.delta.get(state).get(transition);
+		    if(nextState.equals(state)) {
+			hasLoop=true;
+			loopTransition=transition;
+		    }
+		}
+		if (hasLoop) {
+		    for (String transition: fsm.delta.get(state).keySet()) {
+			if ((loopTransition.equals(transition)) || (fsm.delta.get(state)==null)) {continue;}
+			String preLoopTransition = transition;
+			String preLoopState = state;
+			String loopState = fsm.delta.get(preLoopState).get(preLoopTransition);
+			while ((fsm.delta.get(loopState)!=null) && !state.equals(loopState)) {
+			    if (fsm.delta.get(loopState).size()>1) {
+				for (String secondLoopTransition: fsm.delta.get(loopState).keySet()) {
+				    if (!loopTransition.equals(secondLoopTransition)) {continue;}
+				    String checkLoop = fsm.delta.get(loopState).get(secondLoopTransition);
+				    if(checkLoop.equals(loopState)) {
+					for (String postLoopTransition: fsm.delta.get(loopState).keySet()) {
+					    if (postLoopTransition.equals(secondLoopTransition)) {continue;}
+					    String nextState = fsm.delta.get(loopState).get(postLoopTransition);
+					    fsm.delta.get(state).put(postLoopTransition, nextState);
+					    fsm.delta.get(preLoopState).replace(preLoopTransition, state);
+					    fsm.stateMap.remove(loopState);
+					    fsm.delta.remove(loopState);
+					    loopState=nextState;
+					}
+				    }
+				    
+				}
+			    } else {
+				if(loopState.equals(fsm.delta.get(preLoopState).get(fsm.delta.get(loopState).entrySet().iterator().next().getKey()))) {
+				    fsm.delta.get(preLoopState).replace(preLoopTransition, state);
+				    fsm.stateMap.remove(loopState);
+				    fsm.delta.remove(loopState);
 				    break;
 				}
-			    }
-			    if (isPromote) {break;}
-			}
-		    } // end of condition 1
-		    if (isPromote) {break;}
-		    // merge states
-		    if (!isPromote) {
-			// merge stateB's children to state R
-			if (fsm.delta.get(stateB) != null) {
-			    for (String xB : fsm.delta.get(stateB).keySet()) {
-				String stateBB = fsm.delta.get(stateB).get(xB);
-				// if stateR already has transitions
-				if (fsm.delta.get(stateR) != null) { fsm.delta.get(stateR).put(xB, stateBB);}
-				// create new transitions for stateR				    
-				else {
-				    Map<String, String> dmap = new HashMap<String, String>();
-				    dmap.put(xB, stateBB);
-				    fsm.delta.put(stateR, dmap);
-				}
-			    }
-			    if (!stateR.equals(stateB)) {fsm.delta.remove(stateB);}
-			}
-			// merge stateB's parent to state R
-			for (String stateP : fsm.delta.keySet()) {
-			    if (fsm.delta.get(stateP) != null) {
-				for (String xP : fsm.delta.get(stateP).keySet()) {
-				    if (fsm.delta.get(stateP).get(xP).equals(stateB)) {
-					fsm.delta.get(stateP).put(xP, stateR);
+				preLoopTransition = fsm.delta.get(loopState).entrySet().iterator().next().getKey();
+				preLoopState = loopState;
+				loopState = fsm.delta.get(preLoopState).get(preLoopTransition);
+				if(fsm.delta.get(loopState)==null){
+				    if(preLoopTransition.equals(loopTransition)){
+					fsm.delta.get(preLoopState).replace(preLoopTransition, state);
+					fsm.stateMap.remove(loopState);
+					fsm.delta.remove(loopState);
 				    }
 				}
 			    }
 			}
-			// remove stateB after merge
-			if (!stateR.equals(stateB)) {fsm.stateMap.remove(stateB);}
 		    }
 		}
 	    }
-	}
+	}				    
 	return fsm;
     }
-
     
+
 
     public static BigInteger binomial(final int N, final int K) {
 	BigInteger ret = BigInteger.ONE;
