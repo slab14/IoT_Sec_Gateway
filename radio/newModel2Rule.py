@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import re
 
 class FSM():
     """This class represents the FSM read from model. It contains the states, initial state and transition matrix."""
@@ -9,6 +10,7 @@ class FSM():
         self.transMatrix = transMatrix
         self.initial = initial
         self.proto = {}
+        self.out = ''
         
         # need for snort rule IDs
         self.rule_id = 1000000
@@ -38,6 +40,9 @@ Transitions:
 Initial state: {self.initial}
 '''
 
+
+    def setGroupName(self, name):
+        self.GROUPNAME=name
     
     def generateFlowbitsOptions(self, sid, tid):
         # Generate the flowbits rule to check if in state S
@@ -57,16 +62,29 @@ Initial state: {self.initial}
     def readContent(self):
         """This function reads the protocol specifications and fill self.proto"""
         with open(self.protofile, "r") as f:
+            inP = False
+            outP = False
             while True:
                 line = f.readline()
                 if (len(line) == 0):
                     break
+                elif (line[0]=='#'):
+                    if re.search("input", line):
+                        inP=True
+                        outP = False
+                    elif re.search("output", line):
+                        outP = True
+                        inP = False
+                    continue
                 line = line.rstrip('\n')
-                contents = line.split(' - ')
-                if (len(contents) < 2):
-                    print("WARNING: Protocol specification in the wrong format.")
-                    break
-                self.proto[contents[0]] = contents[1]
+                if inP:
+                    contents = line.split(' - ')
+                    if (len(contents) < 2):
+                        print("WARNING: Protocol specification in the wrong format.")
+                        break
+                    self.proto[contents[0]] = contents[1]
+                elif outP:
+                    self.out = line
 
     def generateContent(self, sid, tid): 
         content = ''
@@ -79,17 +97,20 @@ Initial state: {self.initial}
         server = f'any {self.SERVER_PORT}'
         client = f'any any'
         if read:
-            return f'allow tcp {client} -> {server}'
+            return f'pass tcp {client} -> {server}'
         else:
-            return f'allow tcp {server} -> {client}'
+            return f'pass tcp {server} -> {client}'
 
-    def generateRule(self, sid, tid):
+    def generateRule(self, sid, tid, input=True):
         content = self.generateContent(sid, tid)
         flowbits = self.generateFlowbitsOptions(sid, tid)
         rule_id = f'sid:{self.rule_id};'
         
         self.rule_id += 1
-        
+
+        header = self.generateHeader(True)
+        return f'{header} (flow:established;{content}{flowbits}tag:session,exclusive;{rule_id})' 
+        '''
         #Assume transitions that contains read is query from client to server, transition that contains
         #response is from server to client
         if "Query" in self.transMatrix[sid][tid]:
@@ -101,21 +122,42 @@ Initial state: {self.initial}
         else:
             print("WARNING: Protocal specification in wrong format, cannot decide direction of flow.")
             return ''
+        '''
     
     def allowSYN(self):
         #allow client to send SYN packets to server
+        rule_id = f'sid:{self.rule_id};'
+        self.rule_id += 1
         header = self.generateHeader(True)
-        return f'{header} (flags:S;)' 
+        return f'{header} (flags:S;{rule_id})' 
 
     def allowFIN(self):
         #allow client to send FIN to client
+        rule_id = f'sid:{self.rule_id};'        
+        self.rule_id += 1        
         header = self.generateHeader(True)
-        return f'{header} (flags:AF;)' 
+        return f'{header} (flags:AF;{rule_id})' 
 
     def allowSYNACK(self):
         #allow server to send SYN ACK to client
+        rule_id = f'sid:{self.rule_id};'        
+        self.rule_id += 1        
         header = self.generateHeader(False)
-        return f'{header} (flags:SA;)'    
+        return f'{header} (flags:SA;{rule_id})'    
+
+    def dropAll(self):
+        #add drop all traffic not allowed
+        rule_id = f'sid:{self.rule_id};'        
+        self.rule_id += 1
+        header = 'drop tcp any any <> any any'
+        return f'{header} (msg:\"drop all\";{rule_id})'
+
+    def addOut(self):
+        rule_id = f'sid:{self.rule_id};'        
+        self.rule_id += 1        
+        header = self.generateHeader(False)
+        content = self.out
+        return f'{header} (flow:established;{content}{rule_id})'
     
     def generateAllRules(self, outfile):
         #generate rules based on FSM
@@ -132,10 +174,12 @@ Initial state: {self.initial}
             print(self.allowSYN())
             print(self.allowFIN())
             print(self.allowSYNACK())
+            print(self.dropAll())
         else:
             rules.append(self.allowSYN())
             rules.append(self.allowFIN())
             rules.append(self.allowSYNACK())
+            rules.append(self.dropAll())
         with open(outfile, 'w') as f:
             for rule in rules:
                 f.write(rule+"\n")
@@ -144,9 +188,6 @@ Initial state: {self.initial}
     def setServerPort(self, port):
         self.SERVER_PORT=port
 
-    def setGroupName(self, name):
-        self.GROUP_NAME=name
-        
 
 def readModel(fModel, protofile):
     """This function reads the model file and generate a FSM class out of it.""" 
@@ -183,6 +224,7 @@ def readModel(fModel, protofile):
                     tid = states.index(t)
                     transMatrix[sid][tid] = v
     return FSM(states, transMatrix, initstate, protofile)
+
 
 
     
