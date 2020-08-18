@@ -1,0 +1,8 @@
+states
+s30,s0,s28,s29
+#initial
+s0
+#alphabet
+1,2
+#transitions
+s30>1>s28,s0>1>s28,s28>1>s28,s28>2>s30

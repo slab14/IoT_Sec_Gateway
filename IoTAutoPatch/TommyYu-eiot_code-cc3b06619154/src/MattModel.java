@@ -181,10 +181,13 @@ public class MattModel {
 			dmap.put(transition, nextState);
 			fsm.delta.put(nextState, dmap);			
 			break;
-		    }	
-		    if (fsm.delta.get(nextState).size()!=1) {break; }
+		    }
+		    if (fsm.delta.get(nextState).size()!=1) {
+			fsm.delta.get(nextState).put(transition, nextState);		    
+			break;
+		    }
 		    nextTransition = fsm.delta.get(nextState).entrySet().iterator().next().getKey();
-		    if (!transition.equals(nextTransition)) {fsm.delta.get(nextState).put(transition, nextState);}
+		    if (!transition.equals(nextTransition)) {fsm.delta.get(nextState).put(transition, nextState);} 
 		}
 	    }
 	}
@@ -222,7 +225,6 @@ public class MattModel {
 					    loopState=nextState;
 					}
 				    }
-				    
 				}
 			    } else {
 				if(loopState.equals(fsm.delta.get(preLoopState).get(fsm.delta.get(loopState).entrySet().iterator().next().getKey()))) {

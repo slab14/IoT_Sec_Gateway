@@ -1,8 +1,0 @@
-#inputs
-5 - content:"POST"; content:"print_jobs";
-4 - content:"GET"; content:"preview_image";
-1 - content:"GET"; content:"materials";
-3 - content:"GET"; content:"print_jobs";
-2 - content:"GET"; content:"printers";
-#outputs
-content:"200"; content:"OK";
