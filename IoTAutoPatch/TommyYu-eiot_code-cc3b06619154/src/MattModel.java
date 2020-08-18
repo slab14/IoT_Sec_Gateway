@@ -81,12 +81,12 @@ public class MattModel {
 	f.append("#inputs\n");
 	for(String alpha: dMap.keySet()) {
 	    String[] parts = alpha.split("/"); 
-	    f.append(dMap.get(alpha)+" - "+"content:\""+parts[0]+"\"; content:\""+parts[1]+"\";\n");
+	    f.append(dMap.get(alpha)+" - "+"content:\""+parts[0]+"\";content:\""+parts[1]+"\";\n");
 	}
 	f.append("#outputs\n");
 	for(String bets: outMsgs){
 	    String[] parts = bets.split("/"); 	    
-	    f.append("content:\""+parts[0]+"\"; content:\""+parts[1]+"\";\n");
+	    f.append("content:\""+parts[0]+"\";content:\""+parts[1]+"\";\n");
 	}
 	f.flush();
 	f.close();

@@ -174,11 +174,13 @@ Initial state: {self.initial}
             print(self.allowSYN())
             print(self.allowFIN())
             print(self.allowSYNACK())
+            print(self.addOut())
             print(self.dropAll())
         else:
             rules.append(self.allowSYN())
             rules.append(self.allowFIN())
             rules.append(self.allowSYNACK())
+            rules.append(self.addOut())
             rules.append(self.dropAll())
         with open(outfile, 'w') as f:
             for rule in rules:
