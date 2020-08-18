@@ -49,7 +49,7 @@ Initial state: {self.initial}
         if sid == self.init_id:
             s_bits = f'isnotset,any,{self.GROUPNAME}'
         else:
-            s_bits = f'isset,{self.states[sid]},{self.GROUPNAME}'
+            s_bits = f'isset,{self.states[sid]}'
         
         # Generate the flowbits rule to set state T
         if tid == self.init_id:
