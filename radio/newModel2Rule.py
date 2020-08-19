@@ -49,7 +49,7 @@ Initial state: {self.initial}
         if sid == self.init_id:
             s_bits = f'isnotset,any,{self.GROUPNAME}'
         else:
-            s_bits = f'isset,{self.states[sid]},{self.GROUPNAME}'
+            s_bits = f'isset,{self.states[sid]}'
         
         # Generate the flowbits rule to set state T
         if tid == self.init_id:
@@ -93,13 +93,16 @@ Initial state: {self.initial}
                 content += self.proto[entry]
         return content
 
-    def generateHeader(self, read):
+    def generateHeader(self, read, tcp=False):
         server = f'any {self.SERVER_PORT}'
         client = f'any any'
+        msgType = f'ip'
+        if tcp:
+            msgType = f'tcp'
         if read:
-            return f'pass tcp {client} -> {server}'
+            return f'pass {msgType} {client} -> {server}'
         else:
-            return f'pass tcp {server} -> {client}'
+            return f'pass {msgType} {server} -> {client}'
 
     def generateRule(self, sid, tid, input=True):
         content = self.generateContent(sid, tid)
@@ -128,28 +131,28 @@ Initial state: {self.initial}
         #allow client to send SYN packets to server
         rule_id = f'sid:{self.rule_id};'
         self.rule_id += 1
-        header = self.generateHeader(True)
-        return f'{header} (flags:S;{rule_id})' 
+        header = self.generateHeader(True, True)
+        return f'{header} (flags:S+; dsize:0; {rule_id})' 
 
-    def allowFIN(self):
+    def allowACKs(self):
         #allow client to send FIN to client
         rule_id = f'sid:{self.rule_id};'        
-        self.rule_id += 1        
-        header = self.generateHeader(True)
-        return f'{header} (flags:AF;{rule_id})' 
+        self.rule_id += 1
+        header = 'pass tcp any any <> any any'        
+        return f'{header} (flags:A+; dsize:0; {rule_id})' 
 
     def allowSYNACK(self):
         #allow server to send SYN ACK to client
         rule_id = f'sid:{self.rule_id};'        
         self.rule_id += 1        
-        header = self.generateHeader(False)
-        return f'{header} (flags:SA;{rule_id})'    
+        header = self.generateHeader(False, True)
+        return f'{header} (flags:SA+; dsize:0; {rule_id})'    
 
     def dropAll(self):
         #add drop all traffic not allowed
         rule_id = f'sid:{self.rule_id};'        
         self.rule_id += 1
-        header = 'drop tcp any any <> any any'
+        header = 'drop ip any any <> any any'
         return f'{header} (msg:\"drop all\";{rule_id})'
 
     def addOut(self):
@@ -157,7 +160,11 @@ Initial state: {self.initial}
         self.rule_id += 1        
         header = self.generateHeader(False)
         content = self.out
-        return f'{header} (flow:established;{content}{rule_id})'
+        rule1 = f'{header} ({content} flowbits:set,o1,{self.GROUPNAME}; {rule_id})'
+        rule_id2 = f'sid:{self.rule_id};'        
+        self.rule_id += 1
+        rule2 = f'{header} (flowbits:isset,o1; {rule_id2})'
+        return f'{rule1}\n{rule2}'
     
     def generateAllRules(self, outfile):
         #generate rules based on FSM
@@ -172,14 +179,14 @@ Initial state: {self.initial}
         #allow client to send SYN to server to enable connection
         if outfile==None:
             print(self.allowSYN())
-            print(self.allowFIN())
             print(self.allowSYNACK())
+            print(self.allowACKs())
             print(self.addOut())
             print(self.dropAll())
         else:
             rules.append(self.allowSYN())
-            rules.append(self.allowFIN())
             rules.append(self.allowSYNACK())
+            rules.append(self.allowACKs())
             rules.append(self.addOut())
             rules.append(self.dropAll())
         with open(outfile, 'w') as f:
