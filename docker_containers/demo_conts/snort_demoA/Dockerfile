@@ -1,7 +1,7 @@
 FROM ubuntu:xenial
 
 ENV DAQ_VER=2.0.7 \
-    SNORT_VER=2.9.16
+    SNORT_VER=2.9.16.1
 
 # Install Dependencies
 RUN apt-get update && \
