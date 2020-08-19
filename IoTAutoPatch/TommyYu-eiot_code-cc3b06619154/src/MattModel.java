@@ -31,7 +31,8 @@ public class MattModel {
     public static TraceData parseLog(String logFile, String type) throws IOException{
 	Map<String, String> dMap = new HashMap<String,String>();
 	Map<String, ArrayList<String>> sequenceMap = new HashMap<String, ArrayList<String>>();
-	ArrayList<String> outMsgs = new ArrayList<String>();
+	Map<String, String> oMap = new HashMap<String, String>();
+	Map<String, ArrayList<Integer>> outMsgLens = new HashMap<String, ArrayList<Integer>>();
 	ArrayList<Integer> symbolList = new ArrayList<>();
 	ArrayList<String> conns = new ArrayList<>();
 	int msgNo = 0;
@@ -49,18 +50,22 @@ public class MattModel {
 		    conns.add(splitted[1]);
 		    sequenceMap.put(splitted[1], new ArrayList<String>());
 		}
+		String toLen=splitted[14];
+		int fromLen=Integer.parseInt(splitted[15]);
 		String[] lastURI=splitted[9].split("/");
-		String msgTo=splitted[7]+"/"+lastURI[lastURI.length-1];
+		String msgTo=splitted[7]+"/"+lastURI[lastURI.length-1]+"/"+toLen;
 		String msgFrom=splitted[16]+"/"+splitted[17];
 		//Create alphabet of transitions
-		if (!outMsgs.contains(msgFrom)){outMsgs.add(msgFrom);}
 		if (!dMap.containsKey(msgTo)){
 		    msgNo+=1;
 		    dMap.put(msgTo, ""+msgNo);
 		    symbolList.add(msgNo);
-		    System.out.println("alphabet: "+msgNo+" -> "+msgTo);
+		    System.out.println("alphabet: "+msgNo+" -> "+msgTo+" | "+msgFrom);
 		}
 		sequenceMap.get(splitted[1]).add(dMap.get(msgTo));
+		if (!oMap.containsKey(dMap.get(msgTo))){ oMap.put(dMap.get(msgTo), msgFrom); }
+		if (!outMsgLens.containsKey(dMap.get(msgTo))) {outMsgLens.put(dMap.get(msgTo),new ArrayList<Integer>());}
+		outMsgLens.get(dMap.get(msgTo)).add(fromLen);
 	    }
 	    freader.close();
 	} catch (IOException e)	{ e.printStackTrace(); }
@@ -81,12 +86,16 @@ public class MattModel {
 	f.append("#inputs\n");
 	for(String alpha: dMap.keySet()) {
 	    String[] parts = alpha.split("/"); 
-	    f.append(dMap.get(alpha)+" - "+"content:\""+parts[0]+"\";content:\""+parts[1]+"\";\n");
+	    f.append(dMap.get(alpha)+" - "+"content:\""+parts[0]+"\";content:\""+parts[1]+"\"; - "+parts[2]+"\n");
+	    // could modify to be dsize:part[2]
 	}
 	f.append("#outputs\n");
-	for(String bets: outMsgs){
-	    String[] parts = bets.split("/"); 	    
-	    f.append("content:\""+parts[0]+"\";content:\""+parts[1]+"\";\n");
+	for(String bets: oMap.keySet()){
+	    String[] parts = oMap.get(bets).split("/");
+	    int min = Collections.min(outMsgLens.get(bets));
+	    int max = Collections.max(outMsgLens.get(bets));	    
+	    String len = Integer.toString(min)+","+Integer.toString(max);
+	    f.append(bets+" - "+"content:\""+parts[0]+"\";content:\""+parts[1]+"\"; - "+len+"\n");
 	}
 	f.flush();
 	f.close();

@@ -1,5 +1,12 @@
 #inputs
-1 - content:"POST";content:"command";
-2 - content:"POST";content:"print_file_uploads";
+5 - content:"POST";content:"command"; - 24
+4 - content:"POST";content:"command"; - 23
+1 - content:"POST";content:"command"; - 14
+2 - content:"POST";content:"command"; - 16
+3 - content:"POST";content:"print_file_uploads"; - 19445749
 #outputs
-content:"200";content:"OK";
+1 - content:"200";content:"OK"; - 242,242
+2 - content:"200";content:"OK"; - 386,417
+3 - content:"200";content:"OK"; - 41,41
+4 - content:"200";content:"OK"; - 38,38
+5 - content:"200";content:"OK"; - 38,38

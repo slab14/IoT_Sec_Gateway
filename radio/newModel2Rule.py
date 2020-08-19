@@ -132,21 +132,28 @@ Initial state: {self.initial}
         rule_id = f'sid:{self.rule_id};'
         self.rule_id += 1
         header = self.generateHeader(True, True)
-        return f'{header} (flags:S+; dsize:0; {rule_id})' 
-
-    def allowACKs(self):
-        #allow client to send FIN to client
-        rule_id = f'sid:{self.rule_id};'        
-        self.rule_id += 1
-        header = 'pass tcp any any <> any any'        
-        return f'{header} (flags:A+; dsize:0; {rule_id})' 
+        return f'{header} (flags:S,CE; dsize:0; {rule_id})' 
 
     def allowSYNACK(self):
         #allow server to send SYN ACK to client
         rule_id = f'sid:{self.rule_id};'        
         self.rule_id += 1        
         header = self.generateHeader(False, True)
-        return f'{header} (flags:SA+; dsize:0; {rule_id})'    
+        return f'{header} (flags:SA,CE; dsize:0; {rule_id})'    
+
+    def allowACKs(self):
+        #allow client and server to send ACK
+        rule_id = f'sid:{self.rule_id};'        
+        self.rule_id += 1
+        header = 'pass tcp any any <> any any'        
+        return f'{header} (flags:A; dsize:0; {rule_id})' 
+
+    def allowFIN(self):
+        #allow client/server to send FIN
+        rule_id = f'sid:{self.rule_id};'        
+        self.rule_id += 1
+        header = 'pass tcp any any <> any any'        
+        return f'{header} (flags:FA; dsize:0; {rule_id})'     
 
     def dropAll(self):
         #add drop all traffic not allowed
