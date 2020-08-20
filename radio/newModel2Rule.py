@@ -106,15 +106,15 @@ Initial state: {self.initial}
             if tid == self.init_id:
                 t_bits = f'unset,all,{self.GROUPNAME}'
             else:
-                t_bits = f'setx,{self.states[tid]}.{self.states[sid]},{self.GROUPNAME}'
+                t_bits = f'setx,{self.states[sid]}.xfer,{self.GROUPNAME}'
             out = f'flowbits:{s_bits};flowbits:{t_bits};'
         # Part-way through transition from S->T
         elif transit:
-            s_bits = f'isset,{self.states[tid]}.{self.states[sid]}'
+            s_bits = f'isset,{self.states[sid]}.xfer'
             out = f'flowbits:{s_bits};'
         # Final step before transition is complete to T
         elif final:
-            s_bits = f'isset,{self.states[tid]}.{self.states[sid]}'
+            s_bits = f'isset,{self.states[sid]}.xfer'
             t_bits = f'setx,{self.states[tid]},{self.GROUPNAME}'
             out = f'flowbits:{s_bits};flowbits:{t_bits};'
         return out
@@ -253,10 +253,12 @@ Initial state: {self.initial}
         for sid, row in enumerate(self.transMatrix):
             for tid, v in enumerate(row):
                 if v:
-                    if outfile==None:
-                        print(self.generateRule(sid, tid))
-                    else:
-                        rules.append(self.generateRule(sid, tid))
+                    newRules = self.generateRule(sid, tid).split("\n")
+                    for newRule in newRules:
+                        if outfile==None:
+                            print(newRule)
+                        else:
+                            rules.append(newRule)
         #allow client to send SYN to server to enable connection
         if outfile==None:
             print(self.allowSYN())
@@ -272,8 +274,16 @@ Initial state: {self.initial}
             rules.append(self.allowFIN())            
             #rules.append(self.addOut())
             rules.append(self.dropAll())
+        #check for duplicates
+        reducedRules=[]
+        rules2Check=[]
+        for rule in rules:
+            checkRule=rule.split("sid:")
+            if checkRule[0] not in rules2Check:
+                rules2Check.append(checkRule[0])
+                reducedRules.append(rule)
         with open(outfile, 'w') as f:
-            for rule in rules:
+            for rule in reducedRules:
                 f.write(rule+"\n")
             
 
