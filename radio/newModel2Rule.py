@@ -31,6 +31,7 @@ class FSM():
         self.SERVER_PORT=''
         self.GROUPNAME=''
         self.tranState=0
+        self.MTU=1461
         
     def __repr__(self):
         v = "\n".join(str(r) for r in self.transMatrix)
@@ -93,9 +94,12 @@ Initial state: {self.initial}
                     else:
                         self.outLen[contents[0]] = [int(lenRange[0]),int(lenRange[1])]
 
-    def generateStateFlowbitsOptions(self, sid, tid, transit=False, final=False):
+    def generateStateFlowbitsOptions(self, sid, tid, transit=False, final=False, mult=False):
         #initial transition from state S -> T
         out=''
+        transFlag='xfer'
+        if (self.inLen[self.getIndex(sid,tid)] == 0 ):
+            transFlag = f'{self.states[tid]}'
         if ((not transit) and (not final)):
             # Generate the flowbits rule to check if in state S
             if sid == self.init_id:
@@ -106,16 +110,19 @@ Initial state: {self.initial}
             if tid == self.init_id:
                 t_bits = f'unset,all,{self.GROUPNAME}'
             else:
-                t_bits = f'setx,{self.states[sid]}.xfer,{self.GROUPNAME}'
+                t_bits = f'setx,{self.states[sid]}.{transFlag},{self.GROUPNAME}'
             out = f'flowbits:{s_bits};flowbits:{t_bits};'
         # Part-way through transition from S->T
         elif transit:
-            s_bits = f'isset,{self.states[sid]}.xfer'
+            s_bits = f'isset,{self.states[sid]}.{transFlag}'
             out = f'flowbits:{s_bits};'
         # Final step before transition is complete to T
         elif final:
-            s_bits = f'isset,{self.states[sid]}.xfer'
-            t_bits = f'setx,{self.states[tid]},{self.GROUPNAME}'
+            s_bits = f'isset,{self.states[sid]}.{transFlag}'
+            if mult:
+                t_bits = f'set,{self.states[tid]},{self.GROUPNAME}'
+            else:
+                t_bits = f'setx,{self.states[tid]},{self.GROUPNAME}'
             out = f'flowbits:{s_bits};flowbits:{t_bits};'
         return out
 
@@ -134,11 +141,44 @@ Initial state: {self.initial}
                 out+= f'flowbits:setx,t{state},delta;'
         return out
     
-    def generateContent(self, sid, tid): 
-        return self.proto[self.getIndex(sid,tid)]
+    def generateContent(self, sid, tid, missing=False):
+        first=True
+        contents = self.proto[self.getIndex(sid,tid)].split(";")
+        out=''
+        for content in contents:
+            if content == '':
+                break
+            parts=content.split(":")
+            if missing:
+                content = parts[0]+":!"+parts[1]
+            if first:
+                depth = len(parts[1])*3
+                out = content+f';depth:{depth};'
+                first = False
+            else:
+                out += content+";"
+        return out
 
-    def generateResponseContent(self, sid, tid): 
-        return self.out[self.getIndex(sid,tid)]    
+    def generateResponseContent(self, sid, tid, missing=False):
+        first=True
+        contents = self.out[self.getIndex(sid,tid)].split(";")
+        out=''
+        for content in contents:
+            if content == '':
+                break
+            parts=content.split(":")
+            if missing:
+                content = parts[0]+":!"+parts[1]
+            if first:
+                depth = len(parts[1])*3
+                out = content+f';depth:{depth};'
+                first = False
+            else:
+                out += content+";"
+            if missing:
+                mOut=out.split(';')
+                out = mOut[0]+";"+mOut[1]+";"
+        return out
 
     def generateHeader(self, read, tcp=False):
         server = f'any {self.SERVER_PORT}'
@@ -175,75 +215,87 @@ Initial state: {self.initial}
             rules += f'{header} ({size}{stateFlowbits}{transFlowbits}{rule_id})\n'
         # Handle reply
         content = self.generateResponseContent(sid, tid)
-        if (addPkt):        
-            stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True)
-        else:
-            stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True)            
+        stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True)
         transFlowbits = self.generateTransitFlowbits()
         header = self.generateHeader(False)
         rule_id = f'sid:{self.getNewRuleID()};'        
         rules += f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})\n'
         # additional reply packets
-        if (addPkt):
-            size=''
-            limit=self.outLen[self.getIndex(sid,tid)]
-            if len(limit)>1:
-                limit[0]=int(round(limit[0]*.8))
-                limit[1]=int(round(limit[1]*1.2))                
-                size = f'dsize:{limit[0]}<>{limit[1]};'
+        content = self.generateResponseContent(sid, tid, True)        
+        limit=self.outLen[self.getIndex(sid,tid)]
+        reps = int(max(limit)/self.MTU)+1
+        if len(limit)>1:
+            limit[1]=int(limit[1]*1.2)
+            if (limit[1]>self.MTU):
+                limit[1]=self.MTU
+            limit[0]=int(limit[0]*.8)
+            if (addPkt) or (limit[0]<1) or (limit[1]==self.MTU):
+                limit[0]=1
+        else:
+            limit.append(int(limit[0]*1.2))
+            if (limit[1]>self.MTU):
+                limit[1]=self.MTU
+            if (addPkt) and (limit[1]!=self.MTU):
+                limit[0]=int(limit[0]*.8)
             else:
-                size = f'dsize:{limit[0]};'
-            stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True)            
+                limit[0] = 1
+        size = f'dsize:{limit[0]}<>{limit[1]};'
+        header = self.generateHeader(False)
+        if (reps==1):
+            stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True)
             transFlowbits = self.generateTransitFlowbits()
-            header = self.generateHeader(False)
-            rule_id = f'sid:{self.getNewRuleID()};'            
-            rules += f'{header} ({size}{stateFlowbits}{transFlowbits}{rule_id})'
+            rule_id = f'sid:{self.getNewRuleID()};'                    
+            rules += f'{header} ({content}{size}{stateFlowbits}{transFlowbits}{rule_id})'            
+        else:
+            stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True, mult=True)
+            transFlowbits = self.generateTransitFlowbits(mult=True)                    
+            rule_id = f'sid:{self.getNewRuleID()};'
+            rules += f'{header} ({content}{size}{stateFlowbits}{transFlowbits}{rule_id})'
         return rules
 
     
     def allowSYN(self):
         #allow client to send SYN packets to server
-        rule_id = f'sid:{self.rule_id};'
-        self.rule_id += 1
+        rule_id = f'sid:{self.getNewRuleID()};'        
         header = self.generateHeader(True, True)
         return f'{header} (flags:S,CE; dsize:0; {rule_id})' 
 
     def allowSYNACK(self):
         #allow server to send SYN ACK to client
-        rule_id = f'sid:{self.rule_id};'        
-        self.rule_id += 1        
+        rule_id = f'sid:{self.getNewRuleID()};'        
         header = self.generateHeader(False, True)
         return f'{header} (flags:SA,CE; dsize:0; {rule_id})'    
 
     def allowACKs(self):
         #allow client and server to send ACK
-        rule_id = f'sid:{self.rule_id};'        
-        self.rule_id += 1
+        rule_id = f'sid:{self.getNewRuleID()};'        
         header = 'pass tcp any any <> any any'        
         return f'{header} (flags:A; dsize:0; {rule_id})' 
 
     def allowFIN(self):
         #allow client/server to send FIN
-        rule_id = f'sid:{self.rule_id};'        
-        self.rule_id += 1
+        rule_id = f'sid:{self.getNewRuleID()};'        
         header = 'pass tcp any any <> any any'        
-        return f'{header} (flags:FA; dsize:0; {rule_id})'     
+        return f'{header} (flags:FA; dsize:0; {rule_id})'
+
+    def allowRST(self):
+        #allow client/server to send RST
+        rule_id = f'sid:{self.getNewRuleID()};'        
+        header = 'pass tcp any any <> any any'        
+        return f'{header} (flags:RA; dsize:0; {rule_id})'         
 
     def dropAll(self):
         #add drop all traffic not allowed
-        rule_id = f'sid:{self.rule_id};'        
-        self.rule_id += 1
+        rule_id = f'sid:{self.getNewRuleID()};'        
         header = 'drop ip any any <> any any'
         return f'{header} (msg:\"drop all\";{rule_id})'
 
     def addOut(self):
-        rule_id = f'sid:{self.rule_id};'        
-        self.rule_id += 1        
+        rule_id = f'sid:{self.getNewRuleID()};'                
         header = self.generateHeader(False)
         content = self.out
         rule1 = f'{header} ({content} flowbits:set,o1,{self.GROUPNAME}; {rule_id})'
-        rule_id2 = f'sid:{self.rule_id};'        
-        self.rule_id += 1
+        rule_id2 = f'sid:{self.getNewRuleID()};'                        
         rule2 = f'{header} (flowbits:isset,o1; {rule_id2})'
         return f'{rule1}\n{rule2}'
     
@@ -264,14 +316,16 @@ Initial state: {self.initial}
             print(self.allowSYN())
             print(self.allowSYNACK())
             print(self.allowACKs())
-            print(self.allowFIN())            
+            print(self.allowFIN())
+            print(self.allowRST())            
             #print(self.addOut())
             print(self.dropAll())
         else:
             rules.append(self.allowSYN())
             rules.append(self.allowSYNACK())
             rules.append(self.allowACKs())
-            rules.append(self.allowFIN())            
+            rules.append(self.allowFIN())
+            rules.append(self.allowRST())            
             #rules.append(self.addOut())
             rules.append(self.dropAll())
         #check for duplicates
