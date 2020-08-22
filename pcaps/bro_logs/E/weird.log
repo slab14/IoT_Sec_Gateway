@@ -1,0 +1,11 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	weird
+#open	2020-08-21-15-52-19
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	name	addl	notice	peer
+#types	time	string	addr	port	addr	port	string	string	bool	string
+1536676866.836556	C5174p3GOeopQlmy67	fe80::391c:29ee:5819:604c	51404	fe80::c075:a178:5322:64ae	8888	bad_HTTP_request	-	F	zeek
+1536676866.836647	C5174p3GOeopQlmy67	fe80::391c:29ee:5819:604c	51404	fe80::c075:a178:5322:64ae	8888	line_terminated_with_single_CR	-	F	zeek
+#close	2020-08-21-15-52-19
