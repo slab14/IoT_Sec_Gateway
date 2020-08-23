@@ -3,10 +3,10 @@
 #empty_field	(empty)
 #unset_field	-
 #path	dhcp
-#open	2020-08-21-15-52-19
+#open	2020-08-22-17-05-33
 #fields	ts	uids	client_addr	server_addr	mac	host_name	client_fqdn	domain	requested_addr	assigned_addr	lease_time	client_message	server_message	msg_types	duration
 #types	time	set[string]	addr	addr	string	string	string	string	addr	addr	interval	string	string	vector[string]	interval
-1536676821.468431	ClCKQe3tUH4RQVQR3f	-	-	00:60:65:29:67:64	SI1866	-	-	-	-	-	-	-	DISCOVER,DISCOVER	3.999272
-1536676833.468036	ClCKQe3tUH4RQVQR3f	-	-	00:60:65:29:67:64	SI1866	-	-	-	-	-	-	-	DISCOVER	0.000000
-1536676849.468635	ClCKQe3tUH4RQVQR3f	-	-	00:60:65:29:67:64	SI1866	-	-	-	-	-	-	-	DISCOVER	0.000000
-#close	2020-08-21-15-52-19
+1536676821.468431	CZhvtf3hKuCNU83m88	-	-	00:60:65:29:67:64	SI1866	-	-	-	-	-	-	-	DISCOVER,DISCOVER	3.999272
+1536676833.468036	CZhvtf3hKuCNU83m88	-	-	00:60:65:29:67:64	SI1866	-	-	-	-	-	-	-	DISCOVER	0.000000
+1536676849.468635	CZhvtf3hKuCNU83m88	-	-	00:60:65:29:67:64	SI1866	-	-	-	-	-	-	-	DISCOVER	0.000000
+#close	2020-08-22-17-05-33
