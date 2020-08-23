@@ -1,0 +1,16 @@
+#separator \x09
+#set_separator	,
+#empty_field	(empty)
+#unset_field	-
+#path	conn
+#open	2020-08-22-20-31-07
+#fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	proto	service	duration	orig_bytes	resp_bytes	conn_state	local_orig	local_resp	missed_bytes	history	orig_pkts	orig_ip_bytes	resp_pkts	resp_ip_bytes	tunnel_parents
+#types	time	string	addr	port	addr	port	enum	string	interval	count	count	string	bool	bool	count	string	count	count	count	count	set[string]
+1547664094.565205	CKdPhtS60zKST4G5g	fe80::31:f52d:fa41:25a9	5353	ff02::fb	5353	udp	dns	35.368269	1158	0	S0	-	-	0	D	12	1734	0	0	-
+1547664094.565120	C1yS6K1c3WRkaTp2pl	192.168.0.2	5353	224.0.0.251	5353	udp	dns	35.366708	1158	0	S0	-	-	0	D	12	1494	0	0	-
+1547664153.629324	CLK2Ns44oSEBMee2ca	192.168.0.2	5353	224.0.0.251	5353	udp	dns	-	-	-	S0	-	-	0	D	1	103	0	0	-
+1547664153.629396	CUY5u71ydwjjJfUda1	fe80::31:f52d:fa41:25a9	5353	ff02::fb	5353	udp	dns	-	-	-	S0	-	-	0	D	1	123	0	0	-
+1547664234.794957	CS8CeK2jr6sG93bD97	192.168.0.2	5353	224.0.0.251	5353	udp	dns	-	-	-	S0	-	-	0	D	1	103	0	0	-
+1547664234.796322	Csh44F1cpV5i0L3NGj	fe80::31:f52d:fa41:25a9	5353	ff02::fb	5353	udp	dns	-	-	-	S0	-	-	0	D	1	123	0	0	-
+1547664071.481725	CkwvIt16KrwHG6sMs1	192.168.0.2	51277	192.168.0.222	8899	tcp	-	174.389561	36277788	140082	SF	-	-	0	ShADadFf	35796	38139192	17901	1070942	-
+#close	2020-08-22-20-31-08
