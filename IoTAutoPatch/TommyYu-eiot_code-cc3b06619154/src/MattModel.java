@@ -29,6 +29,22 @@ public class MattModel {
     
 
     public static TraceData parseLog(String logFile, String type) throws IOException{
+	if (type.equals("http")) {
+	    return parseHTTPlog(logFile);
+	} else if (type.equals("nettcp")) {
+	    return parseNETTCPlog(logFile);
+	} else if (type.equals("gcode")) {
+	    return parseGCODElog(logFile);
+	} else if (type.equals("cmb")) {
+	    return parseCMBlog(logFile);
+	} else if (type.equals("form2")) {
+	    return parseFORM2log(logFile);	    	    
+	} else {
+	    return new TraceData();
+	}
+    }
+    
+    public static TraceData parseHTTPlogBroDefault(String logFile) throws IOException {
 	Map<String, String> dMap = new HashMap<String,String>();
 	Map<String, ArrayList<String>> sequenceMap = new HashMap<String, ArrayList<String>>();
 	Map<String, String> oMap = new HashMap<String, String>();
@@ -102,6 +118,381 @@ public class MattModel {
 	return new TraceData(traces, symbolList);
     }
 
+
+    public static TraceData parseHTTPlog(String logFile) throws IOException {
+	Map<String, String> dMap = new HashMap<String,String>();
+	Map<String, ArrayList<String>> sequenceMap = new HashMap<String, ArrayList<String>>();
+	Map<String, String> oMap = new HashMap<String, String>();
+	Map<String, ArrayList<Integer>> outMsgLens = new HashMap<String, ArrayList<Integer>>();
+	ArrayList<Integer> symbolList = new ArrayList<>();
+	ArrayList<String> conns = new ArrayList<>();
+	int msgNo = 0;
+	ArrayList<ArrayList<String>> traces = new ArrayList<ArrayList<String>>();
+	ArrayList<String> sequence = new ArrayList<String>();
+	try {
+	    BufferedReader br = null;
+	    String sCurrentLine;
+	    FileReader freader = new FileReader(logFile);
+	    br = new BufferedReader(freader);
+	    while ((sCurrentLine = br.readLine()) != null) {
+		String[] splitted = sCurrentLine.split("\\s+");
+		if (splitted[0].charAt(0) == '#'){continue;}
+		if (! conns.contains(splitted[0])){
+		    conns.add(splitted[0]);
+		    sequenceMap.put(splitted[0], new ArrayList<String>());
+		}
+		String toLen=splitted[9];
+		int fromLen=Integer.parseInt(splitted[10]);
+		String[] lastURI=splitted[6].split("/");
+		String msgTo=splitted[5]+"/"+lastURI[lastURI.length-1]+"/"+toLen;
+		String msgFrom=splitted[7]+"/"+splitted[8];
+		//Create alphabet of transitions
+		if (!dMap.containsKey(msgTo)){
+		    msgNo+=1;
+		    dMap.put(msgTo, ""+msgNo);
+		    symbolList.add(msgNo);
+		    System.out.println("alphabet: "+msgNo+" -> "+msgTo+" | "+msgFrom);
+		}
+		sequenceMap.get(splitted[0]).add(dMap.get(msgTo));
+		if (!oMap.containsKey(dMap.get(msgTo))){ oMap.put(dMap.get(msgTo), msgFrom); }
+		if (!outMsgLens.containsKey(dMap.get(msgTo))) {outMsgLens.put(dMap.get(msgTo),new ArrayList<Integer>());}
+		outMsgLens.get(dMap.get(msgTo)).add(fromLen);
+	    }
+	    freader.close();
+	} catch (IOException e)	{ e.printStackTrace(); }
+	FileWriter writer = new FileWriter("ms.csv");
+	for (ArrayList<String> seq: sequenceMap.values()){
+	    traces.add(seq);
+	    for(String s: seq){
+		writer.append(s);		
+		System.out.print(s+",");		
+		writer.append(",");
+	    }
+	    writer.append(""+0+"\n");
+	    System.out.print("\n");
+	}
+	writer.flush();
+	writer.close();	
+	FileWriter f = new FileWriter("proto.txt");
+	f.append("#inputs\n");
+	for(String alpha: dMap.keySet()) {
+	    String[] parts = alpha.split("/"); 
+	    f.append(dMap.get(alpha)+" - "+"content:\""+parts[0]+"\";content:\""+parts[1]+"\"; - "+parts[2]+"\n");
+	    // could modify to be dsize:part[2]
+	}
+	f.append("#outputs\n");
+	for(String bets: oMap.keySet()){
+	    String[] parts = oMap.get(bets).split("/");
+	    int min = Collections.min(outMsgLens.get(bets));
+	    int max = Collections.max(outMsgLens.get(bets));	    
+	    String len = Integer.toString(min)+","+Integer.toString(max);
+	    f.append(bets+" - "+"content:\""+parts[0]+"\";content:\""+parts[1]+"\"; - "+len+"\n");
+	}
+	f.flush();
+	f.close();
+	return new TraceData(traces, symbolList);
+    }
+    
+
+    public static TraceData parseNETTCPlog(String logFile) throws IOException {
+	Map<String, String> dMap = new HashMap<String,String>();
+	Map<String, ArrayList<String>> sequenceMap = new HashMap<String, ArrayList<String>>();
+	Map<String, String> oMap = new HashMap<String, String>();
+	Map<String, ArrayList<Integer>> outMsgLens = new HashMap<String, ArrayList<Integer>>();
+	ArrayList<Integer> symbolList = new ArrayList<>();
+	ArrayList<String> conns = new ArrayList<>();
+	int msgNo = 0;
+	ArrayList<ArrayList<String>> traces = new ArrayList<ArrayList<String>>();
+	ArrayList<String> sequence = new ArrayList<String>();
+	try {
+	    BufferedReader br = null;
+	    String sCurrentLine;
+	    FileReader freader = new FileReader(logFile);
+	    br = new BufferedReader(freader);
+	    while ((sCurrentLine = br.readLine()) != null) {
+		String[] splitted = sCurrentLine.split("\\s+");
+		if (splitted[0].charAt(0) == '#'){continue;}
+		if (! conns.contains(splitted[0])){
+		    conns.add(splitted[0]);
+		    sequenceMap.put(splitted[0], new ArrayList<String>());
+		}
+		//TODO add ofset values
+		String toLen=splitted[8];
+		int fromLen=Integer.parseInt(splitted[11]);
+		String msgTo=splitted[7]+";"+toLen;
+		String msgFrom=splitted[10]+";"+splitted[11];
+		//Create alphabet of transitions
+		if (!dMap.containsKey(msgTo)){
+		    msgNo+=1;
+		    dMap.put(msgTo, ""+msgNo);
+		    symbolList.add(msgNo);
+		    System.out.println("alphabet: "+msgNo+" -> "+msgTo+" | "+msgFrom);
+		}
+		sequenceMap.get(splitted[0]).add(dMap.get(msgTo));
+		if (!oMap.containsKey(dMap.get(msgTo))){ oMap.put(dMap.get(msgTo), msgFrom); }
+		if (!outMsgLens.containsKey(dMap.get(msgTo))) {outMsgLens.put(dMap.get(msgTo),new ArrayList<Integer>());}
+		outMsgLens.get(dMap.get(msgTo)).add(fromLen);
+	    }
+	    freader.close();
+	} catch (IOException e)	{ e.printStackTrace(); }
+	FileWriter writer = new FileWriter("ms.csv");
+	for (ArrayList<String> seq: sequenceMap.values()){
+	    traces.add(seq);
+	    for(String s: seq){
+		writer.append(s);		
+		System.out.print(s+",");		
+		writer.append(",");
+	    }
+	    writer.append(""+0+"\n");
+	    System.out.print("\n");
+	}
+	writer.flush();
+	writer.close();	
+	FileWriter f = new FileWriter("proto.txt");
+	f.append("#inputs\n");
+	for(String alpha: dMap.keySet()) {
+	    String[] parts = alpha.split(";"); 
+	    f.append(dMap.get(alpha)+" - "+"content:\""+parts[0]+"\"; - "+parts[1]+"\n");
+	    // could modify to be dsize:part[2]
+	}
+	f.append("#outputs\n");
+	for(String bets: oMap.keySet()){
+	    String[] parts = oMap.get(bets).split("/");
+	    int min = Collections.min(outMsgLens.get(bets));
+	    int max = Collections.max(outMsgLens.get(bets));	    
+	    String len = Integer.toString(min)+","+Integer.toString(max);
+	    f.append(bets+" - "+"content:\""+parts[0]+"\"; - "+len+"\n");
+	}
+	f.flush();
+	f.close();
+	return new TraceData(traces, symbolList);
+    }
+
+
+    public static TraceData parseGCODElog(String logFile) throws IOException {
+	Map<String, String> dMap = new HashMap<String,String>();
+	Map<String, ArrayList<String>> sequenceMap = new HashMap<String, ArrayList<String>>();
+	Map<String, String> oMap = new HashMap<String, String>();
+	Map<String, ArrayList<Integer>> outMsgLens = new HashMap<String, ArrayList<Integer>>();
+	ArrayList<Integer> symbolList = new ArrayList<>();
+	ArrayList<String> conns = new ArrayList<>();
+	int msgNo = 0;
+	ArrayList<ArrayList<String>> traces = new ArrayList<ArrayList<String>>();
+	ArrayList<String> sequence = new ArrayList<String>();
+	try {
+	    BufferedReader br = null;
+	    String sCurrentLine;
+	    FileReader freader = new FileReader(logFile);
+	    br = new BufferedReader(freader);
+	    while ((sCurrentLine = br.readLine()) != null) {
+		String[] splitted = sCurrentLine.split("\\s+");
+		if (splitted[0].charAt(0) == '#'){continue;}
+		if (! conns.contains(splitted[0])){
+		    conns.add(splitted[0]);
+		    sequenceMap.put(splitted[0], new ArrayList<String>());
+		}
+		String toLen=splitted[8];
+		int fromLen=Integer.parseInt(splitted[10]);
+		String msgTo=splitted[7]+"/"+toLen;
+		String msgFrom=splitted[9]+"/"+splitted[10];
+		//Create alphabet of transitions
+		if (!dMap.containsKey(msgTo)){
+		    msgNo+=1;
+		    dMap.put(msgTo, ""+msgNo);
+		    symbolList.add(msgNo);
+		    System.out.println("alphabet: "+msgNo+" -> "+msgTo+" | "+msgFrom);
+		}
+		sequenceMap.get(splitted[0]).add(dMap.get(msgTo));
+		if (!oMap.containsKey(dMap.get(msgTo))){ oMap.put(dMap.get(msgTo), msgFrom); }
+		if (!outMsgLens.containsKey(dMap.get(msgTo))) {outMsgLens.put(dMap.get(msgTo),new ArrayList<Integer>());}
+		outMsgLens.get(dMap.get(msgTo)).add(fromLen);
+	    }
+	    freader.close();
+	} catch (IOException e)	{ e.printStackTrace(); }
+	FileWriter writer = new FileWriter("ms.csv");
+	for (ArrayList<String> seq: sequenceMap.values()){
+	    traces.add(seq);
+	    for(String s: seq){
+		writer.append(s);		
+		System.out.print(s+",");		
+		writer.append(",");
+	    }
+	    writer.append(""+0+"\n");
+	    System.out.print("\n");
+	}
+	writer.flush();
+	writer.close();	
+	FileWriter f = new FileWriter("proto.txt");
+	f.append("#inputs\n");
+	for(String alpha: dMap.keySet()) {
+	    String[] parts = alpha.split("/"); 
+	    f.append(dMap.get(alpha)+" - "+"content:\""+parts[0]+"\"; - "+parts[1]+"\n");
+	    // could modify to be dsize:part[2]
+	}
+	f.append("#outputs\n");
+	for(String bets: oMap.keySet()){
+	    String[] parts = oMap.get(bets).split("/");
+	    int min = Collections.min(outMsgLens.get(bets));
+	    int max = Collections.max(outMsgLens.get(bets));	    
+	    String len = Integer.toString(min)+","+Integer.toString(max);
+	    f.append(bets+" - "+"content:\""+parts[0]+"\"; - "+len+"\n");
+	}
+	f.flush();
+	f.close();
+	return new TraceData(traces, symbolList);
+    }
+
+
+    //TODO: update to work with non-req/resp pairing.
+    public static TraceData parseCMBlog(String logFile) throws IOException {
+	Map<String, String> dMap = new HashMap<String,String>();
+	Map<String, ArrayList<String>> sequenceMap = new HashMap<String, ArrayList<String>>();
+	Map<String, String> oMap = new HashMap<String, String>();
+	Map<String, ArrayList<Integer>> outMsgLens = new HashMap<String, ArrayList<Integer>>();
+	ArrayList<Integer> symbolList = new ArrayList<>();
+	ArrayList<String> conns = new ArrayList<>();
+	int msgNo = 0;
+	ArrayList<ArrayList<String>> traces = new ArrayList<ArrayList<String>>();
+	ArrayList<String> sequence = new ArrayList<String>();
+	try {
+	    BufferedReader br = null;
+	    String sCurrentLine;
+	    FileReader freader = new FileReader(logFile);
+	    br = new BufferedReader(freader);
+	    while ((sCurrentLine = br.readLine()) != null) {
+		String[] splitted = sCurrentLine.split("\\s+");
+		if (splitted[0].charAt(0) == '#'){continue;}
+		if (! conns.contains(splitted[0])){
+		    conns.add(splitted[0]);
+		    sequenceMap.put(splitted[0], new ArrayList<String>());
+		}
+		String toLen=splitted[8];
+		int fromLen=Integer.parseInt(splitted[10]);
+		String msgTo=splitted[7]+";"+toLen;
+		String msgFrom=splitted[9]+";"+splitted[10];
+		//Create alphabet of transitions
+		if (!dMap.containsKey(msgTo)){
+		    msgNo+=1;
+		    dMap.put(msgTo, ""+msgNo);
+		    symbolList.add(msgNo);
+		    System.out.println("alphabet: "+msgNo+" -> "+msgTo+" | "+msgFrom);
+		}
+		sequenceMap.get(splitted[0]).add(dMap.get(msgTo));
+		if (!oMap.containsKey(dMap.get(msgTo))){ oMap.put(dMap.get(msgTo), msgFrom); }
+		if (!outMsgLens.containsKey(dMap.get(msgTo))) {outMsgLens.put(dMap.get(msgTo),new ArrayList<Integer>());}
+		outMsgLens.get(dMap.get(msgTo)).add(fromLen);
+	    }
+	    freader.close();
+	} catch (IOException e)	{ e.printStackTrace(); }
+	FileWriter writer = new FileWriter("ms.csv");
+	for (ArrayList<String> seq: sequenceMap.values()){
+	    traces.add(seq);
+	    for(String s: seq){
+		writer.append(s);		
+		System.out.print(s+",");		
+		writer.append(",");
+	    }
+	    writer.append(""+0+"\n");
+	    System.out.print("\n");
+	}
+	writer.flush();
+	writer.close();	
+	FileWriter f = new FileWriter("proto.txt");
+	f.append("#inputs\n");
+	for(String alpha: dMap.keySet()) {
+	    String[] parts = alpha.split("/"); 
+	    f.append(dMap.get(alpha)+" - "+"content:\""+parts[0]+"\"; - "+parts[1]+"\n");
+	    // could modify to be dsize:part[2]
+	}
+	f.append("#outputs\n");
+	for(String bets: oMap.keySet()){
+	    String[] parts = oMap.get(bets).split("/");
+	    int min = Collections.min(outMsgLens.get(bets));
+	    int max = Collections.max(outMsgLens.get(bets));	    
+	    String len = Integer.toString(min)+","+Integer.toString(max);
+	    f.append(bets+" - "+"content:\""+parts[0]+"\"; - "+len+"\n");
+	}
+	f.flush();
+	f.close();
+	return new TraceData(traces, symbolList);
+    }
+
+
+    //TODO: update to work with non-req/resp pairing.
+    public static TraceData parseFORM2log(String logFile) throws IOException {
+	Map<String, String> dMap = new HashMap<String,String>();
+	Map<String, ArrayList<String>> sequenceMap = new HashMap<String, ArrayList<String>>();
+	Map<String, String> oMap = new HashMap<String, String>();
+	Map<String, ArrayList<Integer>> outMsgLens = new HashMap<String, ArrayList<Integer>>();
+	ArrayList<Integer> symbolList = new ArrayList<>();
+	ArrayList<String> conns = new ArrayList<>();
+	int msgNo = 0;
+	ArrayList<ArrayList<String>> traces = new ArrayList<ArrayList<String>>();
+	ArrayList<String> sequence = new ArrayList<String>();
+	try {
+	    BufferedReader br = null;
+	    String sCurrentLine;
+	    FileReader freader = new FileReader(logFile);
+	    br = new BufferedReader(freader);
+	    while ((sCurrentLine = br.readLine()) != null) {
+		String[] splitted = sCurrentLine.split("\\s+");
+		if (splitted[0].charAt(0) == '#'){continue;}
+		if (! conns.contains(splitted[0])){
+		    conns.add(splitted[0]);
+		    sequenceMap.put(splitted[0], new ArrayList<String>());
+		}
+		String toLen=splitted[8];
+		int fromLen=Integer.parseInt(splitted[10]);
+		String msgTo=splitted[7]+";"+toLen;
+		String msgFrom=splitted[9]+";"+splitted[10];
+		//Create alphabet of transitions
+		if (!dMap.containsKey(msgTo)){
+		    msgNo+=1;
+		    dMap.put(msgTo, ""+msgNo);
+		    symbolList.add(msgNo);
+		    System.out.println("alphabet: "+msgNo+" -> "+msgTo+" | "+msgFrom);
+		}
+		sequenceMap.get(splitted[0]).add(dMap.get(msgTo));
+		if (!oMap.containsKey(dMap.get(msgTo))){ oMap.put(dMap.get(msgTo), msgFrom); }
+		if (!outMsgLens.containsKey(dMap.get(msgTo))) {outMsgLens.put(dMap.get(msgTo),new ArrayList<Integer>());}
+		outMsgLens.get(dMap.get(msgTo)).add(fromLen);
+	    }
+	    freader.close();
+	} catch (IOException e)	{ e.printStackTrace(); }
+	FileWriter writer = new FileWriter("ms.csv");
+	for (ArrayList<String> seq: sequenceMap.values()){
+	    traces.add(seq);
+	    for(String s: seq){
+		writer.append(s);		
+		System.out.print(s+",");		
+		writer.append(",");
+	    }
+	    writer.append(""+0+"\n");
+	    System.out.print("\n");
+	}
+	writer.flush();
+	writer.close();	
+	FileWriter f = new FileWriter("proto.txt");
+	f.append("#inputs\n");
+	for(String alpha: dMap.keySet()) {
+	    String[] parts = alpha.split("/"); 
+	    f.append(dMap.get(alpha)+" - "+"content:\""+parts[0]+"\"; - "+parts[1]+"\n");
+	    // could modify to be dsize:part[2]
+	}
+	f.append("#outputs\n");
+	for(String bets: oMap.keySet()){
+	    String[] parts = oMap.get(bets).split("/");
+	    int min = Collections.min(outMsgLens.get(bets));
+	    int max = Collections.max(outMsgLens.get(bets));	    
+	    String len = Integer.toString(min)+","+Integer.toString(max);
+	    f.append(bets+" - "+"content:\""+parts[0]+"\"; - "+len+"\n");
+	}
+	f.flush();
+	f.close();
+	return new TraceData(traces, symbolList);
+    }
+    
+    
 
     public static class MealyFSM {
 	public String initialStateStr;
@@ -356,12 +747,23 @@ public class MattModel {
     }
     
 
+    public static String getLogType(String fileName){
+	String[] dirs = fileName.split("/");
+	String[] name = dirs[dirs.length-1].split("\\.");
+	String[] vals = name[0].split("_");
+	if (vals.length==3) {
+	    return vals[1];
+	} else {
+	    return name[0];
+	}
+    }
     
     public static void main(String[] args) throws Exception{
 	if (args.length == 0) { System.out.println("no arguments were given."); }
 	else {
 	    for (String s: args) {
-		TraceData traces = parseLog(s, "bro");
+		String type = getLogType(s);
+		TraceData traces = parseLog(s, type);
 		genFSM(traces.tracesAll);
 	    }
 	}
