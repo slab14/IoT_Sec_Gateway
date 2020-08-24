@@ -1,0 +1,28 @@
+#inputs
+3 - content:"~M650"; - 5
+11 - content:"~M23"; - 4
+9 - content:"ZZ"; - 2
+13 - content:"~M602"; - 5
+1 - content:"~M601"; - 5
+10 - content:"~M29"; - 4
+8 - content:"~M28"; - 4
+5 - content:"~M27"; - 4
+6 - content:"~M119"; - 5
+12 - content:"~M26"; - 4
+7 - content:"~M105"; - 5
+2 - content:"~M115"; - 5
+4 - content:"~M114"; - 5
+#outputs
+11 - content:"M23"; - 3,3
+12 - content:"M26"; - 3,3
+13 - content:"M602"; - 4,4
+1 - content:"M601"; - 4,4
+2 - content:"M115"; - 4,4
+3 - content:"M650"; - 4,4
+4 - content:"M114"; - 4,4
+5 - content:"M27"; - 3,3
+6 - content:"M119"; - 4,4
+7 - content:"M105"; - 4,4
+8 - content:"M28"; - 3,3
+9 - content:"ok."; - 3,3
+10 - content:"M29"; - 3,3
