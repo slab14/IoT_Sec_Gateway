@@ -122,7 +122,7 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
       }
       match = match_pattern(check_data, /^[0-9]+/);
       ## found numbers (e.g., file size)
-      if ((match$matched) && (match$off==1)){
+      if ((match$matched) && (match$off==1) && (|match$str|>1)){
 	if(is_orig){
 	  if (got_req) {
  	    req_data2 = "/[0-9]+/";

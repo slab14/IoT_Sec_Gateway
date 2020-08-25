@@ -350,6 +350,7 @@ public class MattModel {
 	Map<String, ArrayList<String>> sequenceMap = new HashMap<String, ArrayList<String>>();
 	Map<String, String> oMap = new HashMap<String, String>();
 	Map<String, ArrayList<Integer>> outMsgLens = new HashMap<String, ArrayList<Integer>>();
+	Map<String, String> tMap = new HashMap<String,String>();	
 	ArrayList<Integer> symbolList = new ArrayList<>();
 	ArrayList<String> conns = new ArrayList<>();
 	int msgNo = 0;
@@ -367,23 +368,56 @@ public class MattModel {
 		    conns.add(splitted[0]);
 		    sequenceMap.put(splitted[0], new ArrayList<String>());
 		}
-		String toLen=splitted[8];
 		int fromLen=Integer.parseInt(splitted[10]);
-		String msgTo=splitted[7]+";"+toLen;
-		String msgFrom=splitted[9]+";"+splitted[10];
-		if(splitted[9].equals("(empty)")) { msgFrom=";0";}
-		    
-		//Create alphabet of transitions
-		if (!dMap.containsKey(msgTo)){
-		    msgNo+=1;
-		    dMap.put(msgTo, ""+msgNo);
-		    symbolList.add(msgNo);
-		    System.out.println("alphabet: "+msgNo+" -> "+msgTo+" | "+msgFrom);
+		String toLen=splitted[8];
+		if (splitted[7].contains("/[")) {
+		    for (String key:dMap.keySet()) {
+			if(key.contains(splitted[7])){
+			    int curLen=Integer.parseInt(key.split(";")[1]);
+			    int newLen=Integer.parseInt(toLen);
+			    if (newLen<curLen) {
+				String numb = dMap.get(key);
+				dMap.remove(key);
+				String replace = splitted[7]+";"+toLen;
+				dMap.put(replace, numb);
+			    } else if (newLen>curLen) {
+				toLen=Integer.toString(curLen);
+			    }
+			}
+		    }
+		} else if (splitted[9].contains("/[")) {
+		    for (String key:oMap.keySet()) {
+			if (oMap.get(key).contains(splitted[9])) {
+			    int curLen=Integer.parseInt(oMap.get(key).split(";")[1]);
+			    int newLen=fromLen;
+			    if (newLen<curLen) {
+				String replace = splitted[9]+";"+toLen;
+				oMap.replace(key, replace);
+			    } else if (newLen>curLen) {
+				fromLen=curLen;
+			    }
+			}
+		    }
 		}
-		sequenceMap.get(splitted[0]).add(dMap.get(msgTo));
-		if (!oMap.containsKey(dMap.get(msgTo))){ oMap.put(dMap.get(msgTo), msgFrom); }
-		if (!outMsgLens.containsKey(dMap.get(msgTo))) {outMsgLens.put(dMap.get(msgTo),new ArrayList<Integer>());}
-		outMsgLens.get(dMap.get(msgTo)).add(fromLen);
+		String direction = splitted[11];
+		String msgTo=splitted[7]+";"+toLen;
+		String msgFrom=splitted[9]+";"+Integer.toString(fromLen);
+		if(splitted[9].equals("(empty)")) { msgFrom=";0";}
+		String transition = msgTo+"::"+msgFrom;
+		//Create alphabet of transitions
+		if (!tMap.containsKey(transition)){
+		    msgNo+=1;
+		    String msgStr = Integer.toString(msgNo);
+		    if(direction.equals("<-")){ msgStr+="*"; }
+		    tMap.put(transition, msgStr);
+		    dMap.put(msgTo, msgStr);
+		    symbolList.add(msgNo);
+		    System.out.println("alphabet: "+msgStr+" -> "+msgTo+" | "+msgFrom);
+		}
+		sequenceMap.get(splitted[0]).add(tMap.get(transition));
+		if (!oMap.containsKey(tMap.get(transition))){ oMap.put(tMap.get(transition), msgFrom); }
+		if (!outMsgLens.containsKey(tMap.get(transition))) {outMsgLens.put(tMap.get(transition),new ArrayList<Integer>());}
+		outMsgLens.get(tMap.get(transition)).add(fromLen);
 	    }
 	    freader.close();
 	} catch (IOException e)	{ e.printStackTrace(); }
@@ -402,18 +436,19 @@ public class MattModel {
 	writer.close();	
 	FileWriter f = new FileWriter("proto.txt");
 	f.append("#inputs\n");
-	for(String alpha: dMap.keySet()) {
-	    String[] parts = alpha.split(";"); 
-	    f.append(dMap.get(alpha)+" - "+"content:\""+parts[0]+"\"; - "+parts[1]+"\n");
+	for(String alpha: tMap.keySet()) {
+	    String[] parts = alpha.split("::")[0].split(";");
+	    if(!parts[0].equals("")){
+		f.append(tMap.get(alpha)+" - "+"content:\""+parts[0]+"\"; - "+parts[1]+"\n");
+	    }
 	    // could modify to be dsize:part[2]
 	}
 	f.append("#outputs\n");
-	for(String bets: oMap.keySet()){
-	    String[] parts = oMap.get(bets).split(";");
-	    int min = Collections.min(outMsgLens.get(bets));
-	    int max = Collections.max(outMsgLens.get(bets));	    
-	    String len = Integer.toString(min)+","+Integer.toString(max);
-	    f.append(bets+" - "+"content:\""+parts[0]+"\"; - "+len+"\n");
+	for(String bets: tMap.keySet()){
+	    String[] parts = bets.split("::")[1].split(";");
+	    if(!parts[0].equals("")){
+		f.append(tMap.get(bets)+" - "+"content:\""+parts[0]+"\"; - "+parts[1]+"\n");
+	    }
 	}
 	f.flush();
 	f.close();
