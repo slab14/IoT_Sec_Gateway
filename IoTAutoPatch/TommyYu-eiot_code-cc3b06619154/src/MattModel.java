@@ -678,7 +678,19 @@ public class MattModel {
 		    }
 		    for(String toAdd: transitions2add){
 			String[] add = toAdd.split(",");
-			fsm.delta.get(add[0]).put(add[1], add[2]);
+			if(!fsm.delta.get(add[0]).containsKey(add[1])){
+			    fsm.delta.get(add[0]).put(add[1], add[2]);
+			} else {
+			    for (String transition: fsm.delta.get(fsm.delta.get(add[0]).get(add[1])).keySet()) {
+				if (!fsm.delta.get(add[2]).containsKey(transition)){
+				    fsm.delta.get(add[2]).put(transition, fsm.delta.get(fsm.delta.get(add[0]).get(add[1])).get(transition));
+				    fsm.delta.remove(fsm.delta.get(add[0]).get(add[1]));
+				}
+			    }
+			    fsm.stateMap.remove(fsm.delta.get(add[0]).get(add[1]));
+			    fsm.delta.get(add[0]).replace(add[1], add[2]);
+			    
+			}
 		    }
 		}
 	    }

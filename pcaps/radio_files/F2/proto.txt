@@ -1,0 +1,10 @@
+#inputs
+3 - content:"Method": "PROTOCOL_METHOD_UPLOAD_LAYER""; - 39
+4 - content:""; - 0
+1 - content:"Method": "PROTOCOL_METHOD_GET_STATUS""; - 37
+2 - content:"Method": "PROTOCOL_METHOD_START_FORM2_JOB""; - 42
+#outputs
+1 - content:"Method": "PROTOCOL_METHOD_GET_STATUS""; - 0,39
+2 - content:"Method": "PROTOCOL_METHOD_START_FORM2_JOB""; - 42,42
+3 - content:""; - 0,39
+4 - content:"Method": "PROTOCOL_METHOD_UPLOAD_LAYER""; - 39,39
