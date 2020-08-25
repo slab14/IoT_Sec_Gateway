@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Collections;
+import java.util.Set;
 
 
 public class MattModel {
@@ -360,7 +361,7 @@ public class MattModel {
 	    FileReader freader = new FileReader(logFile);
 	    br = new BufferedReader(freader);
 	    while ((sCurrentLine = br.readLine()) != null) {
-		String[] splitted = sCurrentLine.split("\\s+");
+		String[] splitted = sCurrentLine.split("\\t");
 		if (splitted[0].charAt(0) == '#'){continue;}
 		if (! conns.contains(splitted[0])){
 		    conns.add(splitted[0]);
@@ -370,6 +371,8 @@ public class MattModel {
 		int fromLen=Integer.parseInt(splitted[10]);
 		String msgTo=splitted[7]+";"+toLen;
 		String msgFrom=splitted[9]+";"+splitted[10];
+		if(splitted[9].equals("(empty)")) { msgFrom=";0";}
+		    
 		//Create alphabet of transitions
 		if (!dMap.containsKey(msgTo)){
 		    msgNo+=1;
@@ -400,13 +403,13 @@ public class MattModel {
 	FileWriter f = new FileWriter("proto.txt");
 	f.append("#inputs\n");
 	for(String alpha: dMap.keySet()) {
-	    String[] parts = alpha.split("/"); 
+	    String[] parts = alpha.split(";"); 
 	    f.append(dMap.get(alpha)+" - "+"content:\""+parts[0]+"\"; - "+parts[1]+"\n");
 	    // could modify to be dsize:part[2]
 	}
 	f.append("#outputs\n");
 	for(String bets: oMap.keySet()){
-	    String[] parts = oMap.get(bets).split("/");
+	    String[] parts = oMap.get(bets).split(";");
 	    int min = Collections.min(outMsgLens.get(bets));
 	    int max = Collections.max(outMsgLens.get(bets));	    
 	    String len = Integer.toString(min)+","+Integer.toString(max);
@@ -435,16 +438,28 @@ public class MattModel {
 	    FileReader freader = new FileReader(logFile);
 	    br = new BufferedReader(freader);
 	    while ((sCurrentLine = br.readLine()) != null) {
-		String[] splitted = sCurrentLine.split("\\s+");
+		String[] splitted = sCurrentLine.split("\\t");
 		if (splitted[0].charAt(0) == '#'){continue;}
 		if (! conns.contains(splitted[0])){
 		    conns.add(splitted[0]);
 		    sequenceMap.put(splitted[0], new ArrayList<String>());
 		}
-		String toLen=splitted[8];
-		int fromLen=Integer.parseInt(splitted[10]);
-		String msgTo=splitted[7]+";"+toLen;
-		String msgFrom=splitted[9]+";"+splitted[10];
+		int extra=0;
+		if (splitted[7].equals("Method\":")) {
+		    extra=1;
+		}
+		String toLen=splitted[8+extra];
+		int fromLen=Integer.parseInt(splitted[11+extra]);
+		String msgTo="";
+		if (extra==1){
+		    msgTo=splitted[7]+splitted[7+extra]+";"+toLen;
+		} else {
+		    msgTo=splitted[7]+";"+toLen;		    
+		}
+		if(splitted[7].equals("(empty)")) { msgTo=";0";}		
+		String msgFrom=splitted[10+extra]+";"+splitted[11+extra];
+		if(splitted[10+extra].equals("(empty)")) { msgFrom=";0";}
+		    
 		//Create alphabet of transitions
 		if (!dMap.containsKey(msgTo)){
 		    msgNo+=1;
@@ -475,13 +490,13 @@ public class MattModel {
 	FileWriter f = new FileWriter("proto.txt");
 	f.append("#inputs\n");
 	for(String alpha: dMap.keySet()) {
-	    String[] parts = alpha.split("/"); 
+	    String[] parts = alpha.split(";"); 
 	    f.append(dMap.get(alpha)+" - "+"content:\""+parts[0]+"\"; - "+parts[1]+"\n");
 	    // could modify to be dsize:part[2]
 	}
 	f.append("#outputs\n");
 	for(String bets: oMap.keySet()){
-	    String[] parts = oMap.get(bets).split("/");
+	    String[] parts = oMap.get(bets).split(";");
 	    int min = Collections.min(outMsgLens.get(bets));
 	    int max = Collections.max(outMsgLens.get(bets));	    
 	    String len = Integer.toString(min)+","+Integer.toString(max);
@@ -490,8 +505,7 @@ public class MattModel {
 	f.flush();
 	f.close();
 	return new TraceData(traces, symbolList);
-    }
-    
+    }    
     
 
     public static class MealyFSM {
@@ -601,15 +615,20 @@ public class MattModel {
 		    if(nextState.equals(state)) {
 			hasLoop=true;
 			loopTransition=transition;
+		    } else {
+			hasLoop=false;
 		    }
 		}
 		if (hasLoop) {
+		    ArrayList<String> transitions2add = new ArrayList<String>();
 		    for (String transition: fsm.delta.get(state).keySet()) {
 			if ((loopTransition.equals(transition)) || (fsm.delta.get(state)==null)) {continue;}
 			String preLoopTransition = transition;
 			String preLoopState = state;
 			String loopState = fsm.delta.get(preLoopState).get(preLoopTransition);
+			ArrayList<String> tested = new ArrayList<String>();
 			while ((fsm.delta.get(loopState)!=null) && !state.equals(loopState)) {
+			    tested.add(loopState);
 			    if (fsm.delta.get(loopState).size()>1) {
 				for (String secondLoopTransition: fsm.delta.get(loopState).keySet()) {
 				    if (!loopTransition.equals(secondLoopTransition)) {continue;}
@@ -618,11 +637,14 @@ public class MattModel {
 					for (String postLoopTransition: fsm.delta.get(loopState).keySet()) {
 					    if (postLoopTransition.equals(secondLoopTransition)) {continue;}
 					    String nextState = fsm.delta.get(loopState).get(postLoopTransition);
-					    fsm.delta.get(state).put(postLoopTransition, nextState);
+					    if(!fsm.delta.get(state).containsKey(postLoopTransition)){
+						transitions2add.add(state+","+postLoopTransition+","+nextState);
+					    }
 					    fsm.delta.get(preLoopState).replace(preLoopTransition, state);
 					    fsm.stateMap.remove(loopState);
 					    fsm.delta.remove(loopState);
 					    loopState=nextState;
+					    break;
 					}
 				    }
 				}
@@ -644,7 +666,19 @@ public class MattModel {
 				    }
 				}
 			    }
+			    if(tested.contains(loopState)) {
+				for(String newTransition: fsm.delta.get(loopState).keySet()) {
+				    String potential = fsm.delta.get(loopState).get(newTransition);
+				    if (tested.contains(potential)) {continue;}
+				    loopState=potential;
+				    break;
+				}
+			    }
 			}
+		    }
+		    for(String toAdd: transitions2add){
+			String[] add = toAdd.split(",");
+			fsm.delta.get(add[0]).put(add[1], add[2]);
 		    }
 		}
 	    }
