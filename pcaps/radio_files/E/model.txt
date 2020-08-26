@@ -1,8 +1,8 @@
 states
-s3,s4,s0,s1,s2
+s0,s1
 #initial
 s0
 #alphabet
-2,1
+1,2
 #transitions
-s3>2>s4,s0>1>s1,s1>2>s2,s2>1>s3
+s0>1>s1,s1>2>s0
