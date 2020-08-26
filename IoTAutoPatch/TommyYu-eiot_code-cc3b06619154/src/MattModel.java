@@ -644,88 +644,86 @@ public class MattModel {
 	    if ((!fsm.stateMap.containsKey(state)) || (fsm.delta.get(state)==null)) {continue; }
 	    boolean hasLoop=false;
 	    String loopTransition="";
-	    if (fsm.delta.get(state).size()>1) {
-		for (String transition: fsm.delta.get(state).keySet()) {
-		    String nextState = fsm.delta.get(state).get(transition);
-		    if(nextState.equals(state)) {
-			hasLoop=true;
-			loopTransition=transition;
-		    } else {
-			hasLoop=false;
-		    }
+	    for (String transition: fsm.delta.get(state).keySet()) {
+		String nextState = fsm.delta.get(state).get(transition);
+		if(nextState.equals(state)) {
+		    hasLoop=true;
+		    loopTransition=transition;
+		    break;
+		} else {
+		    hasLoop=false;
 		}
-		if (hasLoop) {
-		    ArrayList<String> transitions2add = new ArrayList<String>();
-		    for (String transition: fsm.delta.get(state).keySet()) {
-			if ((loopTransition.equals(transition)) || (fsm.delta.get(state)==null)) {continue;}
-			String preLoopTransition = transition;
-			String preLoopState = state;
-			String loopState = fsm.delta.get(preLoopState).get(preLoopTransition);
-			ArrayList<String> tested = new ArrayList<String>();
-			while ((fsm.delta.get(loopState)!=null) && !state.equals(loopState)) {
-			    tested.add(loopState);
-			    if (fsm.delta.get(loopState).size()>1) {
-				for (String secondLoopTransition: fsm.delta.get(loopState).keySet()) {
-				    if (!loopTransition.equals(secondLoopTransition)) {continue;}
-				    String checkLoop = fsm.delta.get(loopState).get(secondLoopTransition);
-				    if(checkLoop.equals(loopState)) {
-					for (String postLoopTransition: fsm.delta.get(loopState).keySet()) {
-					    if (postLoopTransition.equals(secondLoopTransition)) {continue;}
-					    String nextState = fsm.delta.get(loopState).get(postLoopTransition);
-					    if(!fsm.delta.get(state).containsKey(postLoopTransition)){
-						transitions2add.add(state+","+postLoopTransition+","+nextState);
-					    }
-					    fsm.delta.get(preLoopState).replace(preLoopTransition, state);
-					    fsm.stateMap.remove(loopState);
-					    fsm.delta.remove(loopState);
-					    loopState=nextState;
-					    break;
+	    }
+	    if (hasLoop) {
+		ArrayList<String> transitions2add = new ArrayList<String>();
+		for (String transition: fsm.delta.get(state).keySet()) {
+		    if ((loopTransition.equals(transition)) || (fsm.delta.get(state)==null)) {continue;}
+		    String preLoopTransition = transition;
+		    String preLoopState = state;
+		    String loopState = fsm.delta.get(preLoopState).get(preLoopTransition);
+		    ArrayList<String> tested = new ArrayList<String>();
+		    while ((fsm.delta.get(loopState)!=null) && !state.equals(loopState)) {
+			tested.add(loopState);
+			if (fsm.delta.get(loopState).size()>1) {
+			    for (String secondLoopTransition: fsm.delta.get(loopState).keySet()) {
+				if (!loopTransition.equals(secondLoopTransition)) {continue;}
+				String checkLoop = fsm.delta.get(loopState).get(secondLoopTransition);
+				if(checkLoop.equals(loopState)) {
+				    for (String postLoopTransition: fsm.delta.get(loopState).keySet()) {
+					if (postLoopTransition.equals(secondLoopTransition)) {continue;}
+					String nextState = fsm.delta.get(loopState).get(postLoopTransition);
+					if(!fsm.delta.get(state).containsKey(postLoopTransition)){
+					    transitions2add.add(state+","+postLoopTransition+","+nextState);
 					}
-				    }
-				}
-			    } else {
-				if(loopState.equals(fsm.delta.get(preLoopState).get(fsm.delta.get(loopState).entrySet().iterator().next().getKey()))) {
-				    fsm.delta.get(preLoopState).replace(preLoopTransition, state);
-				    fsm.stateMap.remove(loopState);
-				    fsm.delta.remove(loopState);
-				    break;
-				}
-				preLoopTransition = fsm.delta.get(loopState).entrySet().iterator().next().getKey();
-				preLoopState = loopState;
-				loopState = fsm.delta.get(preLoopState).get(preLoopTransition);
-				if(fsm.delta.get(loopState)==null){
-				    if(preLoopTransition.equals(loopTransition)){
 					fsm.delta.get(preLoopState).replace(preLoopTransition, state);
 					fsm.stateMap.remove(loopState);
 					fsm.delta.remove(loopState);
+					loopState=nextState;
+					break;
 				    }
 				}
 			    }
-			    if(tested.contains(loopState)) {
-				for(String newTransition: fsm.delta.get(loopState).keySet()) {
-				    String potential = fsm.delta.get(loopState).get(newTransition);
-				    if (tested.contains(potential)) {continue;}
-				    loopState=potential;
-				    break;
+			} else {
+			    if(loopState.equals(fsm.delta.get(preLoopState).get(fsm.delta.get(loopState).entrySet().iterator().next().getKey()))) {
+				fsm.delta.get(preLoopState).replace(preLoopTransition, state);
+				fsm.stateMap.remove(loopState);
+				fsm.delta.remove(loopState);
+				break;
+			    }
+			    preLoopTransition = fsm.delta.get(loopState).entrySet().iterator().next().getKey();
+			    preLoopState = loopState;
+			    loopState = fsm.delta.get(preLoopState).get(preLoopTransition);
+			    if(fsm.delta.get(loopState)==null){
+				if(preLoopTransition.equals(loopTransition)){
+				    fsm.delta.get(preLoopState).replace(preLoopTransition, state);
+				    fsm.stateMap.remove(loopState);
+				    fsm.delta.remove(loopState);
 				}
+			    }
+			}
+			if(tested.contains(loopState)) {
+			    for(String newTransition: fsm.delta.get(loopState).keySet()) {
+				String potential = fsm.delta.get(loopState).get(newTransition);
+				if (tested.contains(potential)) {continue;}
+				loopState=potential;
+				break;
 			    }
 			}
 		    }
-		    for(String toAdd: transitions2add){
-			String[] add = toAdd.split(",");
-			if(!fsm.delta.get(add[0]).containsKey(add[1])){
-			    fsm.delta.get(add[0]).put(add[1], add[2]);
-			} else {
-			    for (String transition: fsm.delta.get(fsm.delta.get(add[0]).get(add[1])).keySet()) {
-				if (!fsm.delta.get(add[2]).containsKey(transition)){
-				    fsm.delta.get(add[2]).put(transition, fsm.delta.get(fsm.delta.get(add[0]).get(add[1])).get(transition));
-				    fsm.delta.remove(fsm.delta.get(add[0]).get(add[1]));
-				}
+		}
+		for(String toAdd: transitions2add){
+		    String[] add = toAdd.split(",");
+		    if(!fsm.delta.get(add[0]).containsKey(add[1])){
+			fsm.delta.get(add[0]).put(add[1], add[2]);
+		    } else {
+			for (String transition: fsm.delta.get(fsm.delta.get(add[0]).get(add[1])).keySet()) {
+			    if (!fsm.delta.get(add[2]).containsKey(transition)){
+				fsm.delta.get(add[2]).put(transition, fsm.delta.get(fsm.delta.get(add[0]).get(add[1])).get(transition));
+				fsm.delta.remove(fsm.delta.get(add[0]).get(add[1]));
 			    }
-			    fsm.stateMap.remove(fsm.delta.get(add[0]).get(add[1]));
-			    fsm.delta.get(add[0]).replace(add[1], add[2]);
-			    
 			}
+			fsm.stateMap.remove(fsm.delta.get(add[0]).get(add[1]));
+			fsm.delta.get(add[0]).replace(add[1], add[2]);
 		    }
 		}
 	    }
@@ -735,6 +733,7 @@ public class MattModel {
 	boolean start = false;
 	String state="s0";
 	String firstState = "";
+	String checkingState="";
 	while (fsm.delta.get(state)!=null) {
 	    while(fsm.delta.get(state).size()==1) {
 		singleTranSeqlen++;
@@ -744,6 +743,10 @@ public class MattModel {
 		}
 		state = fsm.delta.get(state).get(fsm.delta.get(state).entrySet().iterator().next().getKey());
 		if(fsm.delta.get(state)==null){break;}
+		if(state.equals(checkingState)) {
+		    state = null;
+		    break;
+		}
 	    }
 	    if(start){
 		start=false;
@@ -754,8 +757,10 @@ public class MattModel {
 	    if(fsm.delta.get(state)==null){break;}	    
 	    for(String transition: fsm.delta.get(state).keySet()) {
 		String nextState = fsm.delta.get(state).get(transition);
+		checkingState=state;
 		if (state.equals(nextState)) {continue;}
 		state=nextState;
+		break;
 	    }
 	}
 	for (String[] sequence: sequences) {
