@@ -730,6 +730,105 @@ public class MattModel {
 		}
 	    }
 	}
+	int singleTranSeqlen=0;
+	ArrayList<String[]> sequences = new ArrayList<String[]>();
+	boolean start = false;
+	String state="s0";
+	String firstState = "";
+	while (fsm.delta.get(state)!=null) {
+	    while(fsm.delta.get(state).size()==1) {
+		singleTranSeqlen++;
+		if (!start){
+		    start=true;
+		    firstState=state;
+		}
+		state = fsm.delta.get(state).get(fsm.delta.get(state).entrySet().iterator().next().getKey());
+		if(fsm.delta.get(state)==null){break;}
+	    }
+	    if(start){
+		start=false;
+		String[] entry={firstState, state, Integer.toString(singleTranSeqlen)};
+		sequences.add(entry);
+		singleTranSeqlen=0;
+	    }
+	    if(fsm.delta.get(state)==null){break;}	    
+	    for(String transition: fsm.delta.get(state).keySet()) {
+		String nextState = fsm.delta.get(state).get(transition);
+		if (state.equals(nextState)) {continue;}
+		state=nextState;
+	    }
+	}
+	for (String[] sequence: sequences) {
+	    for(int loopSize=2; loopSize<=3; loopSize++) {
+		String[] baseStates = new String[loopSize];
+		String[] baseTrans = new String[loopSize];
+		String[] checkStates = new String[loopSize];
+		String[] checkTrans = new String[loopSize];
+		String outState;
+		int testLen = Integer.parseInt(sequence[2]);
+		String initState=sequence[0];
+		String startTest="";
+		boolean need2write=false;
+		String writeState="";
+		String writeTrans="";
+		String writeOut="";		    
+		HashMap<String, String> writeMap = new HashMap<String, String>();
+		while(testLen>=(loopSize*2)){
+		    baseStates[0]=initState;
+		    baseTrans[0]=fsm.delta.get(initState).entrySet().iterator().next().getKey();
+		    for(int i=1; i<loopSize; i++) {
+			baseStates[i]=fsm.delta.get(baseStates[i-1]).get(baseTrans[i-1]);
+			baseTrans[i]=fsm.delta.get(baseStates[i]).entrySet().iterator().next().getKey();
+		    }
+		    checkStates[0]=fsm.delta.get(baseStates[baseStates.length-1]).get(baseTrans[baseTrans.length-1]);
+		    checkTrans[0]=fsm.delta.get(checkStates[0]).entrySet().iterator().next().getKey();		
+		    for(int i=1;i<loopSize;i++) {
+			checkStates[i]=fsm.delta.get(checkStates[i-1]).get(checkTrans[i-1]);
+			checkTrans[i]=fsm.delta.get(checkStates[i]).entrySet().iterator().next().getKey();
+		    }
+		    outState=fsm.delta.get(checkStates[checkStates.length-1]).get(checkTrans[checkTrans.length-1]);
+		    boolean foundLoop=true;
+		    for(int i=0; i<loopSize; i++){
+			foundLoop=foundLoop && (baseTrans[i]==checkTrans[i]);
+		    }
+		    if(foundLoop) {
+			writeState=outState;
+			writeMap.put(checkTrans[checkTrans.length-1], baseStates[1]);
+			writeTrans=checkTrans[checkTrans.length-1];
+			writeOut=baseStates[1];						
+			need2write=true;
+			fsm.delta.get(baseStates[baseStates.length-1]).replace(baseTrans[baseTrans.length-1], outState);
+			for(int i=0;i<loopSize;i++) {
+			    fsm.stateMap.remove(checkStates[i]);
+			    fsm.delta.remove(checkStates[i]);
+			}
+			testLen-=loopSize;
+		    } else {
+			if(need2write){
+			    if(fsm.delta.get(writeState)==null){
+				fsm.delta.put(writeState, writeMap);
+			    } else {
+				fsm.delta.get(writeState).put(writeTrans, writeOut);
+			    }
+			    initState=checkStates[1];
+			    testLen-=(loopSize+1);
+			    need2write=false;
+			}else {
+			    initState=baseStates[1];
+			    testLen--;
+			}
+		    }
+		}
+		if(need2write){
+		    if(fsm.delta.get(writeState)==null){
+			fsm.delta.put(writeState, writeMap);
+		    } else {
+			fsm.delta.get(writeState).put(writeTrans, writeOut);
+		    }
+		}
+	    }
+	}
+	
 	printFSM(fsm);
 	return fsm;
     }
