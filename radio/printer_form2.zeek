@@ -10,14 +10,21 @@ export {
     req_port: port &log;
     resp_ip: addr &log;
     resp_port: port &log;    
-    full_req_len: count &log &optional;
-    full_resp_len: count &log &optional;
-    req_body_key: string &log &optional;
+    req_len: count &log &optional;
+    req_mult_pkt: bool &log &optional;
+    resp_len: count &log &optional;
+    resp_mult_pkt: bool &log &optional;
+    req_method: string &log &optional;
+    req_uri: string &log &optional;
+    req_key: string &log &optional;
     req_key_len: count &log &optional;
     req_key_offset: count &log &optional;
-    resp_body_key: string &log &optional;
+    resp_code: count &log &optional;
+    resp_msg: string &log &optional;
+    resp_key: string &log &optional;
     resp_key_len: count &log &optional;
     resp_key_offset: count &log &optional;
+    direction: string &log &optional;
   };
 }
 
@@ -53,34 +60,38 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
     local match: PatternMatchResult;
     match = match_pattern(payload,/\{\x0a[ a-zA-Z0-9\"\_\:\{]+/);
     if (match$matched) {
+      match = match_pattern(payload,/Method[\"\:]+/);    
       ##  find messages type
-      match = match_pattern(payload,/Method[ a-zA-Z0-9\"\_\:]+/);
       if (match$matched) {
-        if (is_orig) {
-	  if(got_req) {
-            req_data2=match$str;
-            req_offset2 = match$off;
-            req_len2+=|payload|-match$off;
-            req_len+=match$off-|payload|;
-	    repeat=T;
-	    write=T;
-	  } else {
-            req_data=match$str;
-            req_offset = match$off;
-	    got_req=T;	    
-          }
-        } else {
-          if(got_resp) {
-            resp_data2=match$str;
-            resp_offset2 = match$off;
-            resp_len2+=|payload|-match$off;
-	    resp_len+=match$off-|payload|;
-	    repeat=T;
-  	    write=T;
-	  } else {
-            resp_data=match$str;
-            resp_offset = match$off;
-	    got_resp=T;
+        local start: count=match$off+|match$str|;
+        match = match_pattern(payload[start:],/[A-Z0-9\"\_]+/);
+        if (match$matched) {
+          if (is_orig) {
+    	    if(got_req) {
+              req_data2=match$str;
+              req_offset2 = match$off+start;
+              req_len2+=|payload|-(match$off+start);
+              req_len+=start+match$off-|payload|;
+	      repeat=T;
+	      write=T;
+	    } else {
+              req_data=match$str;
+              req_offset = match$off+start;
+	      got_req=T;	    
+            }
+          } else {
+            if(got_resp) {
+              resp_data2=match$str;
+              resp_offset2 = match$off+start;
+              resp_len2+=|payload|-(match$off+start);
+	      resp_len+=start+match$off-|payload|;
+	      repeat=T;
+  	      write=T;
+	    } else {
+              resp_data=match$str;
+              resp_offset = match$off+start;
+	      got_resp=T;
+	    }
 	  }
         }
       }
@@ -89,14 +100,27 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
       write=T;
     }
     if (write) {
+      local mult_req: bool=F;
+      local mult_resp: bool=F;
+      local dir: string = "->";
+      if(req_len>1460) {
+        mult_req=T;
+      }
+      if(resp_len>1460) {
+        mult_resp=T;
+      }
+      if(c$id$resp_p!=35/tcp) {
+        dir="<-";
+      }
       Log::write(RADIO_FORM2::RADIO_FORM2_MSGS,
                  [$uid=c$uid, $req_ip=c$id$orig_h, $req_port=c$id$orig_p,
                   $resp_ip=c$id$resp_h, $resp_port=c$id$resp_p,
-                  $full_req_len=req_len,
-                  $req_body_key=req_data, $req_key_len=|req_data|,
-		  $req_key_offset=req_offset, $full_resp_len=resp_len,
-  		  $resp_body_key=resp_data, $resp_key_len=|resp_data|,
-		  $resp_key_offset=resp_offset]);
+                  $req_len=req_len, $req_mult_pkt=mult_req,
+		  $resp_len=resp_len, $resp_mult_pkt=mult_resp,
+                  $req_key=req_data, $req_key_len=|req_data|,
+		  $req_key_offset=req_offset, 
+  		  $resp_key=resp_data, $resp_key_len=|resp_data|,
+		  $resp_key_offset=resp_offset, $direction=dir]);
       req_data="";
       req_len=0;
       req_offset=0;

@@ -10,28 +10,40 @@ export {
     req_port: port &log;
     resp_ip: addr &log;
     resp_port: port &log;    
-    full_req_len: count &log &optional;
-    full_resp_len: count &log &optional;
-    req_body_key: string &log &optional;
+    req_len: count &log &optional;
+    req_mult_pkt: bool &log;
+    resp_len: count &log &optional;
+    resp_mult_pkt: bool &log;
+    req_method: string &log &optional;
+    req_uri: string &log &optional;
+    req_key: string &log &optional;
     req_key_len: count &log &optional;
-    resp_body_key: string &log &optional;
+    req_key_offset: count &log &optional;
+    resp_code: count &log &optional;
+    resp_msg: string &log &optional;
+    resp_key: string &log &optional;
     resp_key_len: count &log &optional;
-    initiator: string &log;
+    resp_key_offset: count &log &optional;    
+    direction: string &log;
   };
 }
 
 global req_data: string = "";
 global req_len: count=0;
 global req_key_len: count=0;
+global req_key_off: count=0;
 global resp_data: string = "";
 global resp_len: count=0;
 global resp_key_len: count=0;
+global resp_key_off: count=0;
 global req_data2: string = "";
 global req_len2: count=0;
 global req_key_len2: count=0;
+global req_key_off2: count=0;
 global resp_data2: string = "";
 global resp_len2: count=0;
 global resp_key_len2: count=0;
+global resp_key_off2: count=0;
 global got_log_item: bool = F;
 global got_req: bool=F;
 global got_resp: bool=F;
@@ -65,6 +77,7 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	  if(got_req) {
             req_data2 = "/[a-zA-Z]+\_/";
             req_key_len2=|match$off|;
+	    req_key_off2=match$off;
 	    req_len2+=|payload|;
 	    req_len-=|payload|;
 	    got_repeat=T;
@@ -72,12 +85,14 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	  } else {
             req_data = "/[a-zA-Z]+\_/";
             req_key_len=|match$off|;
+	    req_key_off=match$off;
 	    got_req=T;
 	  }
 	} else {
 	  if(got_resp) {
             resp_data2 = "/[a-zA-Z]+\_/";
             resp_key_len2=|match$off|;
+	    resp_key_off2=match$off;
 	    resp_len2+=|payload|;
 	    resp_len-=|payload|;
 	    got_repeat=T;
@@ -85,6 +100,7 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	  } else {
             resp_data = "/[a-zA-Z]+\_/";
             resp_key_len=|match$off|;
+	    resp_key_off=match$off;
 	    got_resp=T;
 	  }
 	}	
@@ -95,6 +111,7 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
   	    if(got_req){
               req_data2 = match$str;
               req_key_len2=|match$str|;
+	      req_key_off2=match$off;
   	      req_len2+=|payload|;
 	      req_len-=|payload|;
 	      got_repeat=T;
@@ -102,12 +119,14 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	    } else {
               req_data = match$str;
               req_key_len=|match$str|;
+	      req_key_off=match$off;
 	      got_req=T;
 	    }
           } else {
   	    if(got_resp){	
               resp_data2 = match$str;
               resp_key_len2=|match$str|;
+	      resp_key_off=match$off;
   	      resp_len2+=|payload|;
 	      resp_len-=|payload|;
 	      got_repeat=T;
@@ -115,6 +134,7 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	    }else{
               resp_data = match$str;
               resp_key_len=|match$str|;
+	      resp_key_off=match$off;
 	      got_resp=T;
 	    }
 	  }
@@ -127,6 +147,7 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	  if (got_req) {
  	    req_data2 = "/[0-9]+/";
             req_key_len2=|match$str|;
+	    req_key_off2=match$off;
 	    req_len2+=|payload|;
 	    req_len-=|payload|;	    
 	    got_repeat=T;
@@ -134,12 +155,14 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	  } else {
  	    req_data = "/[0-9]+/";
             req_key_len=|match$str|;
+	    req_key_off=match$off;
 	    got_req=T;
  	  }
 	} else {
 	  if(got_resp) {
             resp_data2 = "/[0-9]+/";
             resp_key_len2=|match$str|;
+	    resp_key_off2=match$off;
 	    resp_len2+=|payload|;
 	    resp_len-=|payload|;	    
 	    got_repeat=T;
@@ -147,6 +170,7 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	  } else {
             resp_data = "/[0-9]+/";
             resp_key_len=|match$str|;
+	    resp_key_off=match$off;
 	    got_resp=T;
 	  }
 	}
@@ -160,10 +184,12 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
         if(is_orig){
           req_data = match$str;
           req_key_len=|match$str|;
+	  req_key_off=match$off;
 	  got_req=T;
         } else {
           resp_data = match$str;
           resp_key_len=|match$str|;
+	  resp_key_off=match$off;
 	  got_resp=T;
 	}
       }    
@@ -174,10 +200,12 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
  	if(is_orig){
 	  req_data = match$str;
           req_key_len=|match$str|;
+	  req_key_off=match$off;
 	  got_req=T;
 	} else {
 	  resp_data = match$str;
           resp_key_len=|match$str|;
+	  resp_key_off=match$off;
 	  got_resp=T;
 	}	
       }
@@ -188,10 +216,12 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	if(is_orig){
 	  req_data = "JFIF";
           req_key_len=|match$str|;
+	  req_key_off=match$off;
 	  got_req=T;
 	} else {
 	  resp_data = "JFIF";
           resp_key_len=|match$str|;
+	  resp_key_off=match$off;
 	  got_resp=T;
 	}	
       }            
@@ -210,19 +240,30 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
       got_log_item=T;
     }
     if (got_log_item) {
+      local mult_req=F;
+      local mult_resp=F;
+      if(req_len>64) {
+        mult_req=T;
+      }
+      if(resp_len>64) {
+        mult_resp=T;
+      }      
       Log::write(RADIO_CMB::RADIO_CMB_MSGS,
                  [$uid=c$uid, $req_ip=c$id$orig_h, $req_port=c$id$orig_p,
                   $resp_ip=c$id$resp_h, $resp_port=c$id$resp_p,
-                  $full_req_len=req_len,
-                  $req_body_key=req_data, $req_key_len=req_key_len,
-		  $full_resp_len=resp_len,
-  		  $resp_body_key=resp_data, $resp_key_len=resp_key_len,
-		  $initiator=direction]);
+                  $req_len=req_len, $req_mult_pkt=mult_req,
+		  $resp_len=resp_len, $resp_mult_pkt=mult_resp,
+                  $req_key=req_data, $req_key_len=req_key_len,
+		  $req_key_offset=req_key_off,
+  		  $resp_key=resp_data, $resp_key_len=resp_key_len,
+		  $resp_key_offset=resp_key_off, $direction=direction]);
       req_data="";
       req_key_len=0;
+      req_key_off=0;      
       req_len=0;
       resp_data="";
       resp_key_len=0;
+      resp_key_off=0;      
       resp_len=0;
       got_log_item=F;
       long_file=F;
@@ -234,7 +275,9 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	  req_data=req_data2;
 	  req_data2="";
 	  req_key_len=req_key_len2;
+	  req_key_off=req_key_off2;	  
 	  req_key_len2=0;
+	  req_key_off2=0;	  
 	  req_len=req_len2;
 	  req_len2=0;
 	  got_req=T;
@@ -243,7 +286,9 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	  resp_data=req_data2;
 	  resp_data2="";
 	  resp_key_len=req_key_len2;
+	  resp_key_off=req_key_off2;	  
 	  resp_key_len2=0;
+	  resp_key_off2=0;	  
 	  resp_len=req_len2;
 	  resp_len2=0;
 	  got_resp=T;
