@@ -2,6 +2,7 @@
 
 import argparse
 import re
+import binascii
 
 class FSM():
     """This class represents the FSM read from model. It contains the states, initial state and transition matrix."""
@@ -148,9 +149,9 @@ Initial state: {self.initial}
         for content in contents:
             if content == '':
                 break
-            parts=content.split(":")
+            parts=content.split("content:")
             if missing:
-                content = parts[0]+":!"+parts[1]
+                content = "content:!"+parts[1]
             if first:
                 depth = len(parts[1])*3
                 out = content+f';depth:{depth};'
@@ -166,9 +167,9 @@ Initial state: {self.initial}
         for content in contents:
             if content == '':
                 break
-            parts=content.split(":")
+            parts=content.split("content:")
             if missing:
-                content = parts[0]+":!"+parts[1]
+                content = "content:!"+parts[1]
             if first:
                 depth = len(parts[1])*3
                 out = content+f';depth:{depth};'

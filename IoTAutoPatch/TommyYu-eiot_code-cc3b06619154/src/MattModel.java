@@ -27,6 +27,20 @@ public class MattModel {
 	    this.symbolList = symbolList;
 	}
     }
+
+
+    public static String convertStringToHex(String str) {
+	String out="";
+	int count=2;
+        for (char temp : str.toCharArray()) {
+	    if(count>0){
+		count--;
+		continue;
+	    }
+	    out+=temp;
+        }
+        return out;
+    }
     
 
     public static TraceData parseLog(String logFile, String type) throws IOException{
@@ -258,7 +272,10 @@ public class MattModel {
 	}
 	f.append("#outputs\n");
 	for(String bets: oMap.keySet()){
-	    String[] parts = oMap.get(bets).split("/");
+	    String[] parts = oMap.get(bets).split(";");
+	    if(parts[0].contains("\\x")){
+		parts[0]="|"+convertStringToHex(parts[0])+"|";
+	    }
 	    int min = Collections.min(outMsgLens.get(bets));
 	    int max = Collections.max(outMsgLens.get(bets));	    
 	    String len = Integer.toString(min)+","+Integer.toString(max);
