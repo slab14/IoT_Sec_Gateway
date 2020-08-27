@@ -3,9 +3,9 @@
 #empty_field	(empty)
 #unset_field	-
 #path	x509
-#open	2020-08-13-17-10-37
+#open	2020-08-27-09-40-41
 #fields	ts	id	certificate.version	certificate.serial	certificate.subject	certificate.issuer	certificate.not_valid_before	certificate.not_valid_after	certificate.key_alg	certificate.sig_alg	certificate.key_type	certificate.key_length	certificate.exponent	certificate.curve	san.dns	san.uri	san.email	san.ip	basic_constraints.ca	basic_constraints.path_len
 #types	time	string	count	string	string	string	time	time	string	string	string	count	string	string	vector[string]	vector[string]	vector[string]	vector[addr]	bool	count
-1549038297.484020	FSXEpb2uAGNUYEPS94	3	03847BECF00FF6253A6C16A4CE9D03BBACC2	CN=stats.ultimaker.com	CN=Let's Encrypt Authority X3,O=Let's Encrypt,C=US	1547213682.000000	1554986082.000000	rsaEncryption	sha256WithRSAEncryption	rsa	4096	65537	-	stats.ultimaker.com	-	-	-	F	-
-1549038297.484020	Ffzn6K2fSPIE5Qvg5e	3	0A0141420000015385736A0B85ECA708	CN=Let's Encrypt Authority X3,O=Let's Encrypt,C=US	CN=DST Root CA X3,O=Digital Signature Trust Co.	1458250846.000000	1616017246.000000	rsaEncryption	sha256WithRSAEncryption	rsa	2048	65537	-	-	-	-	-	T	0
-#close	2020-08-13-17-10-37
+1549038297.484020	FSXEpb2uAGNUYEPS94	3	03847BECF00FF6253A6C16A4CE9D03BBACC2	CN=stats.ultimaker.com	CN=Let's Encrypt Authority X3,O=Let's Encrypt,C=US	1547220882.000000	1554993282.000000	rsaEncryption	sha256WithRSAEncryption	rsa	4096	65537	-	stats.ultimaker.com	-	-	-	F	-
+1549038297.484020	Ffzn6K2fSPIE5Qvg5e	3	0A0141420000015385736A0B85ECA708	CN=Let's Encrypt Authority X3,O=Let's Encrypt,C=US	CN=DST Root CA X3,O=Digital Signature Trust Co.	1458258046.000000	1616024446.000000	rsaEncryption	sha256WithRSAEncryption	rsa	2048	65537	-	-	-	-	-	T	0
+#close	2020-08-27-09-40-41

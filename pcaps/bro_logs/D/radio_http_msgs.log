@@ -3,177 +3,177 @@
 #empty_field	(empty)
 #unset_field	-
 #path	radio_http_msgs
-#open	2020-08-22-17-06-50
-#fields	uid	req_ip	req_port	resp_ip	resp_port	method	uri	code	msg	full_req_len	full_resp_len	req_body_key	req_key_len	resp_body_key	resp_key_len
-#types	string	addr	port	addr	port	string	string	count	string	count	count	string	count	string	count
-Cn1FTu2PQHddRUwmMc	10.1.1.42	62521	10.1.1.36	80	POST	/command	200	OK	14	242	GETPRINTERINFO	14	{"SN"	14
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUSGETPRINTERSTATUS	32	{"buildPlate_target_temperature"	32
-CCszf911RQiLcgaHM8	10.1.1.42	62523	10.1.1.36	80	POST	/command	200	OK	16	386	(empty)	0	{"buildPlate_target_temperature"	0
-C1YRhnX7fOc8ljsvb	10.1.1.42	62525	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CDk3AE7ahnY8kGNOf	10.1.1.42	62526	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CgSOSy1cEmyYjlYBZ1	10.1.1.42	62527	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CfC3RI1W3AeyvpvvN8	10.1.1.42	62528	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CUFGcp3vtuECBYvCC1	10.1.1.42	62530	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-Cxfe2H2eMV9jc20fOc	10.1.1.42	62532	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CczXjTZrXUbzwhhW8	10.1.1.42	62533	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CT9EhfJspKdjNh9yi	10.1.1.42	62535	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-C1zjmr4fpQ4Ut7AlKg	10.1.1.42	62536	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CStCoa0IkKfdxOgIi	10.1.1.42	62539	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CNPaX64dwv82zNEDl4	10.1.1.42	62540	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CAEHUbVAZ1KqlS4Za	10.1.1.42	62542	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CVl3KRulAO98A9BCi	10.1.1.42	62543	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-C5kDF51DzffsZ4Prcf	10.1.1.42	62545	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CgqNMwmI71gYdNAe4	10.1.1.42	62547	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CmTrBl4qa13pcdYTKb	10.1.1.42	62549	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CooD5f3ClWTNyjZ4f6	10.1.1.42	62552	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CznYASXJ0KA7bmfrh	10.1.1.42	62553	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CjDqkD3j8UnFfgCd91	10.1.1.42	62554	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CPwrZt1Ii8ONxqNrsl	10.1.1.42	62555	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CU1uAvggSL25usgJ1	10.1.1.42	62556	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-ChQQ3QwNLf89VaTde	10.1.1.42	62557	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-C3aB8g3guSkberJfxl	10.1.1.42	62559	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-C8Z9FC1juxLh9xL4ol	10.1.1.42	62560	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-ChxXYs3uDBWcuWf3ci	10.1.1.42	62561	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-C6W9qE4zL4KlLU1zkb	10.1.1.42	62562	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CV2dIGOt5TFSDSAPe	10.1.1.42	62563	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CbMWzO2tXM1PITzJQj	10.1.1.42	62564	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBLDRzgtnXkKhrsp1	10.1.1.42	62524	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUSGETPRINTERSTATUS	32	{"buildPlate_target_temperature"	32
-CpZQhW2Bet7nlQbUIk	10.1.1.42	62570	10.1.1.36	80	POST	/command	200	OK	16	386	(empty)	0	{"buildPlate_target_temperature"	0
-CTXp3h3DvuSB5BLeG9	10.1.1.42	62572	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-C6Xq9G4TszYL931Ec2	10.1.1.42	62573	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-C9DRlEFkGZKmlWfDg	10.1.1.42	62578	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-Cm2oEl14OXnVcRh64	10.1.1.42	62579	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CUoT851Y6lrn5MuuG8	10.1.1.42	62581	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUSGETPRINTERSTATUS	32	{"buildPlate_target_temperature"	32
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	(empty)	0	{"buildPlate_target_temperature"	0
-CvcgJz4CRnYUv9Bfa7	10.1.1.42	62582	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CQ1ZLD1DwidG2v8Bl8	10.1.1.42	62583	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-C5pLRTNjmtIk6ihea	10.1.1.42	62584	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-Corigj1YiP3QW2CDkj	10.1.1.42	62585	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CVK19g1ajFMDIuzhr1	10.1.1.42	62586	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CnSlsr2RJYdnao9XDb	10.1.1.42	62587	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CkpcNKYuegxW2FyD3	10.1.1.42	62588	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-C8F7J51xNMVYKat6Qj	10.1.1.42	62589	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CkbxTJ2qwwlfJ75b	10.1.1.42	62590	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CGaSsz3dSFb6bSgvSd	10.1.1.42	62591	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CHmHzX3VsCIf4TuXKb	10.1.1.42	62592	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-C12TBO17jvnPkeezU6	10.1.1.42	62593	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CrcDMl1od6ajHn8myf	10.1.1.42	62594	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-COHk9q42qLvGWrXvK4	10.1.1.42	62595	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CTUehg18J1QYaEvph8	10.1.1.42	62596	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CCq7s13QrRLbRrH51f	10.1.1.42	62597	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CNhR5v1VgThuKzjby5	10.1.1.42	62598	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-C1b6QR3f0YfaUE4rh6	10.1.1.42	62599	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CwLVXy47G6MqByfC61	10.1.1.42	62600	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBH6dHtYLwyks41D5	10.1.1.42	62601	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CssYZ53bQefrFQQl51	10.1.1.42	62604	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CTwFcedpSumsfIr9	10.1.1.42	62606	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CIOjVORl3fpQu2cNg	10.1.1.42	62608	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUSGETPRINTERSTATUS	32	{"buildPlate_target_temperature"	32
-CNHK6f1oOAodeKReHg	10.1.1.42	62607	10.1.1.36	80	POST	/command	200	OK	16	386	(empty)	0	{"buildPlate_target_temperature"	0
-CC8f3D1Mphkh2zlMij	10.1.1.42	62609	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CIOjVORl3fpQu2cNg	10.1.1.42	62608	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CFwfkz4MpXYGMJdng	10.1.1.42	62610	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CIOjVORl3fpQu2cNg	10.1.1.42	62608	10.1.1.36	80	POST	/command	200	OK	16	386	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/print_file_uploads	200	OK	9722980	41	FLAVOR	6	(empty)	6
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	23	38	PRINT	5	{"error_code"	5
-C9zji44z8fsxRfWyWb	10.1.1.42	62611	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CuSXPOVSoCJ7gWS8a	10.1.1.42	62612	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-Cy3Myt41sZg9vpGCY7	10.1.1.42	62613	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CMLJsq1CHMqglJs2o9	10.1.1.42	62614	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CCWMHQipcqZiISgN2	10.1.1.42	62615	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CmvDIO2prOSGib4fZb	10.1.1.42	62616	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-Cs8FzCoeigcjpmi07	10.1.1.42	62618	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CogqTR1NOe4wEoguY2	10.1.1.42	62619	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CjqRTzpR5Bb1ntdO7	10.1.1.42	62620	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-Cvu3JF4fXwtLyben14	10.1.1.42	62621	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-Ce7pyB1Mz2FLOT9bfa	10.1.1.42	62622	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-Cfm7eB1VGCvqw7W7Uc	10.1.1.42	62624	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-Cc21Sz2h510nCEgd1	10.1.1.42	62625	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CpwBsP1ofjOh2TlxF3	10.1.1.42	62626	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-Cid3yN3N0o3kS5oEX9	10.1.1.42	62627	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-Cs7WyI3Am2oxqmSFX4	10.1.1.42	62633	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	417	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	24	38	CANCEL	6	{"error_code"	6
-CDZiU13xXDcMm5iFgl	10.1.1.42	62634	10.1.1.36	80	POST	/command	200	OK	16	414	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	414	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CBPAhg1ZGnuq6YBKe9	10.1.1.42	62635	10.1.1.36	80	POST	/command	200	OK	16	414	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	414	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CMgCaX3DnL7IultgS6	10.1.1.42	62637	10.1.1.36	80	POST	/command	200	OK	16	414	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	414	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-Cusgn13FlajxZktWo3	10.1.1.42	62638	10.1.1.36	80	POST	/command	200	OK	16	414	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	414	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CyhxrB1FQqlJ4k1Ht1	10.1.1.42	62639	10.1.1.36	80	POST	/command	200	OK	16	414	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	414	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CeByi21uBGd6mEMrF8	10.1.1.42	62640	10.1.1.36	80	POST	/command	200	OK	16	414	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	414	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CiOt2x17suH78PBfBg	10.1.1.42	62641	10.1.1.36	80	POST	/command	200	OK	16	414	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-CR06133DLmJetsZ5v1	10.1.1.42	62571	10.1.1.36	80	POST	/command	200	OK	16	414	GETPRINTERSTATUS	16	{"buildPlate_target_temperature"	16
-#close	2020-08-22-17-06-50
+#open	2020-08-27-09-40-23
+#fields	uid	req_ip	req_port	resp_ip	resp_port	req_len	req_mult_pkt	resp_len	resp_mult_pkt	req_method	req_uri	req_key	req_key_len	req_key_offset	resp_code	resp_msg	resp_key	resp_key_len	resp_key_offset	direction
+#types	string	addr	port	addr	port	count	bool	count	bool	string	string	string	count	count	count	string	string	count	count	string
+C9osUv2DxzH57HZKYe	10.1.1.42	62521	10.1.1.36	80	14	T	242	T	POST	/command	GETPRINTERINFO	14	1	200	OK	{"SN"	14	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUSGETPRINTERSTATUS	32	1	200	OK	{"buildPlate_target_temperature"	32	1	->
+Ci8nuKPaA0gUM1ej4	10.1.1.42	62523	10.1.1.36	80	16	T	386	T	POST	/command	(empty)	0	0	200	OK	{"buildPlate_target_temperature"	0	1	->
+CIDiiH1yp1j9OAoR66	10.1.1.42	62525	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+Ckhkeb4kj1DF4pi4Zf	10.1.1.42	62526	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+COsKt32zlGk3ppJcSj	10.1.1.42	62527	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C0eBnH2QaJ2UkmQaLa	10.1.1.42	62528	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CRQZm23I1Hx6ouXZg	10.1.1.42	62530	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CbUObs2MPGXWEqIDzk	10.1.1.42	62532	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C4mZle3xXclDeHqc3g	10.1.1.42	62533	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C7FjQ84lv94a8wU4Fc	10.1.1.42	62535	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CiURhd2WngG1MV9zzb	10.1.1.42	62536	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C4vPpkT98x3RKmTLg	10.1.1.42	62539	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CFeCMz3KGF7YjtA6Oj	10.1.1.42	62540	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CPH2An2NY1n08NJZUh	10.1.1.42	62542	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CSB7f85Xzpx4AxXZd	10.1.1.42	62543	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C89qpf3c06c1L5Pee	10.1.1.42	62545	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CTI2T74AhIor78VTX9	10.1.1.42	62547	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C1Vva1A5Frp6W7Ze7	10.1.1.42	62549	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C2eYgF4wMwcxBMIx2h	10.1.1.42	62552	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CS4bpf1QBZCgAMARca	10.1.1.42	62553	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C7Faoj1gW2X1FZqRr2	10.1.1.42	62554	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CVzOPX3ufITdQI2SW4	10.1.1.42	62555	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CtuQpD3l9797V9HoOi	10.1.1.42	62556	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CeTKul3rGwMhMVb6d	10.1.1.42	62557	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CEEqqT3IiVBpcOu5c4	10.1.1.42	62559	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CF9d3t3l9fYEwWAvjh	10.1.1.42	62560	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CDtdaUuCBrPPumuu	10.1.1.42	62561	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CR9gR21Hz19oGB13T1	10.1.1.42	62562	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CVpucE4R0V0kzhIEVj	10.1.1.42	62563	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CsqiViQSjnhyRf2y7	10.1.1.42	62564	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CajjFs19xAe1ncpjgd	10.1.1.42	62524	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUSGETPRINTERSTATUS	32	1	200	OK	{"buildPlate_target_temperature"	32	1	->
+CE8CYs4WCd5YKqvjn3	10.1.1.42	62570	10.1.1.36	80	16	T	386	T	POST	/command	(empty)	0	0	200	OK	{"buildPlate_target_temperature"	0	1	->
+CEAz011eGnhoGltRo8	10.1.1.42	62572	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C9J5cp1rr3cjFmxMib	10.1.1.42	62573	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+ChhkkD2vybX8BsBwi5	10.1.1.42	62578	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+ChuqTN1V9SEMDrT1ek	10.1.1.42	62579	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CtOwMm256rdO80Lzbe	10.1.1.42	62581	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUSGETPRINTERSTATUS	32	1	200	OK	{"buildPlate_target_temperature"	32	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	(empty)	0	0	200	OK	{"buildPlate_target_temperature"	0	1	->
+C1ZR1K1pVO2wmef1Lc	10.1.1.42	62582	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C1wlXQ3Vy6LAxz8Olf	10.1.1.42	62583	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+Cu9l3l2MUngLhHL6a	10.1.1.42	62584	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CyVk1T35gj1MVXrGQi	10.1.1.42	62585	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CZDYIx2XT8XPcr8XKa	10.1.1.42	62586	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+Cqm01p3ALWKRuc09P3	10.1.1.42	62587	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CgOlp53qUns9MP3Xeg	10.1.1.42	62588	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CUtU943XBbnpCpRdok	10.1.1.42	62589	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLkenNbOLDHG9rvv	10.1.1.42	62590	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CYf5gou0G1DWwLDN1	10.1.1.42	62591	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C9Q1m74w6GNzguWQKk	10.1.1.42	62592	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CRkLhG3wi4N1axbE4l	10.1.1.42	62593	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CyMOvA1xXYJHb8VlPg	10.1.1.42	62594	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C2DZqe15ApK2lkTXEe	10.1.1.42	62595	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CmjKcP3GGcIQ34klS4	10.1.1.42	62596	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CFNzxbCBAy79ydWdk	10.1.1.42	62597	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CUiDU02c92wElNndkg	10.1.1.42	62598	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CQXo9C2Yon3LTIN0Ch	10.1.1.42	62599	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CpZvZl36KTCehebB15	10.1.1.42	62600	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+Cs7ABP2Niaz8CQ0G48	10.1.1.42	62601	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C7BS2o3us2sAKg9hia	10.1.1.42	62604	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+Cp77pZ1P5QnbPXaUW6	10.1.1.42	62606	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CoXcvDlASdN9Kkkhb	10.1.1.42	62608	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUSGETPRINTERSTATUS	32	1	200	OK	{"buildPlate_target_temperature"	32	1	->
+C5tNq93VJ3eWUglxZ7	10.1.1.42	62607	10.1.1.36	80	16	T	386	T	POST	/command	(empty)	0	0	200	OK	{"buildPlate_target_temperature"	0	1	->
+CLlKgcKWex2TfEyP	10.1.1.42	62609	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CoXcvDlASdN9Kkkhb	10.1.1.42	62608	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+Cyp2TmIMxPLTsFo0g	10.1.1.42	62610	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CoXcvDlASdN9Kkkhb	10.1.1.42	62608	10.1.1.36	80	16	T	386	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	9722980	T	41	T	POST	/print_file_uploads	FLAVOR	6	2	200	OK	(empty)	6	0	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	23	T	38	T	POST	/command	PRINT	5	1	200	OK	{"error_code"	5	1	->
+CYsL4wf5ZFLXoQQnk	10.1.1.42	62611	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CfCdDzVBx8hglTt1h	10.1.1.42	62612	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CDnme94WQWk54H8MNc	10.1.1.42	62613	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+Ctp4AkO8tWKBaAtgi	10.1.1.42	62614	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CHKYPL1AGQSruUq0jl	10.1.1.42	62615	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CQBvL98xCM1PZu3L4	10.1.1.42	62616	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C5wtLh18B7eqhbBme6	10.1.1.42	62618	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C9E0xn1zcpYBETDAVe	10.1.1.42	62619	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CZ51T21nSBAnGFmfMb	10.1.1.42	62620	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+Cw3HkY2vsZS4UHjCld	10.1.1.42	62621	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C0VLgE38lrt5GWHuu3	10.1.1.42	62622	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CYkI7F4xi1rfG2Psff	10.1.1.42	62624	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CbvHfj4EqaQBUhsK6	10.1.1.42	62625	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C4ZVF92WjN81ugxtX5	10.1.1.42	62626	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+C6Yapu1ynPi4nfBjKj	10.1.1.42	62627	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CnTMEu3SN2IQ3lmcy9	10.1.1.42	62633	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	417	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	24	T	38	T	POST	/command	CANCEL	6	1	200	OK	{"error_code"	6	1	->
+C3Clps1svDavTG2Psf	10.1.1.42	62634	10.1.1.36	80	16	T	414	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	414	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CjuY5K2uvtpGxdKTll	10.1.1.42	62635	10.1.1.36	80	16	T	414	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	414	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CuJHcB28dOe9C4WX65	10.1.1.42	62637	10.1.1.36	80	16	T	414	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	414	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CHQJKu4HHwpHqguro7	10.1.1.42	62638	10.1.1.36	80	16	T	414	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	414	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CcmGhC3yxTf6PikQa9	10.1.1.42	62639	10.1.1.36	80	16	T	414	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	414	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+Cfxf5I1gXxwqYa6ile	10.1.1.42	62640	10.1.1.36	80	16	T	414	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	414	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CAyo3y2DkhT8KYJYxi	10.1.1.42	62641	10.1.1.36	80	16	T	414	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+CLMBpl44FAs6FyM2z3	10.1.1.42	62571	10.1.1.36	80	16	T	414	T	POST	/command	GETPRINTERSTATUS	16	1	200	OK	{"buildPlate_target_temperature"	16	1	->
+#close	2020-08-27-09-40-23

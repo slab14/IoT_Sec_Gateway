@@ -3,8 +3,8 @@
 #empty_field	(empty)
 #unset_field	-
 #path	smb_files
-#open	2020-08-13-17-10-37
+#open	2020-08-27-09-40-41
 #fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	fuid	action	path	name	size	prev_name	times.modified	times.accessed	times.created	times.changed
 #types	time	string	addr	port	addr	port	string	enum	string	string	count	string	time	time	time	time
-1549038272.526491	CutC3f2nyMOzGY3J0j	128.2.56.95	58995	128.2.158.145	445	-	SMB::FILE_OPEN	-	mmccorm1	0	-	1494322748.426790	1494322748.426790	1494322748.426790	1494322748.458041
-#close	2020-08-13-17-10-37
+1549038272.526491	CIGuRN2cvHZHnwnMqa	128.2.56.95	58995	128.2.158.145	445	-	SMB::FILE_OPEN	-	mmccorm1	0	-	1494322748.426790	1494322748.426790	1494322748.426790	1494322748.458041
+#close	2020-08-27-09-40-41

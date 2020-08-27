@@ -3,11 +3,11 @@
 #empty_field	(empty)
 #unset_field	-
 #path	radio_nettcp_msgs
-#open	2020-08-22-17-05-33
-#fields	uid	req_ip	req_port	resp_ip	resp_port	full_req_len	full_resp_len	req_body_key	req_key_len	req_key_offset	resp_body_key	resp_key_len	resp_key_offset
-#types	string	addr	port	addr	port	count	count	string	count	count	string	count	count
-C1bD6VX1tqI3zpmV7	fe80::391c:29ee:5819:604c	51404	fe80::c075:a178:5322:64ae	8888	66	1	net.tcp://si1866:8888/TransferService/service.svc/nettcp	56	8	\x0b	1	0
-C1bD6VX1tqI3zpmV7	fe80::391c:29ee:5819:604c	51404	fe80::c075:a178:5322:64ae	8888	705376	106	www.eos.info/TransferService/ITransferService/Send2e	52	23	www.eos.info/TransferService/ITransferService/Send2ResponseD	52	22
-C1bD6VX1tqI3zpmV7	fe80::391c:29ee:5819:604c	51404	fe80::c075:a178:5322:64ae	8888	66	1	net.tcp://si1866:8888/TransferService/service.svc/nettcp	56	8	\x0b	1	0
-C1bD6VX1tqI3zpmV7	fe80::391c:29ee:5819:604c	51404	fe80::c075:a178:5322:64ae	8888	15494	106	www.eos.info/TransferService/ITransferService/Send2e	52	23	www.eos.info/TransferService/ITransferService/Send2ResponseD	52	22
-#close	2020-08-22-17-05-33
+#open	2020-08-27-09-40-08
+#fields	uid	req_ip	req_port	resp_ip	resp_port	req_len	req_mult_pkt	resp_len	resp_mult_pkt	req_method	req_uri	req_key	req_key_len	req_key_offset	resp_code	resp_msg	resp_key	resp_key_len	resp_key_offset	direction
+#types	string	addr	port	addr	port	count	bool	count	bool	string	string	string	count	count	count	string	string	count	count	string
+CzKbEE2aAnbfGIbtMa	fe80::391c:29ee:5819:604c	51404	fe80::c075:a178:5322:64ae	8888	66	F	1	F	-	-	net.tcp://si1866:8888/TransferService/service.svc/nettcp	56	8	-	-	\x0b	1	0	->
+CzKbEE2aAnbfGIbtMa	fe80::391c:29ee:5819:604c	51404	fe80::c075:a178:5322:64ae	8888	705376	T	106	T	-	-	www.eos.info/TransferService/ITransferService/Send2e	52	23	-	-	www.eos.info/TransferService/ITransferService/Send2ResponseD	52	22	->
+CzKbEE2aAnbfGIbtMa	fe80::391c:29ee:5819:604c	51404	fe80::c075:a178:5322:64ae	8888	66	F	1	F	-	-	net.tcp://si1866:8888/TransferService/service.svc/nettcp	56	8	-	-	\x0b	1	0	->
+CzKbEE2aAnbfGIbtMa	fe80::391c:29ee:5819:604c	51404	fe80::c075:a178:5322:64ae	8888	15494	T	106	T	-	-	www.eos.info/TransferService/ITransferService/Send2e	52	23	-	-	www.eos.info/TransferService/ITransferService/Send2ResponseD	52	22	->
+#close	2020-08-27-09-40-08
