@@ -35,7 +35,8 @@ type trackingData: record {
   resp_data: string &default="";
   resp_len: count &default=0;
   resp_off: count &default=0;
-  not_large: bool &default=T;
+  not_large_req: bool &default=T;
+  not_large_resp: bool &default=T;  
 };
 
 global evalData: table[string] of trackingData;
@@ -51,24 +52,32 @@ event new_connection(c: connection){
 }
 
 event http_entity_data(c: connection, is_orig: bool, length: count, data: string){
-  if (evalData[c$uid]$not_large) {
+  if (((evalData[c$uid]$not_large_req) && (is_orig)) ||
+      (( evalData[c$uid]$not_large_resp) && (!is_orig))){
     local check_data: string = data[0:100];
     local match: PatternMatchResult;
-    match = match_pattern(check_data,/^\{\"[a-zA-Z\"\_]*/);
+    match = match_pattern(check_data,/^\{\"[a-zA-Z\"\_]+/);
     if (|match$str|<=1) {
-      match = match_pattern(check_data,/^[A-Z]*/);
+      match = match_pattern(check_data,/[A-Z;=]+/);
     }
     if (is_orig) {
       evalData[c$uid]$req_data=match$str;
-      evalData[c$uid]$req_len+=|match$str|;
+      evalData[c$uid]$req_len=|match$str|;
       evalData[c$uid]$req_off=match$off;
+      if(evalData[c$uid]$req_data[0]==";") {
+        evalData[c$uid]$req_off+=146;
+      }
     } else {
       evalData[c$uid]$resp_data=match$str;
-      evalData[c$uid]$resp_len+=|match$str|;
+      evalData[c$uid]$resp_len=|match$str|;
       evalData[c$uid]$resp_off=match$off;      
     }
     if (length>700) {
-      evalData[c$uid]$not_large=F;
+      if(is_orig) {
+        evalData[c$uid]$not_large_req=F;
+      } else {
+        evalData[c$uid]$not_large_resp=F;
+      }
     }
   }
 }
