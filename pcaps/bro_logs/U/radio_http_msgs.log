@@ -6,10 +6,7 @@
 #open	2020-08-27-09-40-41
 #fields	uid	req_ip	req_port	resp_ip	resp_port	req_len	req_mult_pkt	resp_len	resp_mult_pkt	req_method	req_uri	req_key	req_key_len	req_key_offset	resp_code	resp_msg	resp_key	resp_key_len	resp_key_offset	direction
 #types	string	addr	port	addr	port	count	bool	count	bool	string	string	string	count	count	count	string	string	count	count	string
-CiVX671mcI88FdhS44	128.2.56.95	65237	93.174.104.27	80	0	F	755	T	GET	/latest.json	(empty)	0	0	200	OK	W	0	26	->
 CcqL2k2U9jcbXHk5Wj	128.2.56.95	65240	128.2.59.58	80	0	F	492	T	GET	/cluster-api/v1/materials/	(empty)	0	0	200	OK	DOCTYPE	0	3	->
-C75PQDPibFTw2MUJc	128.2.56.95	65241	93.174.104.27	80	0	F	15	T	GET	/jedi/releases/latest.version?utm_source=cura&utm_medium=software&utm_campaign=resources	(empty)	0	0	200	OK	(empty)	0	0	->
-CM00mR27HjPeo8Z5Q	128.2.56.95	65242	93.174.104.27	80	0	F	327	T	GET	/releases/firmware/9511/stable/version.txt	(empty)	0	0	404	Not Found	DOCTYPE	0	3	->
 CcqL2k2U9jcbXHk5Wj	128.2.56.95	65240	128.2.59.58	80	0	F	5533	T	GET	/cluster-api/v1/printers/	(empty)	0	0	200	OK	{"machine_variant"	0	2	->
 CXYOU63zFQno8tD803	128.2.56.95	65243	128.2.59.58	80	0	F	6355	T	GET	/cluster-api/v1/print_jobs/	(empty)	0	0	200	OK	{"force"	0	2	->
 CZsBjE2gYWCYJZm8ng	128.2.56.95	65244	128.2.59.58	80	0	F	492	T	GET	/cluster-api/v1/print_jobs/43799793-4b2a-48fd-b124-644dd158f328/preview_image	(empty)	0	0	200	OK	DOCTYPEDOCTYPE	0	3	->
@@ -22,7 +19,6 @@ CEKGsT4lced4D5fhh	128.2.56.95	65245	128.2.59.58	80	0	F	492	T	GET	/cluster-api/v1
 CyUu0x3sF3nCPOFBgl	128.2.56.95	65247	128.2.59.58	80	0	F	492	T	GET	/cluster-api/v1/print_jobs/250b5fb1-79c0-4cb3-b902-13670290f03f/preview_image	(empty)	0	0	200	OK	DOCTYPE	0	3	->
 CZsBjE2gYWCYJZm8ng	128.2.56.95	65244	128.2.59.58	80	0	F	492	T	GET	/cluster-api/v1/print_jobs/c279320f-c9b2-42d5-b666-4e238b981699/preview_image	(empty)	0	0	200	OK	(empty)	0	0	->
 CcqL2k2U9jcbXHk5Wj	128.2.56.95	65240	128.2.59.58	80	0	F	492	T	GET	/cluster-api/v1/print_jobs/abbbb6c8-6724-441b-a99a-1d3a7229dd9e/preview_image	(empty)	0	0	200	OK	(empty)	0	0	->
-CQKPmF17fq06D7efEi	128.2.56.95	65248	128.2.57.113	1947	798	T	1346	T	POST	/api	N	1	4	200	OK	(empty)	1	0	<-
 CcqL2k2U9jcbXHk5Wj	128.2.56.95	65240	128.2.59.58	80	0	F	5533	T	GET	/cluster-api/v1/printers/	(empty)	0	0	200	OK	{"machine_variant"	0	2	->
 CXYOU63zFQno8tD803	128.2.56.95	65243	128.2.59.58	80	0	F	6355	T	GET	/cluster-api/v1/print_jobs/	(empty)	0	0	200	OK	{"force"	0	2	->
 CcqL2k2U9jcbXHk5Wj	128.2.56.95	65240	128.2.59.58	80	0	F	5533	T	GET	/cluster-api/v1/printers/	(empty)	0	0	200	OK	{"machine_variant"	0	2	->
@@ -65,7 +61,6 @@ CZsBjE2gYWCYJZm8ng	128.2.56.95	65244	128.2.59.58	80	0	F	6352	T	GET	/cluster-api/
 CcqL2k2U9jcbXHk5Wj	128.2.56.95	65240	128.2.59.58	80	2339805	T	725	T	POST	/cluster-api/v1/print_jobs/	R	1	3	200	OK	(empty)	1	0	->
 CcqL2k2U9jcbXHk5Wj	128.2.56.95	65240	128.2.59.58	80	0	F	5533	T	GET	/cluster-api/v1/printers/	(empty)	0	0	200	OK	{"machine_variant"	0	2	->
 CXYOU63zFQno8tD803	128.2.56.95	65243	128.2.59.58	80	0	F	7082	T	GET	/cluster-api/v1/print_jobs/	(empty)	0	0	200	OK	{"force"	0	2	->
-CqFYG335ObcAXjxMNl	128.2.56.95	65252	128.2.57.113	1947	798	T	1346	T	POST	/api	N	1	4	200	OK	(empty)	1	0	<-
 CcqL2k2U9jcbXHk5Wj	128.2.56.95	65240	128.2.59.58	80	0	F	5533	T	GET	/cluster-api/v1/printers/	(empty)	0	0	200	OK	{"machine_variant"	0	2	->
 CZsBjE2gYWCYJZm8ng	128.2.56.95	65244	128.2.59.58	80	0	F	492	T	GET	/cluster-api/v1/print_jobs/1a16067e-91b4-404a-85b2-208666c2a4ff/preview_image	(empty)	0	0	200	OK	DOCTYPE	0	3	->
 CXYOU63zFQno8tD803	128.2.56.95	65243	128.2.59.58	80	0	F	7082	T	GET	/cluster-api/v1/print_jobs/	(empty)	0	0	200	OK	{"force"	0	2	->
