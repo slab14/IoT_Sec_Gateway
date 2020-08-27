@@ -28,44 +28,44 @@ export {
   };
 }
 
-global req_data: string = "";
-global req_len: count=0;
-global req_key_len: count=0;
-global req_key_off: count=0;
-global resp_data: string = "";
-global resp_len: count=0;
-global resp_key_len: count=0;
-global resp_key_off: count=0;
-global req_data2: string = "";
-global req_len2: count=0;
-global req_key_len2: count=0;
-global req_key_off2: count=0;
-global resp_data2: string = "";
-global resp_len2: count=0;
-global resp_key_len2: count=0;
-global resp_key_off2: count=0;
-global got_log_item: bool = F;
-global got_req: bool=F;
-global got_resp: bool=F;
-global got_large: bool=F;
-global long_file: bool = F;
-global got_repeat: bool=F;
-global direction: string = "";
+type trackingData: record {
+  req_data: string &default="";
+  req_len: count &default=0;
+  req_key_len: count &default=0;
+  req_key_off: count &default=0;
+  got_req: bool &default=F;
+  resp_data: string &default="";
+  resp_len: count &default=0;
+  resp_key_len: count &default=0;
+  resp_key_off: count &default=0;  
+  got_resp: bool &default=F;
+  got_log_item: bool &default=F;
+  got_large: bool &default=F;
+  long_file: bool &default=F;
+  got_repeat: bool &default=F;
+  direction: string &default="";
+};
+
+global evalData: table[string] of trackingData;
+global evalData2: table[string] of trackingData;
 
 event zeek_init() {
   Log::create_stream(RADIO_CMB_MSGS, [$columns=CMB_MSG, $path="radio_cmb_msgs"]);  
 }
 
 event new_connection (c: connection) {
-  got_large = F;
+  if(c$uid !in evalData) {
+    evalData[c$uid]=trackingData();
+    evalData2[c$uid]=trackingData();    
+  }
 }
 
 event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack: count, len: count, payload: string) {
   if (|payload|>0) {
     if(is_orig) {
-        req_len+=|payload|;
+        evalData[c$uid]$req_len+=|payload|;
     } else {
-        resp_len+=|payload|;      
+        evalData[c$uid]$resp_len+=|payload|;      
     }
     local match: PatternMatchResult;
     local check_data: string = payload[0:32];
@@ -74,68 +74,72 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
       match = match_pattern(check_data, /^[_]+/);
       if ((match$matched)){
 	if(is_orig){
-	  if(got_req) {
-            req_data2 = "/[a-zA-Z]+\_/";
-            req_key_len2=|match$off|;
-	    req_key_off2=match$off;
-	    req_len2+=|payload|;
-	    req_len-=|payload|;
-	    got_repeat=T;
-	    got_log_item=T;
+	  if(evalData[c$uid]$got_req) {
+            evalData2[c$uid]$req_data="/[a-zA-Z]+\_/";
+            evalData2[c$uid]$req_key_len=|match$off|;
+	    evalData2[c$uid]$req_key_off=match$off;
+	    evalData2[c$uid]$req_len+=|payload|;
+	    evalData2[c$uid]$got_req=T;   
+	    evalData[c$uid]$req_len-=|payload|;
+	    evalData[c$uid]$got_repeat=T;
+	    evalData[c$uid]$got_log_item=T;
 	  } else {
-            req_data = "/[a-zA-Z]+\_/";
-            req_key_len=|match$off|;
-	    req_key_off=match$off;
-	    got_req=T;
+            evalData[c$uid]$req_data = "/[a-zA-Z]+\_/";
+            evalData[c$uid]$req_key_len=|match$off|;
+	    evalData[c$uid]$req_key_off=match$off;
+	    evalData[c$uid]$got_req=T;
 	  }
 	} else {
-	  if(got_resp) {
-            resp_data2 = "/[a-zA-Z]+\_/";
-            resp_key_len2=|match$off|;
-	    resp_key_off2=match$off;
-	    resp_len2+=|payload|;
-	    resp_len-=|payload|;
-	    got_repeat=T;
-	    got_log_item=T;
+	  if(evalData[c$uid]$got_resp) {
+            evalData2[c$uid]$resp_data = "/[a-zA-Z]+\_/";
+            evalData2[c$uid]$resp_key_len=|match$off|;
+	    evalData2[c$uid]$resp_key_off=match$off;
+	    evalData2[c$uid]$resp_len+=|payload|;
+	    evalData2[c$uid]$got_resp=T;	    	    
+	    evalData[c$uid]$resp_len-=|payload|;
+	    evalData[c$uid]$got_repeat=T;
+	    evalData[c$uid]$got_log_item=T;
 	  } else {
-            resp_data = "/[a-zA-Z]+\_/";
-            resp_key_len=|match$off|;
-	    resp_key_off=match$off;
-	    got_resp=T;
+            evalData[c$uid]$resp_data = "/[a-zA-Z]+\_/";
+            evalData[c$uid]$resp_key_len=|match$off|;
+	    evalData[c$uid]$resp_key_off=match$off;
+	    evalData[c$uid]$got_resp=T;
 	  }
 	}	
       } else {
         match = match_pattern(check_data,/^[a-zA-Z\:\/\.]+/);
         if ((match$matched) && (|match$str|>=2) && (match$off==1)) {
           if(is_orig){
-  	    if(got_req){
-              req_data2 = match$str;
-              req_key_len2=|match$str|;
-	      req_key_off2=match$off;
-  	      req_len2+=|payload|;
-	      req_len-=|payload|;
-	      got_repeat=T;
-	      got_log_item=T;
+  	    if(evalData[c$uid]$got_req){
+              evalData2[c$uid]$req_data = match$str;
+              evalData2[c$uid]$req_key_len=|match$str|;
+	      evalData2[c$uid]$req_key_off=match$off;
+  	      evalData2[c$uid]$req_len+=|payload|;
+	      evalData2[c$uid]$got_req=T;	    	      
+	      evalData[c$uid]$req_len-=|payload|;
+	      evalData[c$uid]$got_repeat=T;
+	      evalData[c$uid]$got_log_item=T;
 	    } else {
-              req_data = match$str;
-              req_key_len=|match$str|;
-	      req_key_off=match$off;
-	      got_req=T;
+              evalData[c$uid]$req_data = match$str;
+              evalData[c$uid]$req_key_len=|match$str|;
+	      evalData[c$uid]$req_key_off=match$off;
+	      evalData[c$uid]$got_req=T;
 	    }
           } else {
-  	    if(got_resp){	
-              resp_data2 = match$str;
-              resp_key_len2=|match$str|;
-	      resp_key_off=match$off;
-  	      resp_len2+=|payload|;
-	      resp_len-=|payload|;
-	      got_repeat=T;
-	      got_log_item=T;
+  	    if(evalData[c$uid]$got_resp){	
+              evalData2[c$uid]$resp_data = match$str;
+              evalData2[c$uid]$resp_key_len=|match$str|;
+	      evalData2[c$uid]$resp_key_off=match$off;
+  	      evalData2[c$uid]$resp_len+=|payload|;
+	      evalData2[c$uid]$got_resp=T;	    
+	      evalData[c$uid]$resp_len-=|payload|;
+	      evalData[c$uid]$got_repeat=T;
+	      evalData[c$uid]$got_log_item=T;
 	    }else{
-              resp_data = match$str;
-              resp_key_len=|match$str|;
-	      resp_key_off=match$off;
-	      got_resp=T;
+              evalData[c$uid]$resp_data = match$str;
+              evalData[c$uid]$resp_key_len=|match$str|;
+	      evalData[c$uid]$resp_key_off=match$off;
+	      evalData[c$uid]$got_resp=T;
 	    }
 	  }
 	}
@@ -144,157 +148,137 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
       ## found numbers (e.g., file size)
       if ((match$matched) && (match$off==1) && (|match$str|>1)){
 	if(is_orig){
-	  if (got_req) {
- 	    req_data2 = "/[0-9]+/";
-            req_key_len2=|match$str|;
-	    req_key_off2=match$off;
-	    req_len2+=|payload|;
-	    req_len-=|payload|;	    
-	    got_repeat=T;
-	    got_log_item=T;
+	  if (evalData[c$uid]$got_req) {
+ 	    evalData2[c$uid]$req_data = "/[0-9]+/";
+            evalData2[c$uid]$req_key_len=|match$str|;
+	    evalData2[c$uid]$req_key_off=match$off;
+	    evalData2[c$uid]$req_len+=|payload|;
+	    evalData2[c$uid]$got_req=T;	    
+	    evalData[c$uid]$req_len-=|payload|;	    
+	    evalData[c$uid]$got_repeat=T;
+	    evalData[c$uid]$got_log_item=T;
 	  } else {
- 	    req_data = "/[0-9]+/";
-            req_key_len=|match$str|;
-	    req_key_off=match$off;
-	    got_req=T;
+ 	    evalData[c$uid]$req_data = "/[0-9]+/";
+            evalData[c$uid]$req_key_len=|match$str|;
+	    evalData[c$uid]$req_key_off=match$off;
+	    evalData[c$uid]$got_req=T;
  	  }
 	} else {
-	  if(got_resp) {
-            resp_data2 = "/[0-9]+/";
-            resp_key_len2=|match$str|;
-	    resp_key_off2=match$off;
-	    resp_len2+=|payload|;
-	    resp_len-=|payload|;	    
-	    got_repeat=T;
-	    got_log_item=T;
+	  if(evalData[c$uid]$got_resp) {
+            evalData2[c$uid]$resp_data = "/[0-9]+/";
+            evalData2[c$uid]$resp_key_len=|match$str|;
+	    evalData2[c$uid]$resp_key_off=match$off;
+	    evalData2[c$uid]$resp_len+=|payload|;
+	    evalData2[c$uid]$got_resp=T;	    
+	    evalData[c$uid]$resp_len-=|payload|;	    
+	    evalData[c$uid]$got_repeat=T;
+	    evalData[c$uid]$got_log_item=T;
 	  } else {
-            resp_data = "/[0-9]+/";
-            resp_key_len=|match$str|;
-	    resp_key_off=match$off;
-	    got_resp=T;
+            evalData[c$uid]$resp_data = "/[0-9]+/";
+            evalData[c$uid]$resp_key_len=|match$str|;
+	    evalData[c$uid]$resp_key_off=match$off;
+	    evalData[c$uid]$got_resp=T;
 	  }
 	}
       }
 
     }
-    if (!long_file) {
+    if (!evalData[c$uid]$long_file) {
       match = match_pattern(check_data,/^set[ a-zA-Z\:\/\.\(\)\{]+/);
       if ((match$matched) && (|match$str|>=2) && (match$off==1)) {
-        long_file=T;
+        evalData[c$uid]$long_file=T;
         if(is_orig){
-          req_data = match$str;
-          req_key_len=|match$str|;
-	  req_key_off=match$off;
-	  got_req=T;
+          evalData[c$uid]$req_data = match$str;
+          evalData[c$uid]$req_key_len=|match$str|;
+	  evalData[c$uid]$req_key_off=match$off;
+	  evalData[c$uid]$got_req=T;
         } else {
-          resp_data = match$str;
-          resp_key_len=|match$str|;
-	  resp_key_off=match$off;
-	  got_resp=T;
+          evalData[c$uid]$resp_data = match$str;
+          evalData[c$uid]$resp_key_len=|match$str|;
+	  evalData[c$uid]$resp_key_off=match$off;
+	  evalData[c$uid]$got_resp=T;
 	}
       }    
       match = match_pattern(check_data, /^\x1f\x8b/);
       ## found gz
       if ((match$matched)){
-        long_file=T;      
+        evalData[c$uid]$long_file=T;      
  	if(is_orig){
-	  req_data = match$str;
-          req_key_len=|match$str|;
-	  req_key_off=match$off;
-	  got_req=T;
+	  evalData[c$uid]$req_data = match$str;
+          evalData[c$uid]$req_key_len=|match$str|;
+	  evalData[c$uid]$req_key_off=match$off;
+	  evalData[c$uid]$got_req=T;
 	} else {
-	  resp_data = match$str;
-          resp_key_len=|match$str|;
-	  resp_key_off=match$off;
-	  got_resp=T;
+	  evalData[c$uid]$resp_data = match$str;
+          evalData[c$uid]$resp_key_len=|match$str|;
+	  evalData[c$uid]$resp_key_off=match$off;
+	  evalData[c$uid]$got_resp=T;
 	}	
       }
       match = match_pattern(check_data, /^\xff\xd8\xff\xe0\x00\x10JFIF/);
       ## found JPEG
       if ((match$matched)){
-        long_file=T;            
+        evalData[c$uid]$long_file=T;            
 	if(is_orig){
-	  req_data = "JFIF";
-          req_key_len=|match$str|;
-	  req_key_off=match$off;
-	  got_req=T;
+	  evalData[c$uid]$req_data = "JFIF";
+          evalData[c$uid]$req_key_len=|match$str|;
+	  evalData[c$uid]$req_key_off=match$off;
+	  evalData[c$uid]$got_req=T;
 	} else {
-	  resp_data = "JFIF";
-          resp_key_len=|match$str|;
-	  resp_key_off=match$off;
-	  got_resp=T;
+	  evalData[c$uid]$resp_data = "JFIF";
+          evalData[c$uid]$resp_key_len=|match$str|;
+	  evalData[c$uid]$resp_key_off=match$off;
+	  evalData[c$uid]$got_resp=T;
 	}	
       }            
     }
     if(|payload|>65){
-      got_large=T;
+      evalData[c$uid]$got_large=T;
     }
-    if (strcmp(direction, "")==0){
+    if (strcmp(evalData[c$uid]$direction, "")==0){
       if(is_orig) {
-        direction="->";
+        evalData[c$uid]$direction="->";
       } else {
-        direction="<-";
+        evalData[c$uid]$direction="<-";
       }
     }
-    if((got_req) && (got_resp)){
-      got_log_item=T;
+    if((evalData[c$uid]$got_req) && (evalData[c$uid]$got_resp)){
+      evalData[c$uid]$got_log_item=T;
     }
-    if (got_log_item) {
+    if (evalData[c$uid]$got_log_item) {
       local mult_req=F;
       local mult_resp=F;
-      if(req_len>64) {
+      local cleanRepeat=F;
+      if(evalData[c$uid]$req_len>64) {
         mult_req=T;
       }
-      if(resp_len>64) {
+      if(evalData[c$uid]$resp_len>64) {
         mult_resp=T;
-      }      
+      }
+      if(evalData[c$uid]$got_repeat){
+        cleanRepeat=T;
+      }
       Log::write(RADIO_CMB::RADIO_CMB_MSGS,
                  [$uid=c$uid, $req_ip=c$id$orig_h, $req_port=c$id$orig_p,
                   $resp_ip=c$id$resp_h, $resp_port=c$id$resp_p,
-                  $req_len=req_len, $req_mult_pkt=mult_req,
-		  $resp_len=resp_len, $resp_mult_pkt=mult_resp,
-                  $req_key=req_data, $req_key_len=req_key_len,
-		  $req_key_offset=req_key_off,
-  		  $resp_key=resp_data, $resp_key_len=resp_key_len,
-		  $resp_key_offset=resp_key_off, $direction=direction]);
-      req_data="";
-      req_key_len=0;
-      req_key_off=0;      
-      req_len=0;
-      resp_data="";
-      resp_key_len=0;
-      resp_key_off=0;      
-      resp_len=0;
-      got_log_item=F;
-      long_file=F;
-      direction="";
-      got_req=F;
-      got_resp=F;
-      if (got_repeat) {
-        if (|req_data2|>0) {
-	  req_data=req_data2;
-	  req_data2="";
-	  req_key_len=req_key_len2;
-	  req_key_off=req_key_off2;	  
-	  req_key_len2=0;
-	  req_key_off2=0;	  
-	  req_len=req_len2;
-	  req_len2=0;
-	  got_req=T;
-	  direction="->";
+                  $req_len=evalData[c$uid]$req_len, $req_mult_pkt=mult_req,
+		  $resp_len=evalData[c$uid]$resp_len,$resp_mult_pkt=mult_resp,
+                  $req_key=evalData[c$uid]$req_data,
+		  $req_key_len=evalData[c$uid]$req_key_len,
+		  $req_key_offset=evalData[c$uid]$req_key_off,
+  		  $resp_key=evalData[c$uid]$resp_data,
+		  $resp_key_len=evalData[c$uid]$resp_key_len,
+		  $resp_key_offset=evalData[c$uid]$resp_key_off,
+		  $direction=evalData[c$uid]$direction]);
+      evalData[c$uid]=trackingData();
+      if (cleanRepeat) {
+        evalData[c$uid]=evalData2[c$uid];
+        if (|evalData2[c$uid]$req_data|>0) {
+	  evalData[c$uid]$direction="->";
 	} else {
-	  resp_data=req_data2;
-	  resp_data2="";
-	  resp_key_len=req_key_len2;
-	  resp_key_off=req_key_off2;	  
-	  resp_key_len2=0;
-	  resp_key_off2=0;	  
-	  resp_len=req_len2;
-	  resp_len2=0;
-	  got_resp=T;
-	  direction="<-";	  
+	  evalData[c$uid]$direction="<-";	  
 	}
-	got_repeat=F;
+	evalData2[c$uid]=trackingData();
       }
     }
   }

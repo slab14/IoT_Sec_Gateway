@@ -28,33 +28,39 @@ export {
   };
 }
 
-global req_data: string = "";
-global req_offset: count = 0;
-global req_len: count=0;
-global resp_data: string = "";
-global resp_len: count=0;
-global resp_offset: count = 0;
-global req_data2: string = "";
-global req_offset2: count = 0;
-global req_len2: count=0;
-global resp_data2: string = "";
-global resp_len2: count=0;
-global resp_offset2: count = 0;
-global got_req: bool = F;
-global got_resp: bool = F;
-global write: bool = F;
-global repeat: bool = F;
+type trackingData: record {
+  req_data: string &default="";
+  req_len: count &default=0;
+  req_offset: count &default=0;
+  got_req: bool &default=F;
+  resp_data: string &default="";
+  resp_len: count &default=0;
+  resp_offset: count &default=0;
+  got_resp: bool &default=F;
+  write: bool &default=F;
+  repeat: bool &default=F;
+};
+
+global evalData: table[string] of trackingData;
+global evalData2: table[string] of trackingData;
 
 event zeek_init() {
   Log::create_stream(RADIO_FORM2_MSGS, [$columns=FORM2_MSG, $path="radio_form2_msgs"]);
 }
 
+event new_connection (c: connection) {
+  if(c$uid !in evalData) {
+    evalData[c$uid]=trackingData();
+    evalData2[c$uid]=trackingData();
+  }
+}
+
 event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack: count, len: count, payload: string) {
   if (|payload|>0) {
     if(is_orig) {
-      req_len+=|payload|;
+      evalData[c$uid]$req_len+=|payload|;
     } else {
-      resp_len+=|payload|;
+      evalData[c$uid]$resp_len+=|payload|;
     }
     ##  find start
     local match: PatternMatchResult;
@@ -67,88 +73,77 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
         match = match_pattern(payload[start:],/[A-Z0-9\"\_]+/);
         if (match$matched) {
           if (is_orig) {
-    	    if(got_req) {
-              req_data2=match$str;
-              req_offset2 = match$off+start;
-              req_len2+=|payload|-(match$off+start);
-              req_len+=start+match$off-|payload|;
-	      repeat=T;
-	      write=T;
+    	    if(evalData[c$uid]$got_req) {
+              evalData2[c$uid]$req_data=match$str;
+              evalData2[c$uid]$req_offset = match$off+start;
+              evalData2[c$uid]$req_len+=|payload|-(match$off+start);
+	      evalData2[c$uid]$got_req=T;
+              evalData[c$uid]$req_len+=start+match$off-|payload|;
+	      evalData[c$uid]$repeat=T;
+	      evalData[c$uid]$write=T;
 	    } else {
-              req_data=match$str;
-              req_offset = match$off+start;
-	      got_req=T;	    
+              evalData[c$uid]$req_data=match$str;
+              evalData[c$uid]$req_offset = match$off+start;
+	      evalData[c$uid]$got_req=T;	    
             }
           } else {
-            if(got_resp) {
-              resp_data2=match$str;
-              resp_offset2 = match$off+start;
-              resp_len2+=|payload|-(match$off+start);
-	      resp_len+=start+match$off-|payload|;
-	      repeat=T;
-  	      write=T;
+            if(evalData[c$uid]$got_resp) {
+              evalData2[c$uid]$resp_data=match$str;
+              evalData2[c$uid]$resp_offset = match$off+start;
+              evalData2[c$uid]$resp_len+=|payload|-(match$off+start);
+	      evalData2[c$uid]$got_resp=T;
+	      evalData[c$uid]$resp_len+=start+match$off-|payload|;
+	      evalData[c$uid]$repeat=T;
+  	      evalData[c$uid]$write=T;
 	    } else {
-              resp_data=match$str;
-              resp_offset = match$off+start;
-	      got_resp=T;
+              evalData[c$uid]$resp_data=match$str;
+              evalData[c$uid]$resp_offset = match$off+start;
+	      evalData[c$uid]$got_resp=T;
 	    }
 	  }
         }
       }
     }
-    if ((got_req) && (got_resp)) {
-      write=T;
+    if ((evalData[c$uid]$got_req) && (evalData[c$uid]$got_resp)) {
+      evalData[c$uid]$write=T;
     }
-    if (write) {
+    if (evalData[c$uid]$write) {
       local mult_req: bool=F;
       local mult_resp: bool=F;
+      local cleanRepeat: bool=F;
       local dir: string = "->";
-      if(req_len>1460) {
+      if(evalData[c$uid]$req_len>1460) {
         mult_req=T;
       }
-      if(resp_len>1460) {
+      if(evalData[c$uid]$resp_len>1460) {
         mult_resp=T;
       }
       if(c$id$resp_p!=35/tcp) {
         dir="<-";
       }
+      if(evalData[c$uid]$repeat){
+        cleanRepeat=T;
+      }
       Log::write(RADIO_FORM2::RADIO_FORM2_MSGS,
                  [$uid=c$uid, $req_ip=c$id$orig_h, $req_port=c$id$orig_p,
                   $resp_ip=c$id$resp_h, $resp_port=c$id$resp_p,
-                  $req_len=req_len, $req_mult_pkt=mult_req,
-		  $resp_len=resp_len, $resp_mult_pkt=mult_resp,
-                  $req_key=req_data, $req_key_len=|req_data|,
-		  $req_key_offset=req_offset, 
-  		  $resp_key=resp_data, $resp_key_len=|resp_data|,
-		  $resp_key_offset=resp_offset, $direction=dir]);
-      req_data="";
-      req_len=0;
-      req_offset=0;
-      resp_data="";
-      resp_len=0;
-      resp_offset=0;
-      write=F;
-      got_req=F;
-      got_resp=F;
-      if (repeat) {
-        if (|req_data2|>0) {
-	  req_data=req_data2;
-	  req_offset=req_offset2;
-	  req_len=req_len2;
-	  req_data2="";
-	  req_offset2=0;
-	  req_len2=0;
-	  got_req=T;
+                  $req_len=evalData[c$uid]$req_len, $req_mult_pkt=mult_req,
+		  $resp_len=evalData[c$uid]$resp_len, $resp_mult_pkt=mult_resp,
+                  $req_key=evalData[c$uid]$req_data,
+		  $req_key_len=|evalData[c$uid]$req_data|,
+		  $req_key_offset=evalData[c$uid]$req_offset, 
+  		  $resp_key=evalData[c$uid]$resp_data,
+		  $resp_key_len=|evalData[c$uid]$resp_data|,
+		  $resp_key_offset=evalData[c$uid]$resp_offset,
+		  $direction=dir]);
+      evalData[c$uid]=trackingData();
+      if (cleanRepeat) {
+        if (|evalData2[c$uid]$req_data|>0) {
+	  evalData[c$uid]=evalData2[c$uid];
 	} else {
-	  resp_data=resp_data2;
-	  resp_offset=resp_offset2;
-	  resp_len=resp_len2;
-	  resp_data2="";
-	  resp_offset2=0;
-	  resp_len2=0;
-	  got_resp=T;
+	  evalData[c$uid]=evalData2[c$uid];
         }
-	repeat=F;
+	evalData2[c$uid]=trackingData();
       }
     }
   }

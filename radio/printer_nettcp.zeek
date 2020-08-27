@@ -28,32 +28,42 @@ export {
   };
 }
 
-global req_data: string = "";
-global req_offset: count = 0;
-global req_len: count=0;
-global mult_req_pkts: bool=F;
-global resp_data: string = "";
-global resp_len: count=0;
-global resp_offset: count = 0;
-global mult_resp_pkts: bool=F;
-global got_req: bool = F;
+type trackingData: record {
+  req_data: string &default="";
+  req_len: count &default=0;
+  req_offset: count &default=0;
+  mult_req_pkts: bool &default=F;  
+  resp_data: string &default="";
+  resp_len: count &default=0;
+  resp_offset: count &default=0;
+  mult_resp_pkts: bool &default=F;    
+  got_req: bool &default=F;
+};
+
+global evalData: table[string] of trackingData;
 
 event zeek_init() {
   Log::create_stream(RADIO_NETTCP_MSGS, [$columns=NETTCP_MSG, $path="radio_nettcp_msgs"]);  
 }
 
+event new_connection(c: connection){
+  if(c$uid !in evalData) {
+    evalData[c$uid]=trackingData();
+  }
+}
+
 event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack: count, len: count, payload: string) {
   if (|payload|>0) {
     if(is_orig) {
-      if((!mult_req_pkts) &&  (|req_len|>0)){
-        mult_req_pkts=T;
+      if((!evalData[c$uid]$mult_req_pkts) &&  (|evalData[c$uid]$req_len|>0)){
+        evalData[c$uid]$mult_req_pkts=T;
       }
-      req_len+=|payload|;
+      evalData[c$uid]$req_len+=|payload|;
     } else {
-      if((!mult_resp_pkts) &&  (|resp_len|>0)){
-        mult_resp_pkts=T;
+      if((!evalData[c$uid]$mult_resp_pkts) &&  (|evalData[c$uid]$resp_len|>0)){
+        evalData[c$uid]$mult_resp_pkts=T;
       }    
-      resp_len+=|payload|;      
+      evalData[c$uid]$resp_len+=|payload|;      
     }    
     if ((|payload|>2) && (|payload|<500)) {
       local check_data: string = payload[0:500];
@@ -61,18 +71,18 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
       ## nettcp start
       match = match_pattern(check_data,/^net\.tcp[a-zA-Z0-9\:\/\.]*/);
       if (match$matched) {
-	req_data = match$str;
-	req_offset = match$off;
+	evalData[c$uid]$req_data = match$str;
+	evalData[c$uid]$req_offset = match$off;
       }
       ## nettcp cmds
       match = match_pattern(check_data,/www\.eos\.info[a-zA-Z0-9\:\/\.]*/);
       if (match$matched) {
         if (is_orig) {
-          req_data=match$str;
-	  req_offset = match$off;
+          evalData[c$uid]$req_data=match$str;
+	  evalData[c$uid]$req_offset = match$off;
         } else {
-          resp_data=match$str;
-	  resp_offset = match$off;
+          evalData[c$uid]$resp_data=match$str;
+	  evalData[c$uid]$resp_offset = match$off;
         }
       }
     }
@@ -86,45 +96,38 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
         Log::write(RADIO_NETTCP::RADIO_NETTCP_MSGS,
                    [$uid=c$uid, $req_ip=c$id$orig_h, $req_port=c$id$orig_p,
                     $resp_ip=c$id$resp_h, $resp_port=c$id$resp_p,
-                    $req_len=req_len, $req_mult_pkt=mult_req_pkts,
-		    $resp_len=resp_len, $resp_mult_pkt=mult_resp_pkts,
-		    $req_key=req_data, $req_key_len=|req_data|,
-		    $req_key_offset=req_offset, 
+                    $req_len=evalData[c$uid]$req_len,
+		    $req_mult_pkt=evalData[c$uid]$mult_req_pkts,
+		    $resp_len=evalData[c$uid]$resp_len,
+		    $resp_mult_pkt=evalData[c$uid]$mult_resp_pkts,
+		    $req_key=evalData[c$uid]$req_data,
+		    $req_key_len=|evalData[c$uid]$req_data|,
+		    $req_key_offset=evalData[c$uid]$req_offset, 
   		    $resp_key=payload, $resp_key_len=|payload|,
-		    $resp_key_offset=resp_offset, $direction=dir]);
-        req_data="";
-        req_len=0;
-	req_offset=0;
-        resp_data="";
-        resp_len=0;
-	resp_offset=0;
-	got_req=F;
-        mult_req_pkts=F;
-        mult_resp_pkts=F;	
+		    $resp_key_offset=evalData[c$uid]$resp_offset,
+		    $direction=dir]);
+        evalData[c$uid]=trackingData();		    
       }
       if (((|payload|==2) && (strcmp(string_to_ascii_hex(payload),"0007")==0)) || ((|payload|==1) && (strcmp(string_to_ascii_hex(payload),"07")==0))) {
         ## end of nettcp session
-	if (got_req) {
+	if (evalData[c$uid]$got_req) {
           Log::write(RADIO_NETTCP::RADIO_NETTCP_MSGS,
                      [$uid=c$uid, $req_ip=c$id$orig_h, $req_port=c$id$orig_p,
                       $resp_ip=c$id$resp_h, $resp_port=c$id$resp_p,
-                      $req_len=req_len, $req_mult_pkt=mult_req_pkts,
-		      $resp_len=resp_len, $resp_mult_pkt=mult_resp_pkts,
-		      $req_key=req_data, $req_key_len=|req_data|,
-		      $req_key_offset=req_offset, 
-  		      $resp_key=resp_data, $resp_key_len=|req_data|,
-		      $resp_key_offset=resp_offset, $direction=dir]);
-        req_data="";
-        req_len=0;
-	req_offset=0;
-        resp_data="";
-        resp_len=0;
-	resp_offset=0;
-	got_req=F;
-        mult_req_pkts=F;
-        mult_resp_pkts=F;		
+                      $req_len=evalData[c$uid]$req_len,
+		      $req_mult_pkt=evalData[c$uid]$mult_req_pkts,
+		      $resp_len=evalData[c$uid]$resp_len,
+		      $resp_mult_pkt=evalData[c$uid]$mult_resp_pkts,
+		      $req_key=evalData[c$uid]$req_data,
+		      $req_key_len=|evalData[c$uid]$req_data|,
+		      $req_key_offset=evalData[c$uid]$req_offset, 
+  		      $resp_key=evalData[c$uid]$resp_data,
+		      $resp_key_len=|evalData[c$uid]$req_data|,
+		      $resp_key_offset=evalData[c$uid]$resp_offset,
+		      $direction=dir]);
+	evalData[c$uid]=trackingData();
         } else {
-	  got_req=T;
+	  evalData[c$uid]$got_req=T;
 	}
       }
     }

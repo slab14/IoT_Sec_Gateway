@@ -28,39 +28,47 @@ export {
   };
 }
 
-global req_data: string = "";
-global req_len: count=0;
-global req_off: count=0;
-global resp_data: string = "";
-global resp_len: count=0;
-global resp_off: count=0;
-global not_large: bool = T;
+type trackingData: record {
+  req_data: string &default="";
+  req_len: count &default=0;
+  req_off: count &default=0;
+  resp_data: string &default="";
+  resp_len: count &default=0;
+  resp_off: count &default=0;
+  not_large: bool &default=T;
+};
+
+global evalData: table[string] of trackingData;
 
 event zeek_init() {
   Log::create_stream(RADIO_HTTP_MSGS, [$columns=HTTP_MSG, $path="radio_http_msgs"]);  
 }
 
+event new_connection(c: connection){
+  if(c$uid !in evalData) {
+    evalData[c$uid]=trackingData();
+  }
+}
 
 event http_entity_data(c: connection, is_orig: bool, length: count, data: string){
-  if (not_large) {
+  if (evalData[c$uid]$not_large) {
     local check_data: string = data[0:100];
     local match: PatternMatchResult;
-    ##match = match_pattern(check_data,/^[a-zA-Z\{\"\_]*/);
-    match = match_pattern(check_data,/^\{\"[a-zA-Z\"\_]*/);        
+    match = match_pattern(check_data,/^\{\"[a-zA-Z\"\_]*/);
     if (|match$str|<=1) {
       match = match_pattern(check_data,/^[A-Z]*/);
     }
     if (is_orig) {
-      req_data+=match$str;
-      req_len+=|match$str|;
-      req_off=match$off;
+      evalData[c$uid]$req_data=match$str;
+      evalData[c$uid]$req_len+=|match$str|;
+      evalData[c$uid]$req_off=match$off;
     } else {
-      resp_data+=match$str;
-      resp_len+=|match$str|;
-      resp_off=match$off;      
+      evalData[c$uid]$resp_data=match$str;
+      evalData[c$uid]$resp_len+=|match$str|;
+      evalData[c$uid]$resp_off=match$off;      
     }
     if (length>700) {
-      not_large=F;
+      evalData[c$uid]$not_large=F;
     }
   }
 }
@@ -80,24 +88,23 @@ event http_message_done (c: connection, is_orig: bool, stat: http_message_stat){
       dir="<-";
     }
     Log::write(RADIO_HTTP::RADIO_HTTP_MSGS,
-               [$uid=c$uid, $req_ip=c$id$orig_h, $req_port=c$id$orig_p,
+               [$uid=c$uid, $req_ip=c$id$orig_h,
+	        $req_port=c$id$orig_p,
                 $resp_ip=c$id$resp_h, $resp_port=c$id$resp_p,
   		$req_len=c$http$request_body_len,
 		$req_mult_pkt=multiple_req_pkts,
 		$resp_len=c$http$response_body_len,
 		$resp_mult_pkt=multiple_resp_pkts,
       		$req_method=c$http$method, $req_uri=c$http$uri,
-		$req_key=req_data, $req_key_len=req_len,
-		$req_key_offset=req_off,
-                $resp_code=c$http$status_code, $resp_msg=c$http$status_msg,		
-  		$resp_key=resp_data, $resp_key_len=req_len,
-		$resp_key_offset=resp_off, $direction=dir]);    		
-    not_large=T;
-    req_data="";
-    req_len=0;
-    req_off=0;    
-    resp_data="";
-    resp_len=0;
-    resp_off=0;    
+		$req_key=evalData[c$uid]$req_data,
+		$req_key_len=evalData[c$uid]$req_len,
+		$req_key_offset=evalData[c$uid]$req_off,
+                $resp_code=c$http$status_code,
+		$resp_msg=c$http$status_msg,		
+  		$resp_key=evalData[c$uid]$resp_data,
+		$resp_key_len=evalData[c$uid]$req_len,
+		$resp_key_offset=evalData[c$uid]$resp_off,
+		$direction=dir]);
+    evalData[c$uid]=trackingData();
   }
 }

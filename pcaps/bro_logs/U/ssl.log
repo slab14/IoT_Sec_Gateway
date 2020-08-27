@@ -3,10 +3,10 @@
 #empty_field	(empty)
 #unset_field	-
 #path	ssl
-#open	2020-08-27-09-40-41
+#open	2020-08-27-16-13-14
 #fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	version	cipher	curve	server_name	resumed	last_alert	next_protocol	established	cert_chain_fuids	client_cert_chain_fuids	subject	issuer	client_subject	client_issuer
 #types	time	string	addr	port	addr	port	string	string	string	string	bool	string	string	bool	vector[string]	vector[string]	string	string	string	string
-1549038269.705075	CCIgHe3CyqsTvU84el	128.2.56.95	65234	13.107.6.158	443	TLSv12	TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256	-	api.cortana.ai	T	-	h2	T	-	-	-	-	-	-
-1549038269.745562	C4eH8T3uezwFCMFwO	128.2.56.95	65235	13.107.21.200	443	TLSv12	TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256	-	www.bing.com	T	-	h2	T	-	-	-	-	-	-
-1549038297.367995	C0rVJB4ndXP4VxlVg8	128.2.56.95	65250	35.195.54.16	443	TLSv12	TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256	secp256r1	stats.ultimaker.com	F	-	-	T	FSXEpb2uAGNUYEPS94,Ffzn6K2fSPIE5Qvg5e	(empty)	CN=stats.ultimaker.com	CN=Let's Encrypt Authority X3,O=Let's Encrypt,C=US	-	-
-#close	2020-08-27-09-40-41
+1549038269.705075	CcHSeb3qXg3i15hJa	128.2.56.95	65234	13.107.6.158	443	TLSv12	TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256	-	api.cortana.ai	T	-	h2	T	-	-	-	-	-	-
+1549038269.745562	CLbvxy4d1q5n7YAuze	128.2.56.95	65235	13.107.21.200	443	TLSv12	TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256	-	www.bing.com	T	-	h2	T	-	-	-	-	-	-
+1549038297.367995	CKH21E41pg6GO6pn7h	128.2.56.95	65250	35.195.54.16	443	TLSv12	TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256	secp256r1	stats.ultimaker.com	F	-	-	T	FSXEpb2uAGNUYEPS94,Ffzn6K2fSPIE5Qvg5e	(empty)	CN=stats.ultimaker.com	CN=Let's Encrypt Authority X3,O=Let's Encrypt,C=US	-	-
+#close	2020-08-27-16-13-14

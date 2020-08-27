@@ -3,10 +3,10 @@
 #empty_field	(empty)
 #unset_field	-
 #path	weird
-#open	2020-08-27-09-40-41
+#open	2020-08-27-16-13-14
 #fields	ts	uid	id.orig_h	id.orig_p	id.resp_h	id.resp_p	name	addl	notice	peer
 #types	time	string	addr	port	addr	port	string	string	bool	string
 1549038269.772462	-	-	-	-	-	ip_hdr_len_zero	-	F	zeek
 1549038270.347859	-	-	-	-	-	non_ip_packet_in_ethernet	-	F	zeek
 1549038277.925742	-	-	-	-	-	unknown_protocol	2	F	zeek
-#close	2020-08-27-09-40-41
+#close	2020-08-27-16-13-14
