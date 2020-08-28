@@ -58,7 +58,7 @@ event http_entity_data(c: connection, is_orig: bool, length: count, data: string
     local match: PatternMatchResult;
     match = match_pattern(check_data,/^\{\"[a-zA-Z\"\_]+/);
     if (|match$str|<=1) {
-      match = match_pattern(check_data,/[A-Z;=]+/);
+      match = match_pattern(check_data,/[;A-Z=]+/);
     }
     if (|match$str|<=1) {
       match = match_pattern(check_data, /^\x1f\x8b/);
@@ -69,6 +69,7 @@ event http_entity_data(c: connection, is_orig: bool, length: count, data: string
       evalData[c$uid]$req_off=match$off;
       if(evalData[c$uid]$req_data[0]==";") {
         evalData[c$uid]$req_off+=146;
+	evalData[c$uid]$req_data=evalData[c$uid]$req_data[1:];
       }
       if(evalData[c$uid]$req_data[0]=="\x1f") {
         evalData[c$uid]$req_off+=434;
@@ -117,7 +118,7 @@ event http_message_done (c: connection, is_orig: bool, stat: http_message_stat){
                 $resp_code=c$http$status_code,
 		$resp_msg=c$http$status_msg,		
   		$resp_key=evalData[c$uid]$resp_data,
-		$resp_key_len=evalData[c$uid]$req_len,
+		$resp_key_len=evalData[c$uid]$resp_len,
 		$resp_key_offset=evalData[c$uid]$resp_off,
 		$direction=dir]);
     evalData[c$uid]=trackingData();

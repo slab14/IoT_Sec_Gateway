@@ -1,12 +1,12 @@
 #inputs
-1 - content:"POST,/command,GETPRINTERINFO"; - 14 - 0
-4 - content:"POST,/command,PRINT=D"; - 7 - 0
-2 - content:"POST,/command,GETPRINTERSTATUS"; - 16 - 0
-3 - content:"POST,/print_file_uploads,;FLAVOR"; - 153 - 146
-5 - content:"POST,/command,CANCEL=D"; - 8 - 0
+2 - content:"POST";content:"/command";content:"GETPRINTERSTATUS"; - 16 - 0
+4 - content:"POST";content:"/command";content:"PRINT=D"; - 7 - 0
+3 - content:"POST";content:"/print_file_uploads";content:"FLAVOR"; - 153 - 146
+1 - content:"POST";content:"/command";content:"GETPRINTERINFO"; - 14 - 0
+5 - content:"POST";content:"/command";content:"CANCEL=D"; - 8 - 0
 #outputs
-1 - content:"200,/OK,{"SN""; - 14 - 0
-4 - content:"200,/OK,{"error_code""; - 7 - 0
-2 - content:"200,/OK,{"buildPlate_target_temperature""; - 16 - 0
-3 - content:"200,/OK,{"message""; - 7 - 0
-5 - content:"200,/OK,{"error_code""; - 8 - 0
+2 - content:"200";content:"OK";content:"{\"buildPlate_target_temperature\""; - 32 - 0
+4 - content:"200";content:"OK";content:"{\"error_code\""; - 13 - 0
+3 - content:"200";content:"OK";content:"{\"message\""; - 10 - 0
+1 - content:"200";content:"OK";content:"{\"SN\""; - 5 - 0
+5 - content:"200";content:"OK";content:"{\"error_code\""; - 13 - 0
