@@ -1,6 +1,6 @@
 #inputs
-2 - content:"www.eos.info/TransferService/ITransferService/Send2e"; - 52
-1 - content:"net.tcp://si1866:8888/TransferService/service.svc/nettcp"; - 56
+1 - content:"net.tcp://si1866:8888/TransferService/service.svc/nettcp"; - 63 - 7
+2 - content:"www.eos.info/TransferService/ITransferService/Send2e"; - 74 - 22
 #outputs
-1 - content:"|0b|"; - 1,1
-2 - content:"www.eos.info/TransferService/ITransferService/Send2ResponseD"; - 52,52
+1 - content:"|0b|"; - 1 - 0
+2 - content:"www.eos.info/TransferService/ITransferService/Send2ResponseD"; - 73 - 21

@@ -1,10 +1,15 @@
 #inputs
-3 - content:"Method": "PROTOCOL_METHOD_UPLOAD_LAYER""; - 39
-4 - content:""; - 0
-1 - content:"Method": "PROTOCOL_METHOD_GET_STATUS""; - 37
-2 - content:"Method": "PROTOCOL_METHOD_START_FORM2_JOB""; - 42
+4 - content:"\"PROTOCOL_METHOD_UPLOAD_LAYER\""; - 28755 - -1
+1 - content:"\"PROTOCOL_METHOD_GET_STATUS\""; - 100 - 72
+5 - content:"\"PROTOCOL_METHOD_GET_STATUS\""; - 100 - 72
+6 - content:"\"PROTOCOL_METHOD_UPLOAD_LAYER\""; - 102 - 72
+8 - content:"\"PROTOCOL_METHOD_GET_STATUS\""; - 100 - 72
+3 - content:"\"PROTOCOL_METHOD_UPLOAD_LAYER\""; - 54378 - -1
+2 - content:"\"PROTOCOL_METHOD_START_FORM2_JOB\""; - 105 - 72
 #outputs
-1 - content:"Method": "PROTOCOL_METHOD_GET_STATUS""; - 0,39
-2 - content:"Method": "PROTOCOL_METHOD_START_FORM2_JOB""; - 42,42
-3 - content:""; - 0,39
-4 - content:"Method": "PROTOCOL_METHOD_UPLOAD_LAYER""; - 39,39
+4 - content:"\"PROTOCOL_METHOD_UPLOAD_LAYER\""; - 109 - 79
+1 - content:"\"PROTOCOL_METHOD_GET_STATUS\""; - 671 - -1
+6 - content:"\"PROTOCOL_METHOD_GET_STATUS\""; - 671 - 643
+8 - content:"\"PROTOCOL_METHOD_UPLOAD_LAYER\""; - 109 - 79
+2 - content:"\"PROTOCOL_METHOD_START_FORM2_JOB\""; - 112 - 79
+7 - content:"\"PROTOCOL_METHOD_UPLOAD_LAYER\""; - 109 - 79
