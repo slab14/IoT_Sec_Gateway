@@ -60,6 +60,9 @@ event http_entity_data(c: connection, is_orig: bool, length: count, data: string
     if (|match$str|<=1) {
       match = match_pattern(check_data,/[A-Z;=]+/);
     }
+    if (|match$str|<=1) {
+      match = match_pattern(check_data, /^\x1f\x8b/);
+    }    
     if (is_orig) {
       evalData[c$uid]$req_data=match$str;
       evalData[c$uid]$req_len=|match$str|;
@@ -67,6 +70,9 @@ event http_entity_data(c: connection, is_orig: bool, length: count, data: string
       if(evalData[c$uid]$req_data[0]==";") {
         evalData[c$uid]$req_off+=146;
       }
+      if(evalData[c$uid]$req_data[0]=="\x1f") {
+        evalData[c$uid]$req_off+=434;
+      }      
     } else {
       evalData[c$uid]$resp_data=match$str;
       evalData[c$uid]$resp_len=|match$str|;

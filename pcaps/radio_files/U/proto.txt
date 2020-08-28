@@ -1,12 +1,12 @@
 #inputs
-1 - content:"GET";content:"materials"; - 0
-5 - content:"POST";content:"print_jobs"; - 4679163
-4 - content:"GET";content:"preview_image"; - 0
-2 - content:"GET";content:"printers"; - 0
-3 - content:"GET";content:"print_jobs"; - 0
+3 - content:"GET,/print_jobs,"; - 0 - 0
+4 - content:"GET,/preview_image,"; - 0 - 0
+5 - content:"|POST,/print_jobs,1f8b|"; - 436 - 434
+1 - content:"GET,/materials,"; - 0 - 0
+2 - content:"GET,/printers,"; - 0 - 0
 #outputs
-1 - content:"200";content:"OK"; - 492,492
-2 - content:"200";content:"OK"; - 5533,5537
-3 - content:"200";content:"OK"; - 6350,7122
-4 - content:"200";content:"OK"; - 492,492
-5 - content:"200";content:"OK"; - 725,725
+3 - content:"200,/OK,{"force""; - 1 - 1
+4 - content:"200,/OK,DOCTYPE"; - 2 - 2
+5 - content:"200,/OK,{"force""; - 2 - 0
+1 - content:"200,/OK,DOCTYPE"; - 2 - 2
+2 - content:"200,/OK,{"machine_variant""; - 1 - 1
