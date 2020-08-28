@@ -121,6 +121,9 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
       if(c$id$resp_p!=35/tcp) {
         dir="<-";
       }
+      if((evalData[c$uid]$got_resp)&&(!evalData[c$uid]$got_req)){
+        dir="<-";
+      }
       if(evalData[c$uid]$repeat){
         cleanRepeat=T;
       }

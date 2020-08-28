@@ -163,12 +163,20 @@ public class MattModel {
 	    Integer[] sizeData = tsizeMap.get(tMap.get(alpha));
 	    if(!content.equals(" ")){
 		if(!type.equals("http")) {
-		    f.append(tMap.get(alpha)+" - "+"content:\""+content.trim()+"\"; - "+Integer.toString(sizeData[0])+" - "+Integer.toString(sizeData[1])+"\n");
+		    if(content.contains("/[")) {
+			f.append(tMap.get(alpha)+" - "+"pcre:\""+content.trim()+"\"; - "+Integer.toString(sizeData[0])+" - "+Integer.toString(sizeData[1])+"\n");
+		    } else {
+			f.append(tMap.get(alpha)+" - "+"content:\""+content.trim()+"\"; - "+Integer.toString(sizeData[0])+" - "+Integer.toString(sizeData[1])+"\n");
+		    }
 		} else {
 		    String[] parts=content.split(",");
 		    String rule="";
 		    for(String part: parts) {
-			rule+="content:\""+part+"\";";
+			if(part.contains("/[")) {
+			    rule+="pcre:\""+part+"\";";			    
+			} else {
+			    rule+="content:\""+part+"\";";
+			}
 		    }
 		    f.append(tMap.get(alpha)+" - "+rule+" - "+Integer.toString(sizeData[0])+" - "+Integer.toString(sizeData[1])+"\n");
 		}
@@ -190,13 +198,21 @@ public class MattModel {
 	    }
 	    Integer[] sizeData = tsizeMap.get(tMap.get(bets));	    
 	    if(!content.equals(" ")){
-		if(!type.equals("http")) {		
-		    f.append(tMap.get(bets)+" - "+"content:\""+content.trim()+"\"; - "+Integer.toString(sizeData[2])+" - "+Integer.toString(sizeData[3])+"\n");
+		if(!type.equals("http")) {
+		    if(content.contains("/[")) {
+			f.append(tMap.get(bets)+" - "+"pcre:\""+content.trim()+"\"; - "+Integer.toString(sizeData[2])+" - "+Integer.toString(sizeData[3])+"\n");
+		    }else{
+			f.append(tMap.get(bets)+" - "+"content:\""+content.trim()+"\"; - "+Integer.toString(sizeData[2])+" - "+Integer.toString(sizeData[3])+"\n");
+		    }
 		}else {
 		    String[] parts=content.split(",");
 		    String rule="";
 		    for(String part: parts) {
-			rule+="content:\""+part+"\";";
+			if(part.contains("/[")){
+			    rule+="pcre:\""+part+"\";";
+			}else{
+			    rule+="content:\""+part+"\";";
+			}
 		    }
 		    f.append(tMap.get(bets)+" - "+rule+" - "+Integer.toString(sizeData[2])+" - "+Integer.toString(sizeData[3])+"\n");
 		}
