@@ -55,7 +55,8 @@ public class MattModel {
     public static TraceData parseLog2(String logFile, String type) throws IOException {
 	Map<String, ArrayList<String>> sequenceMap = new HashMap<String, ArrayList<String>>();
 	Map<String, String> tMap = new HashMap<String,String>();
-	Map<String, Integer[]> tsizeMap = new HashMap<String,Integer[]>();		
+	Map<String, Integer[]> tsizeMap = new HashMap<String,Integer[]>();
+	Map<String, String[]> tdataMap = new HashMap<String,String[]>();
 	ArrayList<Integer> symbolList = new ArrayList<>();
 	ArrayList<String> conns = new ArrayList<>();
 	int msgNo = 0;
@@ -72,6 +73,9 @@ public class MattModel {
 		    conns.add(splitted[0]);
 		    sequenceMap.put(splitted[0], new ArrayList<String>());
 		}
+		String toMult=splitted[6];
+		String fromMult=splitted[8];
+		String[] otherData={toMult, fromMult};
 		int fromLen=Integer.parseInt(splitted[7]);
 		int toLen=Integer.parseInt(splitted[5]);
 		String toKey=addEscapes(splitted[11]);
@@ -91,7 +95,7 @@ public class MattModel {
 		if(fromKeyOff!=0) {fromKeyOff-=1;}		
 		int toKeyLen=Integer.parseInt(splitted[12])+toKeyOff;
 		int fromKeyLen=Integer.parseInt(splitted[17])+fromKeyOff;
-		Integer[] sizes = {toKeyLen, toKeyOff, fromKeyLen, fromKeyOff};
+		Integer[] sizes = {toKeyLen, toKeyOff, fromKeyLen, fromKeyOff, toLen, fromLen};
 		for(String key: tMap.keySet()) {
 		    String[] sig = key.split("::");
 		    if ((sig[0].contains(toKey)) && (sig[1].contains(fromKey))) {
@@ -125,6 +129,7 @@ public class MattModel {
 		    if((direction.equals("<-")) || (msgTo.equals(""))){ msgStr+="*"; }
 		    tMap.put(transition, msgStr);
 		    tsizeMap.put(msgStr, sizes);
+		    tdataMap.put(msgStr, otherData);
 		    symbolList.add(msgNo);
 		    System.out.println("alphabet: "+msgStr+" -> "+msgTo+" | "+msgFrom);
 		}
@@ -146,9 +151,11 @@ public class MattModel {
 	writer.flush();
 	writer.close();	
 	FileWriter f = new FileWriter("proto.txt");
+	f.append("#type:"+type+"\n");
 	f.append("#inputs\n");
 	for(String alpha: tMap.keySet()) {
 	    String content = alpha.split("::")[0];
+	    String mult = tdataMap.get(tMap.get(alpha))[0];
 	    if(content.contains("\\x")) {
 		if(type.equals("http")){
 		    String[] parts=content.split(",");
@@ -163,20 +170,29 @@ public class MattModel {
 	    Integer[] sizeData = tsizeMap.get(tMap.get(alpha));
 	    if(!content.equals(" ")){
 		if(!type.equals("http")) {
-		    f.append(tMap.get(alpha)+" - "+"content:\""+content.trim()+"\"; - "+Integer.toString(sizeData[0])+" - "+Integer.toString(sizeData[1])+"\n");
+		    if(content.contains("/[")) {
+			f.append(tMap.get(alpha)+" - "+"pcre:\""+content.trim()+"\"; - "+Integer.toString(sizeData[0])+" - "+Integer.toString(sizeData[1])+" - "+mult+" - "+Integer.toString(sizeData[4])+"\n");
+		    } else {
+			f.append(tMap.get(alpha)+" - "+"content:\""+content.trim()+"\"; - "+Integer.toString(sizeData[0])+" - "+Integer.toString(sizeData[1])+" - "+mult+" - "+Integer.toString(sizeData[4])+"\n");
+		    }
 		} else {
 		    String[] parts=content.split(",");
 		    String rule="";
 		    for(String part: parts) {
-			rule+="content:\""+part+"\";";
+			if(part.contains("/[")) {
+			    rule+="pcre:\""+part+"\";";			    
+			} else {
+			    rule+="content:\""+part+"\";";
+			}
 		    }
-		    f.append(tMap.get(alpha)+" - "+rule+" - "+Integer.toString(sizeData[0])+" - "+Integer.toString(sizeData[1])+"\n");
+		    f.append(tMap.get(alpha)+" - "+rule+" - "+Integer.toString(sizeData[0])+" - "+Integer.toString(sizeData[1])+" - "+mult+" - "+Integer.toString(sizeData[4])+"\n");
 		}
 	    }
 	}
 	f.append("#outputs\n");
 	for(String bets: tMap.keySet()){	    
 	    String content = bets.split("::")[1];
+	    String mult = tdataMap.get(tMap.get(bets))[1];
 	    if(content.contains("\\x")) {
 		if(type.equals("http")){
 		    String[] parts=content.split(",");
@@ -190,15 +206,23 @@ public class MattModel {
 	    }
 	    Integer[] sizeData = tsizeMap.get(tMap.get(bets));	    
 	    if(!content.equals(" ")){
-		if(!type.equals("http")) {		
-		    f.append(tMap.get(bets)+" - "+"content:\""+content.trim()+"\"; - "+Integer.toString(sizeData[2])+" - "+Integer.toString(sizeData[3])+"\n");
+		if(!type.equals("http")) {
+		    if(content.contains("/[")) {
+			f.append(tMap.get(bets)+" - "+"pcre:\""+content.trim()+"\"; - "+Integer.toString(sizeData[2])+" - "+Integer.toString(sizeData[3])+" - "+mult+" - "+Integer.toString(sizeData[5])+"\n");
+		    }else{
+			f.append(tMap.get(bets)+" - "+"content:\""+content.trim()+"\"; - "+Integer.toString(sizeData[2])+" - "+Integer.toString(sizeData[3])+" - "+mult+" - "+Integer.toString(sizeData[5])+"\n");
+		    }
 		}else {
 		    String[] parts=content.split(",");
 		    String rule="";
 		    for(String part: parts) {
-			rule+="content:\""+part+"\";";
+			if(part.contains("/[")){
+			    rule+="pcre:\""+part+"\";";
+			}else{
+			    rule+="content:\""+part+"\";";
+			}
 		    }
-		    f.append(tMap.get(bets)+" - "+rule+" - "+Integer.toString(sizeData[2])+" - "+Integer.toString(sizeData[3])+"\n");
+		    f.append(tMap.get(bets)+" - "+rule+" - "+Integer.toString(sizeData[2])+" - "+Integer.toString(sizeData[3])+" - "+mult+" - "+Integer.toString(sizeData[5])+"\n");
 		}
 	    }
 	}

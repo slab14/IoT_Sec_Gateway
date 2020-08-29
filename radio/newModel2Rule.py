@@ -14,6 +14,12 @@ class FSM():
         self.out = {}
         self.inLen = {}
         self.outLen = {}
+        self.inKeyOff = {}
+        self.outKeyOff = {}
+        self.inKeyLen = {}
+        self.outKeyLen = {}        
+        self.inMult={}
+        self.outMult={}
         # need for snort rule IDs
         self.rule_id = 1000000
         #check if initial state is in states
@@ -28,11 +34,13 @@ class FSM():
             if len(row) != len(self.states):
                 print(f"WARNING: Invalid matrix size (# cols in row {i}).")
         self.protofile=protofile
-        self.readContent()
         self.SERVER_PORT=''
         self.GROUPNAME=''
         self.tranState=0
         self.MTU=1461
+        self.msgType=""        
+        self.readContent()
+
         
     def __repr__(self):
         v = "\n".join(str(r) for r in self.transMatrix)
@@ -72,7 +80,9 @@ Initial state: {self.initial}
                 if (len(line) == 0):
                     break
                 elif (line[0]=='#'):
-                    if re.search("input", line):
+                    if re.search("type:", line):
+                        self.msgType=line.split("type:")[1].strip()
+                    elif re.search("input", line):
                         inP=True
                         outP = False
                     elif re.search("output", line):
@@ -86,14 +96,16 @@ Initial state: {self.initial}
                     break
                 if inP:
                     self.proto[contents[0]] = contents[1]
-                    self.inLen[contents[0]] = int(contents[2])
+                    self.inKeyLen[contents[0]] = int(contents[2])
+                    self.inKeyOff[contents[0]] = int(contents[3])
+                    self.inMult[contents[0]] = contents[4]
+                    self.inLen[contents[0]] = int(contents[5]) 
                 elif outP:
                     self.out[contents[0]] = contents[1]
-                    lenRange=contents[2].split(',')
-                    if (int(lenRange[0]) == int(lenRange[1])):
-                        self.outLen[contents[0]] = [int(lenRange[0])]
-                    else:
-                        self.outLen[contents[0]] = [int(lenRange[0]),int(lenRange[1])]
+                    self.outKeyLen[contents[0]] = int(contents[2])
+                    self.outKeyOff[contents[0]] = int(contents[3])
+                    self.outMult[contents[0]] = contents[4]
+                    self.outLen[contents[0]] = int(contents[5])                     
 
     def generateStateFlowbitsOptions(self, sid, tid, transit=False, final=False, mult=False):
         #initial transition from state S -> T
@@ -193,18 +205,23 @@ Initial state: {self.initial}
             return f'pass {msgType} {server} -> {client}'
 
     def generateRule(self, sid, tid, input=True):
+        rules=''
         rule_id = f'sid:{self.getNewRuleID()};'
-        addPkt=False
-        if (self.inLen[self.getIndex(sid,tid)]!=0):
-            addPkt=True
         # Initial rule for starting state transitions (request)
         content = self.generateContent(sid, tid)
         stateFlowbits = self.generateStateFlowbitsOptions(sid, tid)
         transFlowbits = self.generateTransitFlowbits(True)
-        header = self.generateHeader(True)
-        rules = f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})\n'
+        header = self.generateHeader(True)        
+        if(self.msgType=='http' and self.inMult[self.getIndex(sid,tid)]=='T'):
+            httpContent=content.split(content.split(";")[-2])[0]
+            rules += f'{header} ({httpContent}{stateFlowbits}{transFlowbits}{rule_id})\n'
+            rule_id = f'sid:{self.getNewRuleID()};'
+            stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True)
+            transFlowbits = self.generateTransitFlowbits()
+            content=content.split(";")[-2]+";"
+        rules += f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})\n'
         # check if additional packets are expected in request
-        if (addPkt):
+        if (self.inMult[self.getIndex(sid,tid)]=='T'):
             if (self.inLen[self.getIndex(sid,tid)]>1460):
                 size = f'dsize:>0;'
                 transFlowbits = self.generateTransitFlowbits(mult=True)
@@ -215,38 +232,28 @@ Initial state: {self.initial}
             stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True)
             rules += f'{header} ({size}{stateFlowbits}{transFlowbits}{rule_id})\n'
         # Handle reply
+        limit=self.outLen[self.getIndex(sid,tid)]
+        reps =int(limit/self.MTU)+1
+        limit=int(limit*1.2)
+        size = f'dsize:<{limit};'
         content = self.generateResponseContent(sid, tid)
         stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True)
         transFlowbits = self.generateTransitFlowbits()
         header = self.generateHeader(False)
-        rule_id = f'sid:{self.getNewRuleID()};'        
-        rules += f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})\n'
-        # additional reply packets
-        content = self.generateResponseContent(sid, tid, True)        
-        limit=self.outLen[self.getIndex(sid,tid)]
-        reps = int(max(limit)/self.MTU)+1
-        if len(limit)>1:
-            limit[1]=int(limit[1]*1.2)
-            if (limit[1]>self.MTU):
-                limit[1]=self.MTU
-            limit[0]=int(limit[0]*.8)
-            if (addPkt) or (limit[0]<1) or (limit[1]==self.MTU):
-                limit[0]=1
+        rule_id = f'sid:{self.getNewRuleID()};'
+        if(self.msgType=='http' and self.outMult[self.getIndex(sid,tid)]=='T'):
+            httpContent=content.split(content.split(";")[-2])[0]
+            rules += f'{header} ({httpContent}{stateFlowbits}{transFlowbits}{rule_id})\n'
+            content=content.split(";")[-2]+";"
         else:
-            limit.append(int(limit[0]*1.2))
-            if (limit[1]>self.MTU):
-                limit[1]=self.MTU
-            if (addPkt) and (limit[1]!=self.MTU):
-                limit[0]=int(limit[0]*.8)
-            else:
-                limit[0] = 1
-        size = f'dsize:{limit[0]}<>{limit[1]};'
+            rules += f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})\n'
+        # additional reply packets
         header = self.generateHeader(False)
         if (reps==1):
             stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True)
             transFlowbits = self.generateTransitFlowbits()
             rule_id = f'sid:{self.getNewRuleID()};'                    
-            rules += f'{header} ({content}{size}{stateFlowbits}{transFlowbits}{rule_id})'            
+            rules += f'{header} ({content}{size}{stateFlowbits}{transFlowbits}{rule_id})'   
         else:
             stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True, mult=True)
             transFlowbits = self.generateTransitFlowbits(mult=True)                    
