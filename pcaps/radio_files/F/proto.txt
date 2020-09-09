@@ -1,28 +1,29 @@
+#type:gcode
 #inputs
-4 - content:"~M114"; - 5 - 0
-9 - content:"ZZ"; - 2 - 0
-13 - content:"~M602"; - 5 - 0
-7 - content:"~M105"; - 5 - 0
-8 - content:"~M28"; - 4 - 0
-3 - content:"~M650"; - 5 - 0
-11 - content:"~M23"; - 4 - 0
-12 - content:"~M26"; - 4 - 0
-10 - content:"~M29"; - 4 - 0
-5 - content:"~M27"; - 4 - 0
-1 - content:"~M601"; - 5 - 0
-2 - content:"~M115"; - 5 - 0
-6 - content:"~M119"; - 5 - 0
+4 - content:"~M114"; - 5 - 0 - F - 7
+9 - content:"ZZ"; - 2 - 0 - T - 4112
+13 - content:"~M602"; - 5 - 0 - F - 7
+7 - content:"~M105"; - 5 - 0 - F - 7
+8 - content:"~M28"; - 4 - 0 - F - 31
+3 - content:"~M650"; - 5 - 0 - F - 7
+11 - content:"~M23"; - 4 - 0 - F - 22
+12 - content:"~M26"; - 4 - 0 - F - 6
+10 - content:"~M29"; - 4 - 0 - F - 6
+5 - content:"~M27"; - 4 - 0 - F - 6
+1 - content:"~M601"; - 5 - 0 - F - 10
+2 - content:"~M115"; - 5 - 0 - F - 7
+6 - content:"~M119"; - 5 - 0 - F - 7
 #outputs
-4 - content:"M114"; - 8 - 4
-9 - content:"ok."; - 12 - -1
-13 - content:"M602"; - 8 - 4
-7 - content:"M105"; - 8 - 4
-8 - content:"M28"; - 7 - 4
-3 - content:"M650"; - 8 - 4
-11 - content:"M23"; - 7 - 4
-12 - content:"M26"; - 7 - 4
-10 - content:"M29"; - 7 - 4
-5 - content:"M27"; - 7 - 4
-1 - content:"M601"; - 8 - 4
-2 - content:"M115"; - 8 - 4
-6 - content:"M119"; - 8 - 4
+4 - content:"M114"; - 8 - 4 - F - 45
+9 - content:"ok."; - 12 - -1 - F - 14
+13 - content:"M602"; - 8 - 4 - F - 42
+7 - content:"M105"; - 8 - 4 - F - 42
+8 - content:"M28"; - 7 - 4 - F - 57
+3 - content:"M650"; - 8 - 4 - F - 39
+11 - content:"M23"; - 7 - 4 - F - 75
+12 - content:"M26"; - 7 - 4 - F - 23
+10 - content:"M29"; - 7 - 4 - F - 42
+5 - content:"M27"; - 7 - 4 - F - 47
+1 - content:"M601"; - 8 - 4 - F - 42
+2 - content:"M115"; - 8 - 4 - F - 176
+6 - content:"M119"; - 8 - 4 - F - 133
