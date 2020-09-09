@@ -107,18 +107,20 @@ Initial state: {self.initial}
                     self.outMult[contents[0]] = contents[4]
                     self.outLen[contents[0]] = int(contents[5])                     
 
-    def generateStateFlowbitsOptions(self, sid, tid, transit=False, final=False, mult=False):
+    def generateStateFlowbitsOptions(self, sid, tid, transit=False, final=False, mult=False, xfer=False, priorXfer=False):
         #initial transition from state S -> T
         out=''
-        transFlag='xfer'
-        if (self.inLen[self.getIndex(sid,tid)] == 0 ):
-            transFlag = f'{self.states[tid]}'
+        transFlag = f'{self.states[tid]}'
+        if (xfer):
+            transFlag=f'xfer'
         if ((not transit) and (not final)):
             # Generate the flowbits rule to check if in state S
-            if sid == self.init_id:
+            if sid == self.init_id and not priorXfer:
                 s_bits = f'isnotset,any,{self.GROUPNAME}'
             else:
                 s_bits = f'isset,{self.states[sid]}'
+                if(priorXfer):
+                    s_bits+='.xfer'
             # Generate the flowbits rule to set state T
             if tid == self.init_id:
                 t_bits = f'unset,all,{self.GROUPNAME}'
@@ -156,7 +158,8 @@ Initial state: {self.initial}
     
     def generateContent(self, sid, tid, missing=False):
         first=True
-        contents = self.proto[self.getIndex(sid,tid)].split(";")
+        index = self.getIndex(sid,tid)
+        contents = self.proto[index].split(";")
         out=''
         for content in contents:
             if content == '':
@@ -165,16 +168,20 @@ Initial state: {self.initial}
             if missing:
                 content = "content:!"+parts[1]
             if first:
+                if(self.msgType=='http' and parts[1]=="\"GET\""):
+                    out+=f'dsize:{int(self.inLen[index]*.9)}<>{int(self.inLen[index]*1.1)};'
                 depth = len(parts[1])*3
-                out = content+f';depth:{depth};'
+                out += content+f';depth:{depth};'
                 first = False
             else:
                 out += content+";"
+        out+=f'offset:{self.inKeyOff[index]};depth:{self.inKeyLen[index]};'
         return out
 
     def generateResponseContent(self, sid, tid, missing=False):
         first=True
-        contents = self.out[self.getIndex(sid,tid)].split(";")
+        index = self.getIndex(sid,tid)        
+        contents = self.out[index].split(";")
         out=''
         for content in contents:
             if content == '':
@@ -191,6 +198,8 @@ Initial state: {self.initial}
             if missing:
                 mOut=out.split(';')
                 out = mOut[0]+";"+mOut[1]+";"
+        if not missing:
+            out+=f'offset:{self.outKeyOff[index]};depth:{self.outKeyLen[index]};'
         return out
 
     def generateHeader(self, read, tcp=False):
@@ -205,6 +214,8 @@ Initial state: {self.initial}
             return f'pass {msgType} {server} -> {client}'
 
     def generateRule(self, sid, tid, input=True):
+        index=self.getIndex(sid,tid)
+        xferState=False
         rules=''
         rule_id = f'sid:{self.getNewRuleID()};'
         # Initial rule for starting state transitions (request)
@@ -212,27 +223,28 @@ Initial state: {self.initial}
         stateFlowbits = self.generateStateFlowbitsOptions(sid, tid)
         transFlowbits = self.generateTransitFlowbits(True)
         header = self.generateHeader(True)        
-        if(self.msgType=='http' and self.inMult[self.getIndex(sid,tid)]=='T'):
-            httpContent=content.split(content.split(";")[-2])[0]
+        if(self.msgType=='http' and self.inMult[index]=='T' and self.inKeyLen[index]>0):
+            xferState=True
+            httpContent=content.split(content.split(";")[3-len(content.split(";"))])[0]
+            stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, xfer=xferState)
             rules += f'{header} ({httpContent}{stateFlowbits}{transFlowbits}{rule_id})\n'
             rule_id = f'sid:{self.getNewRuleID()};'
-            stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True)
+            stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, priorXfer=xferState)
             transFlowbits = self.generateTransitFlowbits()
-            content=content.split(";")[-2]+";"
+            if(len(content.split(";"))==8):
+                content=content.split(";")[-5]+";"+content.split(";")[-4]+";"
+            else:
+                content=content.split(";")[-4]+";"
         rules += f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})\n'
         # check if additional packets are expected in request
-        if (self.inMult[self.getIndex(sid,tid)]=='T'):
-            if (self.inLen[self.getIndex(sid,tid)]>1460):
-                size = f'dsize:>0;'
-                transFlowbits = self.generateTransitFlowbits(mult=True)
-            else:
-                size = f'dsize:{self.inLen[self.getIndex(sid,tid)]};'
-                transFlowbits = self.generateTransitFlowbits()
+        if (self.inMult[index]=='T' and self.inLen[index]>1460):
+            size = f'dsize:>0;'
+            transFlowbits = self.generateTransitFlowbits(mult=True)
             rule_id = f'sid:{self.getNewRuleID()};'                
             stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True)
             rules += f'{header} ({size}{stateFlowbits}{transFlowbits}{rule_id})\n'
         # Handle reply
-        limit=self.outLen[self.getIndex(sid,tid)]
+        limit=int(self.outLen[index])
         reps =int(limit/self.MTU)+1
         limit=int(limit*1.2)
         size = f'dsize:<{limit};'
@@ -241,22 +253,24 @@ Initial state: {self.initial}
         transFlowbits = self.generateTransitFlowbits()
         header = self.generateHeader(False)
         rule_id = f'sid:{self.getNewRuleID()};'
-        if(self.msgType=='http' and self.outMult[self.getIndex(sid,tid)]=='T'):
-            httpContent=content.split(content.split(";")[-2])[0]
+        if(self.msgType=='http' and self.outMult[index]=='T' and self.outKeyLen[index]>0):
+            httpContent=content.split(content.split(";")[3-len(content.split(";"))])[0]
             rules += f'{header} ({httpContent}{stateFlowbits}{transFlowbits}{rule_id})\n'
-            content=content.split(";")[-2]+";"
+            if(len(content.split(";"))>=7):
+                content=content.split(";")[3-len(content.split(";"))]+";"
+            else:
+                content = self.generateResponseContent(sid, tid, True)                 
         else:
             rules += f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})\n'
+            content = self.generateResponseContent(sid, tid, True)
         # additional reply packets
         header = self.generateHeader(False)
-        if (reps==1):
-            stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True)
-            transFlowbits = self.generateTransitFlowbits()
-            rule_id = f'sid:{self.getNewRuleID()};'                    
-            rules += f'{header} ({content}{size}{stateFlowbits}{transFlowbits}{rule_id})'   
-        else:
-            stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True, mult=True)
-            transFlowbits = self.generateTransitFlowbits(mult=True)                    
+        stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True, mult=True)
+        transFlowbits = self.generateTransitFlowbits(mult=True)
+        rule_id = f'sid:{self.getNewRuleID()};'                    
+        rules += f'{header} ({content}{size}{stateFlowbits}{transFlowbits}{rule_id})\n'
+        if (reps>1):
+            content = self.generateResponseContent(sid, tid, True)                             
             rule_id = f'sid:{self.getNewRuleID()};'
             rules += f'{header} ({content}{size}{stateFlowbits}{transFlowbits}{rule_id})'
         return rules
@@ -295,7 +309,8 @@ Initial state: {self.initial}
     def dropAll(self):
         #add drop all traffic not allowed
         rule_id = f'sid:{self.getNewRuleID()};'        
-        header = 'drop ip any any <> any any'
+        #header = 'drop ip any any <> any any'
+        header = 'alert ip any any <> any any'        
         return f'{header} (msg:\"drop all\";{rule_id})'
 
     def addOut(self):

@@ -75,9 +75,11 @@ event http_entity_data(c: connection, is_orig: bool, length: count, data: string
         evalData[c$uid]$req_off+=434;
       }      
     } else {
-      evalData[c$uid]$resp_data=match$str;
-      evalData[c$uid]$resp_len=|match$str|;
-      evalData[c$uid]$resp_off=match$off;      
+      if(match$str!="DOCTYPE") {
+        evalData[c$uid]$resp_data=match$str;
+        evalData[c$uid]$resp_len=|match$str|;
+        evalData[c$uid]$resp_off=match$off;
+      }
     }
     if (length>700) {
       if(is_orig) {
