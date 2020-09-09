@@ -213,11 +213,11 @@ public class MattModel {
 		if(type.equals("http")){
 		    String[] parts=content.split(",");
 		    if(parts[2].contains("\\x")) {
-			parts[2]="|"+convertStringToHex(parts[2])+"|";
+			parts[2]=convertStringToHex(parts[2])+"rawbytes";
 		    }
 		    content=parts[0]+","+parts[1]+","+parts[2];
 		} else {
-		    content="|"+convertStringToHex(content)+"|";
+		    content=convertStringToHex(content)+"rawbytes";
 		}		
 	    }
 	    Integer[] sizeData = tsizeMap.get(tMap.get(bets));	    
@@ -225,6 +225,8 @@ public class MattModel {
 		if(!type.equals("http")) {
 		    if(content.contains("/[")) {
 			f.append(tMap.get(bets)+" - "+"pcre:\""+content.trim()+"\"; - "+Integer.toString(sizeData[2])+" - "+Integer.toString(sizeData[3])+" - "+mult+" - "+Integer.toString(sizeData[5])+"\n");
+		    } else if(content.contains("\"|")) {
+			f.append(tMap.get(bets)+" - "+"content:"+content+"; - "+Integer.toString(sizeData[2])+" - "+Integer.toString(sizeData[3])+" - "+mult+" - "+Integer.toString(sizeData[5])+"\n");			
 		    }else{
 			f.append(tMap.get(bets)+" - "+"content:\""+content.trim()+"\"; - "+Integer.toString(sizeData[2])+" - "+Integer.toString(sizeData[3])+" - "+mult+" - "+Integer.toString(sizeData[5])+"\n");
 		    }

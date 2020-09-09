@@ -3,5 +3,5 @@
 1 - content:"net.tcp://si1866:8888/TransferService/service.svc/nettcp"; - 63 - 7 - F - 66
 2 - content:"www.eos.info/TransferService/ITransferService/Send2e"; - 74 - 22 - T - 705376
 #outputs
-1 - content:"|"|0b|";|"; - 1 - 0 - F - 1
+1 - content:"|0b|";rawbytes; - 1 - 0 - F - 1
 2 - content:"www.eos.info/TransferService/ITransferService/Send2ResponseD"; - 73 - 21 - T - 106

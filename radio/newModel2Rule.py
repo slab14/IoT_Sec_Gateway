@@ -183,10 +183,12 @@ Initial state: {self.initial}
         index = self.getIndex(sid,tid)        
         contents = self.out[index].split(";")
         out=''
+        print(contents)
         for content in contents:
             if content == '':
                 break
             parts=content.split("content:")
+            print(parts)
             if missing:
                 content = "content:!"+parts[1]
             if first:
