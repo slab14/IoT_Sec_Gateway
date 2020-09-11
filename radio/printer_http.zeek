@@ -32,9 +32,11 @@ type trackingData: record {
   req_data: string &default="";
   req_len: count &default=0;
   req_off: count &default=0;
+  req_total: count &default=0;
   resp_data: string &default="";
   resp_len: count &default=0;
   resp_off: count &default=0;
+  resp_total: count &default=0;
   not_large_req: bool &default=T;
   not_large_resp: bool &default=T;  
 };
@@ -48,6 +50,14 @@ event zeek_init() {
 event new_connection(c: connection){
   if(c$uid !in evalData) {
     evalData[c$uid]=trackingData();
+  }
+}
+
+event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack: count, len: count, payload: string) {
+  if(is_orig){
+    evalData[c$uid]$req_total+=|payload|;
+  } else {
+    evalData[c$uid]$resp_total+=|payload|;  
   }
 }
 
@@ -109,9 +119,9 @@ event http_message_done (c: connection, is_orig: bool, stat: http_message_stat){
                [$uid=c$uid, $req_ip=c$id$orig_h,
 	        $req_port=c$id$orig_p,
                 $resp_ip=c$id$resp_h, $resp_port=c$id$resp_p,
-  		$req_len=c$http$request_body_len,
+		$req_len=evalData[c$uid]$req_total,
 		$req_mult_pkt=multiple_req_pkts,
-		$resp_len=c$http$response_body_len,
+		$resp_len=evalData[c$uid]$resp_total,
 		$resp_mult_pkt=multiple_resp_pkts,
       		$req_method=c$http$method, $req_uri=c$http$uri,
 		$req_key=evalData[c$uid]$req_data,

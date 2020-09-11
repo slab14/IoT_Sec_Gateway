@@ -75,7 +75,7 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
       if ((match$matched)){
 	if(is_orig){
 	  if(evalData[c$uid]$got_req) {
-            evalData2[c$uid]$req_data="/[a-zA-Z]+\_/";
+            evalData2[c$uid]$req_data="/[a-zA-Z]{2,}\_/";
             evalData2[c$uid]$req_key_len=|match$off|;
 	    evalData2[c$uid]$req_key_off=match$off;
 	    evalData2[c$uid]$req_len+=|payload|;
@@ -84,14 +84,14 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	    evalData[c$uid]$got_repeat=T;
 	    evalData[c$uid]$got_log_item=T;
 	  } else {
-            evalData[c$uid]$req_data = "/[a-zA-Z]+\_/";
+            evalData[c$uid]$req_data = "/[a-zA-Z]{2,}\_/";
             evalData[c$uid]$req_key_len=|match$off|;
 	    evalData[c$uid]$req_key_off=match$off;
 	    evalData[c$uid]$got_req=T;
 	  }
 	} else {
 	  if(evalData[c$uid]$got_resp) {
-            evalData2[c$uid]$resp_data = "/[a-zA-Z]+\_/";
+            evalData2[c$uid]$resp_data = "/[a-zA-Z]{2,}\_/";
             evalData2[c$uid]$resp_key_len=|match$off|;
 	    evalData2[c$uid]$resp_key_off=match$off;
 	    evalData2[c$uid]$resp_len+=|payload|;
@@ -100,7 +100,7 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	    evalData[c$uid]$got_repeat=T;
 	    evalData[c$uid]$got_log_item=T;
 	  } else {
-            evalData[c$uid]$resp_data = "/[a-zA-Z]+\_/";
+            evalData[c$uid]$resp_data = "/[a-zA-Z]{2,}\_/";
             evalData[c$uid]$resp_key_len=|match$off|;
 	    evalData[c$uid]$resp_key_off=match$off;
 	    evalData[c$uid]$got_resp=T;
@@ -149,7 +149,7 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
       if ((match$matched) && (match$off==1) && (|match$str|>1)){
 	if(is_orig){
 	  if (evalData[c$uid]$got_req) {
- 	    evalData2[c$uid]$req_data = "/[0-9]+/";
+ 	    evalData2[c$uid]$req_data = "/[0-9]{2,}/";
             evalData2[c$uid]$req_key_len=|match$str|;
 	    evalData2[c$uid]$req_key_off=match$off;
 	    evalData2[c$uid]$req_len+=|payload|;
@@ -158,14 +158,14 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	    evalData[c$uid]$got_repeat=T;
 	    evalData[c$uid]$got_log_item=T;
 	  } else {
- 	    evalData[c$uid]$req_data = "/[0-9]+/";
+ 	    evalData[c$uid]$req_data = "/[0-9]{2,}/";
             evalData[c$uid]$req_key_len=|match$str|;
 	    evalData[c$uid]$req_key_off=match$off;
 	    evalData[c$uid]$got_req=T;
  	  }
 	} else {
 	  if(evalData[c$uid]$got_resp) {
-            evalData2[c$uid]$resp_data = "/[0-9]+/";
+            evalData2[c$uid]$resp_data = "/[0-9]{2,}/";
             evalData2[c$uid]$resp_key_len=|match$str|;
 	    evalData2[c$uid]$resp_key_off=match$off;
 	    evalData2[c$uid]$resp_len+=|payload|;
@@ -174,7 +174,7 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 	    evalData[c$uid]$got_repeat=T;
 	    evalData[c$uid]$got_log_item=T;
 	  } else {
-            evalData[c$uid]$resp_data = "/[0-9]+/";
+            evalData[c$uid]$resp_data = "/[0-9]{2,}/";
             evalData[c$uid]$resp_key_len=|match$str|;
 	    evalData[c$uid]$resp_key_off=match$off;
 	    evalData[c$uid]$got_resp=T;
