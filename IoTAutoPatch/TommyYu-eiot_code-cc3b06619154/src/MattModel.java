@@ -109,7 +109,7 @@ public class MattModel {
 		}
 		Integer[] sizes = {toKeyLen, toKeyOff, fromKeyLen, fromKeyOff, toLen, fromLen};
 		for(String key: tMap.keySet()) {
-		    String[] sig = key.split("::");
+		    String[] sig = key.split(" :: ");
 		    if ((sig[0].contains(toKey)) && (sig[1].contains(fromKey))) {
 			Integer[] storedSizes = tsizeMap.get(tMap.get(key));
 			for (int i=0; i<sizes.length; i++) {
@@ -133,7 +133,7 @@ public class MattModel {
 		String direction = splitted[19];
 		String msgTo=toKey;
 		String msgFrom=fromKey;
-		String transition = msgTo+"::"+msgFrom;
+		String transition = msgTo+" :: "+msgFrom;
 		//Create alphabet of transitions
 		if (!tMap.containsKey(transition)){
 		    msgNo+=1;
@@ -166,7 +166,7 @@ public class MattModel {
 	f.append("#type:"+type+"\n");
 	f.append("#inputs\n");
 	for(String alpha: tMap.keySet()) {
-	    String content = alpha.split("::")[0].trim();
+	    String content = alpha.split(" :: ")[0].trim();
 	    String mult = tdataMap.get(tMap.get(alpha))[0];
 	    if(content.contains("\\x")) {
 		if(type.equals("http")){
@@ -207,7 +207,7 @@ public class MattModel {
 	}
 	f.append("#outputs\n");
 	for(String bets: tMap.keySet()){	    
-	    String content = bets.split("::")[1];
+	    String content = bets.split(" :: ")[1];
 	    String mult = tdataMap.get(tMap.get(bets))[1];
 	    if(content.contains("\\x")) {
 		if(type.equals("http")){

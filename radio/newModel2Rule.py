@@ -107,7 +107,7 @@ Initial state: {self.initial}
                     self.outMult[contents[0]] = contents[4]
                     self.outLen[contents[0]] = int(contents[5])                     
 
-    def generateStateFlowbitsOptions(self, sid, tid, transit=False, final=False, mult=False, xfer=False, priorXfer=False):
+    def generateStateFlowbitsOptions(self, sid, tid, transit=False, final=False, mult=False, xfer=False, priorXfer=False, loner=False):
         #initial transition from state S -> T
         out=''
         transFlag = f'{self.states[tid]}'
@@ -130,7 +130,12 @@ Initial state: {self.initial}
             out = f'flowbits:{s_bits};'
         # Final step before transition is complete to T
         elif final:
-            s_bits = f'isset,{self.states[sid]}.{transFlag}'
+            if sid == self.init_id and not priorXfer:
+                s_bits = f'isnotset,any,{self.GROUPNAME}'
+            elif loner:
+                s_bits = f'isset,{self.states[sid]}'                
+            else:            
+                s_bits = f'isset,{self.states[sid]}.{transFlag}'
             if mult:
                 t_bits = f'set,{self.states[tid]},{self.GROUPNAME}'
             elif tid == self.init_id:
@@ -166,7 +171,7 @@ Initial state: {self.initial}
             parts=content.split("content:")
             if missing:
                 content = "content:!"+parts[1]
-            if first:
+            if first and not re.search('pcre:',content):
                 if(self.msgType=='http' and parts[1]=="\"GET\""):
                     out+=f'dsize:{int(self.inLen[index]*.9)}<>{int(self.inLen[index]*1.1)};'
                 depth = int(self.inKeyLen[index]*1.1)
@@ -189,7 +194,7 @@ Initial state: {self.initial}
             parts=content.split("content:")
             if missing:
                 content = "content:!"+parts[1]
-            if first:
+            if first and not re.search('pcre:',content):
                 depth = int(self.outKeyLen[index]*1.1)
                 if(self.msgType=='http'):
                     depth+=9
@@ -219,29 +224,32 @@ Initial state: {self.initial}
         index=self.getIndex(sid,tid)
         xferState=False
         rules=''
-        rule_id = f'sid:{self.getNewRuleID()};'
         # Initial rule for starting state transitions (request)
         if re.search('\\*', index)==None:
             content = self.generateContent(sid, tid)
-            stateFlowbits = self.generateStateFlowbitsOptions(sid, tid)
+            if (index not in self.out and self.inMult[index]=='F'):
+                stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True, loner=True)
+            else:
+                stateFlowbits = self.generateStateFlowbitsOptions(sid, tid)
             transFlowbits = self.generateTransitFlowbits(True)
             header = self.generateHeader(True)        
             if(self.msgType=='http' and self.inMult[index]=='T' and self.inKeyLen[index]>0):
                 xferState=True
                 httpContent=content.split(content.split(";")[3-len(content.split(";"))])[0]
                 stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, xfer=xferState)
-                rules += f'{header} ({httpContent}{stateFlowbits}{transFlowbits}{rule_id})\n'
                 rule_id = f'sid:{self.getNewRuleID()};'
+                rules += f'{header} ({httpContent}{stateFlowbits}{transFlowbits}{rule_id})\n'
                 stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, priorXfer=xferState)
                 transFlowbits = self.generateTransitFlowbits()
                 content=content.split(httpContent)[1]
+            rule_id = f'sid:{self.getNewRuleID()};'
             rules += f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})\n'
             # check if additional packets are expected in request
             if (self.inMult[index]=='T' and self.inLen[index]>1460):
                 size = f'dsize:>0;'
                 transFlowbits = self.generateTransitFlowbits(mult=True)
-                rule_id = f'sid:{self.getNewRuleID()};'                
                 stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True)
+                rule_id = f'sid:{self.getNewRuleID()};'                
                 rules += f'{header} ({size}{stateFlowbits}{transFlowbits}{rule_id})\n'
         # Handle reply
         if(index in self.out):
@@ -249,7 +257,7 @@ Initial state: {self.initial}
             reps =int(limit/self.MTU)+1
             content = self.generateResponseContent(sid, tid)
             header = self.generateHeader(False)
-            if(self.outMult[index]=='T'):
+            if(self.outMult[index]=='T' and not re.search('\\*',index)):
                 stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True)
                 transFlowbits = self.generateTransitFlowbits()
                 if(self.msgType=='http' and self.outKeyLen[index]>0):
@@ -264,9 +272,12 @@ Initial state: {self.initial}
                     rule_id = f'sid:{self.getNewRuleID()};'            
                     rules += f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})\n'
                     content = self.generateResponseContent(sid, tid, True)
-            # additional reply packets
-            stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True, mult=True)
-            transFlowbits = self.generateTransitFlowbits(mult=True)
+            if re.search('\\*', index):
+                stateFlowbits = self.generateStateFlowbitsOptions(sid, tid)
+                transFlowbits = self.generateTransitFlowbits(True)                
+            else:
+                stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True)
+                transFlowbits = self.generateTransitFlowbits(mult=True)
             if(self.msgType=='nettcp' and self.outMult[index]=='T'):
                 stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True)
                 nettcpContent='\"|07|\";depth:2;'
@@ -277,11 +288,39 @@ Initial state: {self.initial}
             rule_id = f'sid:{self.getNewRuleID()};'                    
             rules += f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})\n'
             if (reps>1):
+                if re.search('\\*', index):                
+                    stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True, mult=True)
+                    transFlowbits = self.generateTransitFlowbits(mult=True)
                 content = self.generateResponseContent(sid, tid, True)
                 rule_id = f'sid:{self.getNewRuleID()};'
-                rules += f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})'
+                rules += f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})\n'
+        # Handle "reply" when server initiates
         if re.search('\\*', index) and index in self.proto:
-            print("fix me")
+            content = self.generateContent(sid, tid)
+            if (self.inMult[index]=='F'):
+                stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True)
+            else:            
+                stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True)
+            transFlowbits = self.generateTransitFlowbits()
+            header = self.generateHeader(True)        
+            if(self.msgType=='http' and self.inMult[index]=='T' and self.inKeyLen[index]>0):
+                xferState=True
+                httpContent=content.split(content.split(";")[3-len(content.split(";"))])[0]
+                stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, xfer=xferState)
+                rule_id = f'sid:{self.getNewRuleID()};'
+                rules += f'{header} ({httpContent}{stateFlowbits}{transFlowbits}{rule_id})\n'
+                stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, priorXfer=xferState)
+                transFlowbits = self.generateTransitFlowbits()
+                content=content.split(httpContent)[1]
+            rule_id = f'sid:{self.getNewRuleID()};'                
+            rules += f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})\n'
+            # check if additional packets are expected in request
+            if (self.inMult[index]=='T' and self.inLen[index]>1460):
+                size = f'dsize:>0;'
+                transFlowbits = self.generateTransitFlowbits(mult=True)
+                stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True, mult=True)
+                rule_id = f'sid:{self.getNewRuleID()};'                
+                rules += f'{header} ({size}{stateFlowbits}{transFlowbits}{rule_id})\n'
         return rules
 
     

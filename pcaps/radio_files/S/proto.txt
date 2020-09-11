@@ -1,28 +1,28 @@
 #type:cmb
 #inputs
-2 - content:"status.sts"; - 10 - 0 - F - 64
+13 - content:"/data/queue/t"; - 13 - 0 - F - 64
+3 - content:"NA"; - 2 - 0 - F - 64
 12 - content:"SendFile"; - 8 - 0 - F - 64
 9 - pcre:"/[0-9]+/"; - 6 - 0 - F - 64
-4* - content:"OK"; - 2 - 0 - F - 64
-1 - content:"GetFile"; - 7 - 0 - F - 64
-6* - content:"Transferred"; - 12 - 0 - F - 64
-10* - content:"SendFile"; - 8 - 0 - F - 64
-7 - content:"CheckFile"; - 9 - 0 - F - 64
-5* - content:"OK"; - 2 - 0 - F - 64
-11 - pcre:"/[a-zA-Z]+_/"; - 17 - -1 - F - 64
-3 - content:"NA"; - 2 - 0 - F - 64
-15 - content:"camera.jpg"; - 10 - 0 - F - 64
+16* - content:"Transferred:"; - 12 - 0 - F - 64
+2 - content:"status.sts"; - 10 - 0 - F - 64
 14 - content:"|1f8b|";rawbytes; - 2 - 0 - T - 993231
-16* - content:"Transferred"; - 12 - 0 - F - 64
+7 - content:"CheckFile"; - 9 - 0 - F - 64
+4* - content:"OK"; - 2 - 0 - F - 64
 8 - content:"command.cmb.gz"; - 14 - 0 - F - 64
-13 - content:"/data/queue/t"; - 13 - 0 - F - 64
+5* - content:"OK"; - 2 - 0 - F - 64
+6* - content:"Transferred:"; - 12 - 0 - F - 64
+15 - content:"camera.jpg"; - 10 - 0 - F - 64
+11 - pcre:"/[a-zA-Z]+_/"; - 17 - -1 - F - 64
+10* - content:"SendFile"; - 8 - 0 - F - 64
+1 - content:"GetFile"; - 7 - 0 - F - 64
 #outputs
-9 - content:"OK"; - 2 - 0 - F - 64
-4* - content:"NA"; - 2 - 0 - F - 64
-6* - content:":set machineStatus(general) {"; - 28 - 0 - T - 2765
-10* - content:"/data/queue/t"; - 13 - 0 - F - 64
-5* - pcre:"/[0-9]+/"; - 6 - 0 - F - 64
-3 - content:"SendFile"; - 8 - 0 - F - 64
-14 - content:"Transferred:"; - 12 - 0 - F - 64
-16* - content:":JFIF"; - 10 - 0 - T - 280636
 13 - content:"OK"; - 2 - 0 - F - 64
+3 - content:"SendFile"; - 8 - 0 - F - 64
+9 - content:"OK"; - 2 - 0 - F - 64
+16* - content:"JFIF"; - 10 - 0 - T - 280636
+14 - content:"Transferred:"; - 12 - 0 - F - 64
+4* - content:"NA"; - 2 - 0 - F - 64
+5* - pcre:"/[0-9]+/"; - 6 - 0 - F - 64
+6* - content:"set machineStatus(general) {"; - 28 - 0 - T - 3559
+10* - content:"/data/queue/t"; - 13 - 0 - F - 64
