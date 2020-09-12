@@ -38,7 +38,9 @@ type trackingData: record {
   resp_off: count &default=0;
   resp_total: count &default=0;
   not_large_req: bool &default=T;
-  not_large_resp: bool &default=T;  
+  not_large_resp: bool &default=T;
+  got_req:bool &default=F;
+  got_resp:bool &default=F;
 };
 
 global evalData: table[string] of trackingData;
@@ -62,18 +64,19 @@ event tcp_packet  (c: connection, is_orig: bool, flags: string, seq: count, ack:
 }
 
 event http_entity_data(c: connection, is_orig: bool, length: count, data: string){
-  if (((evalData[c$uid]$not_large_req) && (is_orig)) ||
-      (( evalData[c$uid]$not_large_resp) && (!is_orig))){
+  if (((evalData[c$uid]$not_large_req) && (is_orig) && !evalData[c$uid]$got_req) ||
+      (( evalData[c$uid]$not_large_resp) && (!is_orig) && !evalData[c$uid]$got_resp)){
     local check_data: string = data[0:100];
     local match: PatternMatchResult;
-    match = match_pattern(check_data,/^\{\"[a-zA-Z\"\_]+/);
+    match = match_pattern(check_data,/^[\[\{]+[a-zA-Z\"\_]+/);
     if (|match$str|<=1) {
-      match = match_pattern(check_data,/[;A-Z=]+/);
+      match = match_pattern(check_data,/[;a-zA-Z=]+/);
     }
     if (|match$str|<=1) {
-      match = match_pattern(check_data, /^\x1f\x8b/);
-    }    
+      match = match_pattern(data, /^\x1f\x8b/);
+    }
     if (is_orig) {
+      evalData[c$uid]$got_req=T;
       evalData[c$uid]$req_data=match$str;
       evalData[c$uid]$req_len=|match$str|;
       evalData[c$uid]$req_off=match$off;
@@ -85,6 +88,7 @@ event http_entity_data(c: connection, is_orig: bool, length: count, data: string
         evalData[c$uid]$req_off+=434;
       }      
     } else {
+      evalData[c$uid]$got_resp=T;    
       if(match$str!="DOCTYPE") {
         evalData[c$uid]$resp_data=match$str;
         evalData[c$uid]$resp_len=|match$str|;

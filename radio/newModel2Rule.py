@@ -235,7 +235,10 @@ Initial state: {self.initial}
             header = self.generateHeader(True)        
             if(self.msgType=='http' and self.inMult[index]=='T' and self.inKeyLen[index]>0):
                 xferState=True
-                httpContent=content.split(content.split(";")[3-len(content.split(";"))])[0]
+                if(len(content.split("content:"))>=4):
+                    httpContent=content.split(content.split("content:")[3])[0].rstrip("content:")
+                else:
+                    httpContent=content
                 stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, xfer=xferState)
                 rule_id = f'sid:{self.getNewRuleID()};'
                 rules += f'{header} ({httpContent}{stateFlowbits}{transFlowbits}{rule_id})\n'
@@ -251,20 +254,20 @@ Initial state: {self.initial}
                 stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True)
                 rule_id = f'sid:{self.getNewRuleID()};'                
                 rules += f'{header} ({size}{stateFlowbits}{transFlowbits}{rule_id})\n'
+            xferState=True
         # Handle reply
         if(index in self.out):
-            limit=int(self.outLen[index])
-            reps =int(limit/self.MTU)+1
             content = self.generateResponseContent(sid, tid)
             header = self.generateHeader(False)
             if(self.outMult[index]=='T' and not re.search('\\*',index)):
                 stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True)
                 transFlowbits = self.generateTransitFlowbits()
-                if(self.msgType=='http' and self.outKeyLen[index]>0):
+                if(self.msgType=='http'):
                     httpContent=content.split(content.split(";")[3-len(content.split(";"))])[0]
                     rule_id = f'sid:{self.getNewRuleID()};'
                     rules += f'{header} ({httpContent}{stateFlowbits}{transFlowbits}{rule_id})\n'
-                    if(len(content.split("content:"))>=4):
+                    if(len(content.split("content:"))>=4 and self.inMult[index]=='T'):
+                    #if(len(content.split("content:"))>=4):
                         content=content.split(httpContent)[1]
                     else:
                         content = self.generateResponseContent(sid, tid, True)
@@ -276,7 +279,14 @@ Initial state: {self.initial}
                 stateFlowbits = self.generateStateFlowbitsOptions(sid, tid)
                 transFlowbits = self.generateTransitFlowbits(True)                
             else:
-                stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True)
+                '''
+                if self.msgType=='nettcp':
+                    priorXfer=True
+                '''
+                if (self.outMult[index]=='T'):
+                    stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True, mult=True, priorXfer=xferState)
+                else:
+                    stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, final=True, priorXfer=xferState)
                 transFlowbits = self.generateTransitFlowbits(mult=True)
             if(self.msgType=='nettcp' and self.outMult[index]=='T'):
                 stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True)
@@ -287,13 +297,14 @@ Initial state: {self.initial}
                 content=f'content:{nettcpContent}'
             rule_id = f'sid:{self.getNewRuleID()};'                    
             rules += f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})\n'
-            if (reps>1):
-                if re.search('\\*', index):                
+            if (self.outMult[index]=='T' and self.msgType!='nettcp'):
+                if re.search('\\*', index):
                     stateFlowbits = self.generateStateFlowbitsOptions(sid, tid, transit=True, mult=True)
                     transFlowbits = self.generateTransitFlowbits(mult=True)
                 content = self.generateResponseContent(sid, tid, True)
                 rule_id = f'sid:{self.getNewRuleID()};'
                 rules += f'{header} ({content}{stateFlowbits}{transFlowbits}{rule_id})\n'
+            xferState=True
         # Handle "reply" when server initiates
         if re.search('\\*', index) and index in self.proto:
             content = self.generateContent(sid, tid)

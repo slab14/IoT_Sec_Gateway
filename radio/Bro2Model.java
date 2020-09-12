@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Set;
 
 
-public class MattModel {
+public class Bro2Model {
 
     public static class TraceData {
 	ArrayList<ArrayList<String>> tracesAll;

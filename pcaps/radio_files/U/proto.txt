@@ -1,13 +1,13 @@
 #type:http
 #inputs
+2 - content:"GET";content:"/printers"; - 30 - 19 - F - 200
+5 - content:"POST";content:"/print_jobs";content:"ultimakersystem"; - 15 - 0 - T - 2423759
+3 - content:"GET";content:"/print_jobs"; - 32 - 19 - F - 202
 4 - content:"GET";content:"/preview_image"; - 82 - 67 - F - 252
 1 - content:"GET";content:"/materials"; - 31 - 19 - F - 201
-3 - content:"GET";content:"/print_jobs"; - 32 - 19 - F - 202
-5 - content:"POST";content:"/print_jobs";content:"|1f8b|";rawbytes; - 436 - 434 - T - 2423759
-2 - content:"GET";content:"/printers"; - 30 - 19 - F - 200
 #outputs
+2 - content:"200";content:"OK";content:"[{\"machine_variant\""; - 19 - 0 - T - 5717
+5 - content:"200";content:"OK";content:"{\"force\""; - 8 - 0 - T - 904
+3 - content:"200";content:"OK";content:"[{\"force\""; - 9 - 0 - T - 7302
 4 - content:"200";content:"OK"; - 7 - 9 - T - 570
 1 - content:"200";content:"OK"; - 7 - 9 - T - 569
-3 - content:"200";content:"OK";content:"{\"force\""; - 9 - 1 - T - 7302
-5 - content:"200";content:"OK";content:"{\"force\""; - 8 - 0 - T - 904
-2 - content:"200";content:"OK";content:"{\"machine_variant\""; - 19 - 1 - T - 5717
