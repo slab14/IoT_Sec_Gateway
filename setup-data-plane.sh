@@ -86,7 +86,7 @@ install_ovs_fromGit() {
     cd ~
     git clone https://github.com/slab14/ovs.git
     cd ovs
-    git checkout feature-kernsign
+    git checkout rpi-hyp
     ./boot.sh
     ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc --with-linux=/lib/modules/$(uname -r)/build
     make
@@ -172,6 +172,28 @@ get_controller() {
     export MAVEN_OPTS='-Xmx1048m -Xms256m'
     export PATH=$M2:$PATH
     mvn clean install -Pq -DskipTests -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true
+    cd ~
+}
+
+setup_wifi_ap() {
+    cd ~
+    sudo apt-get upate -qq
+    sudo apt-get install -yqq build-essential git libnl-3-dev libnl-genl-3-dev iw crda libnl-genl-3-200 libnl-3-200 dnsmasq
+    # get openssl
+    
+    
+    #get hostapd
+    cd ~
+    git clone git://w1.fi/srv/git/hostap.git
+    cd hostap
+    git checkout hostap_2_6
+    # replace with OVS compatible bridge ioctl
+    cp ~/IoT_Sec_Gateway/RaspberryPi/linux_ioctl.c src/drivers/linux_ioctl.c
+    cp defconfig .config
+    sed -i 's/^#CONFIG_DRIVER_NL80211=y/CONFIG_DRIVER_NL80211=y/g' .config
+    sed -i 's/^#CONFIG_LIBNL32=y/CONFIG_LIBNL32=y/g' .config
+    sed -i 's/^#CONFIG_IEEE80211N=y/CONFIG_IEEE80211N=y/g' .config
+    make && sudo make install
     cd ~
 }
 
