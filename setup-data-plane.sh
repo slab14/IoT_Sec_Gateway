@@ -229,6 +229,12 @@ config_wifi_ap() {
     sudo sh -c 'echo "country_code=US\ninterface=${WIFI_IFACE}\nbridge=${WIFI_BR}\n /
 ssid=r3-hw\nhw_mode=g\nchannel=6\nmacaddr_acl=0\nauth_algs=1\nignore_broadcast_ssid=0\n /
 wpa=2\nwpa_passphrase=iotsec23\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP\nrsn_pairwise=CCMP" > /etc/hostapd/hostapd.conf'
+
+    ## high-speed variant
+#    sudo sh -c 'echo "country_code=US\ninterface=${WIFI_IFACE}\nbridge=${WIFI_BR}\n /
+#ssid=r3-hw\nhw_mode=g\nchannel=6\nmacaddr_acl=0\nauth_algs=1\nignore_broadcast_ssid=0\n /
+#wpa=2\nwpa_passphrase=iotsec23\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP\nrsn_pairwise=CCMP /
+#wmm_enabled=1\nieee80211n=1\nht_capab=[40-][40+][SHORT-GI-20][DSSS_CCK-40][40-INTOLERANT]" > /etc/hostapd/hostapd.conf'    
 }
 
 
