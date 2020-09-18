@@ -7,6 +7,10 @@ SERVER_SIDE=eth2
 OVS_PORT=6677
 DOCKER_PORT=4243
 
+WIFI_BR=wlan-br
+WIFI_IFACE=wlan0
+WIFI_IP=192.168.1.1
+
 update() {
     echo "Updating apt-get..."
     sudo apt-get update -qq
@@ -175,13 +179,18 @@ get_controller() {
     cd ~
 }
 
-setup_wifi_ap() {
+get_wifi_ap_tools() {
     cd ~
     sudo apt-get upate -qq
-    sudo apt-get install -yqq build-essential git libnl-3-dev libnl-genl-3-dev iw crda libnl-genl-3-200 libnl-3-200 dnsmasq
+    sudo apt-get install -yqq build-essential git libnl-3-dev libnl-genl-3-dev iw crda libnl-genl-3-200 libnl-3-200 dnsmasq checkinstall zlib1g-dev rfkill
     # get openssl
-    
-    
+    cd ~
+    git clone git://git.openssl.org/openssl.git
+    cd openssl
+    git checkout OpenSSL_1_0_2u
+    ./config --prefix=/usr shared
+    make && sudo make install_sw
+    cd ~
     #get hostapd
     cd ~
     git clone git://w1.fi/srv/git/hostap.git
@@ -197,6 +206,53 @@ setup_wifi_ap() {
     cd ~
 }
 
+get_dhcp_range(){
+    IFS="."
+    read -a IP <<< "$1"
+    start=$((${IP[3]}+1))
+    end=$(($start+60))
+    if [ "$end" -gt "250" ]; then
+	end=245
+    fi
+    echo "${IP[0]}.${IP[1]}.${IP[2]}.$start,${IP[0]}.${IP[1]}.${IP[2]}.$end"
+    return 0
+}
+
+config_wifi_ap() {
+    # update dhcpcd.conf
+    sudo sh -c 'echo "interface ${WIFI_BR}\n\t static ip_address ${WIFI_IP}/24" >> /etc/dhcpcd.conf'
+    # configure dnsmasq.conf
+    range=$(get_dhcp_range ${WIFI_IP})
+    sudo sh -c 'echo "interface ${WIFI_BR}\n\t dhcp-range="${range},255.255.255.0,24h" >> /etc/dnsmasq.conf'
+    # configure AP
+    sudo touch /etc/hostapd/hostapd.conf
+    sudo sh -c 'echo "country_code=US\ninterface=${WIFI_IFACE}\nbridge=${WIFI_BR}\n /
+ssid=r3-hw\nhw_mode=g\nchannel=6\nmacaddr_acl=0\nauth_algs=1\nignore_broadcast_ssid=0\n /
+wpa=2\nwpa_passphrase=iotsec23\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP\nrsn_pairwise=CCMP" > /etc/hostapd/hostapd.conf'
+}
+
+
+setup_wifi_br(){
+    ##TODO
+    sudo ovs-vsctl --may-exist add-br $WIFI_BR
+    sudo ip link set $WIFI_BR up
+    
+
+    local client_side_if=$CLIENT_SIDE
+    local server_side_if=$SERVER_SIDE
+    
+    sudo ovs-vsctl --may-exist add-port $BRIDGE_NAME $client_side_if \
+	 -- set Interface $client_side_if ofport_request=1
+    sudo ovs-ofctl mod-port $BRIDGE_NAME $client_side_if up
+}
+
+start_ap() {
+    sudo rfkill unblock wlan
+    sudo systemctl restart dhcpcd
+    sudo systemctl start dnsmasq
+    sudo hostapd -B /etc/hostapd/hostapd.conf
+}
+
 # Install packages
 echo "Beginning Dataplane Setup..."
 update
@@ -208,6 +264,8 @@ setup_maven
 setup_remote_ovsdb_server
 setup_remote_docker
 get_controller
+get_wifi_ap_tools
+config_wifi_ap
     
 # Setup
 disable_gro
