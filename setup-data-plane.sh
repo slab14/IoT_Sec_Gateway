@@ -233,17 +233,13 @@ wpa=2\nwpa_passphrase=iotsec23\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP\nrsn_pai
 
 
 setup_wifi_br(){
-    ##TODO
-    sudo ovs-vsctl --may-exist add-br $WIFI_BR
-    sudo ip link set $WIFI_BR up
+    sudo ovs-vsctl --may-exist add-br ${WIFI_BR}
+    sudo ip link set ${WIFI_BR} up
+    sudo ifconfig ${WIFI_BR} ${WIFI_IP}/24
     
-
-    local client_side_if=$CLIENT_SIDE
-    local server_side_if=$SERVER_SIDE
-    
-    sudo ovs-vsctl --may-exist add-port $BRIDGE_NAME $client_side_if \
-	 -- set Interface $client_side_if ofport_request=1
-    sudo ovs-ofctl mod-port $BRIDGE_NAME $client_side_if up
+    sudo ovs-vsctl --may-exist add-port ${WIFI_BR} ${WIFI_IFACE} \
+	 -- set Interface ${WIFI_IFACE} ofport_request=3 #TODO -- update to be 1
+    sudo ovs-ofctl mod-port ${WIFI_BR} ${WIFI_IFACE} up
 }
 
 start_ap() {
@@ -271,4 +267,6 @@ config_wifi_ap
 disable_gro
 setup_bridge
 configure_ovs_switch
+setup_wifi_br
+start_ap
 echo "Dataplane Ready"
