@@ -201,6 +201,7 @@ get_wifi_ap_tools() {
     cp defconfig .config
     sed -i 's/^#CONFIG_DRIVER_NL80211=y/CONFIG_DRIVER_NL80211=y/g' .config
     sed -i 's/^#CONFIG_LIBNL32=y/CONFIG_LIBNL32=y/g' .config
+    # allow higher throughput
     sed -i 's/^#CONFIG_IEEE80211N=y/CONFIG_IEEE80211N=y/g' .config
     make && sudo make install
     cd ~
@@ -252,6 +253,7 @@ start_ap() {
     sudo rfkill unblock wlan
     sudo systemctl restart dhcpcd
     sudo systemctl start dnsmasq
+    # receive errors when trying to start hostapd using systemctl, but works directly
     sudo hostapd -B /etc/hostapd/hostapd.conf
 }
 
