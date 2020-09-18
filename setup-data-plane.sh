@@ -9,7 +9,7 @@ DOCKER_PORT=4243
 
 WIFI_BR=wlan-br
 WIFI_IFACE=wlan0
-WIFI_IP=192.168.1.1
+WIFI_IP=192.168.0.1
 
 update() {
     echo "Updating apt-get..."
@@ -64,14 +64,6 @@ get_kernel_headers(){
     sudo make modules_install
     sudo rm /usr/scr/linux-source.tar.gz
     cd ~
-    /*
-    // generates kernel headers based upon kernel commit in changelog (incorrect headers for hypervisor, kernel version of original raspbian image, not upgraded one from hypervisor install)
-    // also sudo apt-get install raspberrypi-kernel-headers installs the wrong version (does not match uname -r)
-    sudo wget https://raw.githubusercontent.com/notro/rpi-source/master/rpi-source -O /usr/local/bin/rpi-source
-    sudo chmod +x /usr/local/bin/rpi-source
-    /usr/local/bin/rpi-source -q --tag-update
-    rpi-source
-    */
 }
 
 install_ovs_fromGit() {
@@ -103,7 +95,7 @@ install_ovs_fromGit() {
     sudo apt-get install -yqq jq curl uuid-runtime
 
     # Start OVS Deamons
-    sudo /usr/share/openvswitch/scripts/ovs-ctl start --system-id
+    sudo /usr/share/openvswitch/scripts/ovs-ctl start
 }
 
 setup_maven() {
@@ -181,7 +173,7 @@ get_controller() {
 
 get_wifi_ap_tools() {
     cd ~
-    sudo apt-get upate -qq
+    sudo apt-get update -qq
     sudo apt-get install -yqq build-essential git libnl-3-dev libnl-genl-3-dev iw crda libnl-genl-3-200 libnl-3-200 dnsmasq checkinstall zlib1g-dev rfkill
     # get openssl
     cd ~
@@ -198,6 +190,7 @@ get_wifi_ap_tools() {
     git checkout hostap_2_6
     # replace with OVS compatible bridge ioctl
     cp ~/IoT_Sec_Gateway/RaspberryPi/linux_ioctl.c src/drivers/linux_ioctl.c
+    cd hostapd
     cp defconfig .config
     sed -i 's/^#CONFIG_DRIVER_NL80211=y/CONFIG_DRIVER_NL80211=y/g' .config
     sed -i 's/^#CONFIG_LIBNL32=y/CONFIG_LIBNL32=y/g' .config
@@ -211,35 +204,41 @@ get_dhcp_range(){
     IFS="."
     read -a IP <<< "$1"
     start=$((${IP[3]}+1))
-    end=$(($start+60))
+    end=$((${start}+60))
     if [ "$end" -gt "250" ]; then
 	end=245
     fi
-    echo "${IP[0]}.${IP[1]}.${IP[2]}.$start,${IP[0]}.${IP[1]}.${IP[2]}.$end"
+    echo "${IP[0]}.${IP[1]}.${IP[2]}.${start},${IP[0]}.${IP[1]}.${IP[2]}.${end}"
     return 0
 }
 
 config_wifi_ap() {
     # update dhcpcd.conf
-    sudo sh -c 'echo "interface ${WIFI_BR}\n\t static ip_address ${WIFI_IP}/24" >> /etc/dhcpcd.conf'
+    printf "interface ${WIFI_BR}\n\t static ip_address ${WIFI_IP}/24" | sudo tee -a /etc/dhcpcd.conf
     # configure dnsmasq.conf
+    echo $WIFI_IP
     range=$(get_dhcp_range ${WIFI_IP})
-    sudo sh -c 'echo "interface ${WIFI_BR}\n\t dhcp-range="${range},255.255.255.0,24h" >> /etc/dnsmasq.conf'
+    echo $range
+    printf "\ninterface=${WIFI_BR}\n\t dhcp-range=${range},255.255.255.0,24h" | sudo tee -a /etc/dnsmasq.conf
     # configure AP
+    sudo mkdir -p /etc/hostapd
     sudo touch /etc/hostapd/hostapd.conf
-    sudo sh -c 'echo "country_code=US\ninterface=${WIFI_IFACE}\nbridge=${WIFI_BR}\n /
-ssid=r3-hw\nhw_mode=g\nchannel=6\nmacaddr_acl=0\nauth_algs=1\nignore_broadcast_ssid=0\n /
-wpa=2\nwpa_passphrase=iotsec23\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP\nrsn_pairwise=CCMP" > /etc/hostapd/hostapd.conf'
+    printf "country_code=US\ninterface=${WIFI_IFACE}\nbridge=${WIFI_BR}\n\
+ssid=r3-hw\nhw_mode=g\nchannel=6\nmacaddr_acl=0\nauth_algs=1\nignore_broadcast_ssid=0\n\
+wpa=2\nwpa_passphrase=iotsec23\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP\nrsn_pairwise=CCMP" | sudo tee /etc/hostapd/hostapd.conf
 
     ## high-speed variant
-#    sudo sh -c 'echo "country_code=US\ninterface=${WIFI_IFACE}\nbridge=${WIFI_BR}\n /
-#ssid=r3-hw\nhw_mode=g\nchannel=6\nmacaddr_acl=0\nauth_algs=1\nignore_broadcast_ssid=0\n /
-#wpa=2\nwpa_passphrase=iotsec23\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP\nrsn_pairwise=CCMP /
-#wmm_enabled=1\nieee80211n=1\nht_capab=[40-][40+][SHORT-GI-20][DSSS_CCK-40][40-INTOLERANT]" > /etc/hostapd/hostapd.conf'    
+#    printf "country_code=US\ninterface=${WIFI_IFACE}\nbridge=${WIFI_BR}\n\
+#ssid=r3-hw\nhw_mode=g\nchannel=6\nmacaddr_acl=0\nauth_algs=1\nignore_broadcast_ssid=0\n\
+#wpa=2\nwpa_passphrase=iotsec23\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP\nrsn_pairwise=CCMP\
+#wmm_enabled=1\nieee80211n=1\nht_capab=[40-][40+][SHORT-GI-20][DSSS_CCK-40][40-INTOLERANT]" | sudo tee /etc/hostapd/hostapd.conf
 }
 
 
 setup_wifi_br(){
+    if [[ ! "$(sudo ovs-vsctl show)" ]]; then
+	sudo /usr/share/openvswitch/scripts/ovs-ctl start --system-id
+    fi
     sudo ovs-vsctl --may-exist add-br ${WIFI_BR}
     sudo ip link set ${WIFI_BR} up
     sudo ifconfig ${WIFI_BR} ${WIFI_IP}/24
