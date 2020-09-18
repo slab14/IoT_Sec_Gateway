@@ -250,6 +250,10 @@ setup_wifi_br(){
     # setup peer patch to br0
     sudo ovs-vsctl -- add-port ${BRIDGE_NAME} patch0 -- set interface patch0 type=patch options:peer=patch1 \
 	 --add-port ${WIFI_BR} patch1 -- set interface patch1 type=patch options:peer=patch0
+    # add routing rules
+    ## TODO find port numbers
+    sudo ovs-ofctl add-flow ${WIFI_BR} "ip in_port=1 actions=2"
+    sudo ovs-ofctl add-flow ${WIFI_BR} "arp in_port=1 actions=2"    
 }
 
 start_ap() {
