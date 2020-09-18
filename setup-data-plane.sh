@@ -246,6 +246,10 @@ setup_wifi_br(){
     sudo ovs-vsctl --may-exist add-port ${WIFI_BR} ${WIFI_IFACE} \
 	 -- set Interface ${WIFI_IFACE} ofport_request=3 #TODO -- update to be 1
     sudo ovs-ofctl mod-port ${WIFI_BR} ${WIFI_IFACE} up
+
+    # setup peer patch to br0
+    sudo ovs-vsctl -- add-port ${BRIDGE_NAME} patch0 -- set interface patch0 type=patch options:peer=patch1 \
+	 --add-port ${WIFI_BR} patch1 -- set interface patch1 type=patch options:peer=patch0
 }
 
 start_ap() {
