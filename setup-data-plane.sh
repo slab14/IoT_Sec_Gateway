@@ -124,8 +124,9 @@ setup_remote_docker() {
 disable_gro() {
     local client_side_if=eth1
     local server_side_if=eth2
-    sudo ethtool -K $client_side_if gro off
-    sudo ethtool -K $server_side_if gro off
+    sudo ethtool -K $client_side_if tx off rx off gro off
+    sudo ethtool -K $server_side_if tx off rx off gro off
+    sudo ethtool -K wlan0 tx off rx off gro off    
 }
 
 
@@ -214,7 +215,8 @@ get_dhcp_range(){
 
 config_wifi_ap() {
     # update dhcpcd.conf
-    printf "interface ${WIFI_BR}\n\t static ip_address ${WIFI_IP}/24" | sudo tee -a /etc/dhcpcd.conf
+    printf "interface ${WIFI_BR}\n\t static ip_address ${WIFI_IP}/24\n\
+denyinterface wlan0\n denyinterface eth0" | sudo tee -a /etc/dhcpcd.conf
     # configure dnsmasq.conf
     echo $WIFI_IP
     range=$(get_dhcp_range ${WIFI_IP})
@@ -250,10 +252,6 @@ setup_wifi_br(){
     # setup peer patch to br0
     sudo ovs-vsctl -- add-port ${BRIDGE_NAME} patch0 -- set interface patch0 type=patch options:peer=patch1 \
 	 --add-port ${WIFI_BR} patch1 -- set interface patch1 type=patch options:peer=patch0
-    # add routing rules
-    ## TODO find port numbers
-    sudo ovs-ofctl add-flow ${WIFI_BR} "ip in_port=1 actions=2"
-    sudo ovs-ofctl add-flow ${WIFI_BR} "arp in_port=1 actions=2"    
 }
 
 start_ap() {
