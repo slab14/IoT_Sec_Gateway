@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 BRIDGE_NAME=br0
 CLIENT_SIDE=eth1
 SERVER_SIDE=eth2
@@ -74,7 +76,7 @@ install_ovs_fromGit() {
 	 libtool wget netcat curl clang  \
 	 graphviz automake python-dev python3-pip \
 	 build-essential pkg-config \
-         libssl-dev gdb linux-headers-`uname -r`
+         libssl-dev gdb
     sudo pip3 -qq install --upgrade pip
     pip -qq install --user six pyftpdlib tftpy flake8 sparse
 
@@ -267,6 +269,7 @@ echo "Beginning Dataplane Setup..."
 update
 install_docker
 build_docker_containers
+get_kernel_headers
 install_ovs_fromGit
 install_python_packages
 setup_maven
