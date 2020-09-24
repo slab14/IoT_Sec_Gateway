@@ -38,19 +38,18 @@ unsigned char * uappCalcHmac(uint8_t *data, uint32_t len) {
 
 /* Callback function */
 static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *nfa, void *data) {
-  unsigned char * hash;
+  unsigned char *hash;
   char key[]="super_secret_key_for_hmac";
   //hash = calcHmac(key, nfa);
-  u_int32_t id;
+  uint32_t id;
   struct nfqnl_msg_packet_hdr *ph;
   ph=nfq_get_msg_packet_hdr(nfa);
   id=ntohl(ph->packet_id);
 
-  //testing
   unsigned char *rawData;
   int len = nfq_get_payload(nfa, &rawData);
-  struct pkt_buff *pkBuff=pktb_alloc(AF_INET, rawData, len, 0x20); /* create buffer with extra space for hash value */
-  struct iphdr* ip=nfq_ip_get_hdr(pkBuff);
+  struct pkt_buff *pkBuff=pktb_alloc(AF_INET, rawData, len, 0x24); /* create buffer with extra space for hash value */
+  struct iphdr *ip=nfq_ip_get_hdr(pkBuff);
   nfq_ip_set_transport_header(pkBuff, ip);
   if(ip->protocol == IPPROTO_TCP) {
     struct tcphdr *tcp = nfq_tcp_get_hdr(pkBuff);    
@@ -59,13 +58,12 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
     if(payloadLen>0){
       hash=uappCalcHmac(pktb_data(pkBuff), pktb_len(pkBuff));
       if(hash != NULL) {
-	/* using mangle, updates ip & tcp headers */
-	//nfq_tcp_mangle_ipv4(pkBuff, 0, 0, hash, DIGEST_SIZE);  
-	/* alternative to mangle, performing same actions */
 	pktb_put(pkBuff,DIGEST_SIZE);
 	char *payload=nfq_tcp_get_payload(tcp, pkBuff);
-	//memmove(payload+DIGEST_SIZE, payload, payloadLen);
-	memcpy(payload+payloadLen+2, hash, DIGEST_SIZE);
+	memcpy(payload+payloadLen, hash, DIGEST_SIZE);
+	pktb_put(pkBuff,1);
+	uint8_t hash_len=DIGEST_SIZE;
+	memcpy(payload+payloadLen+DIGEST_SIZE, &hash_len, 1);	
 	ip->tot_len=htons(pktb_len(pkBuff));	  
 	nfq_tcp_compute_checksum_ipv4(tcp,ip);
 	nfq_ip_set_checksum(ip);

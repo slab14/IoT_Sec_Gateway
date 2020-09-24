@@ -21,8 +21,8 @@ brctl addif bridge0 eth0 eth1
 ifconfig eth0 up
 ifconfig eth1 up
 ifconfig bridge0 up
-ifconfig eth0 mtu 1520
-ifconfig eth1 mtu 1520
+ifconfig eth0 mtu 1534
+ifconfig eth1 mtu 1534
 
 #Send packets to NFQUEUE
 iptables -t raw -A PREROUTING -i bridge0 -j NFQUEUE --queue-num 1

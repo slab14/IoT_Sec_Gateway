@@ -35,7 +35,7 @@ void reverseData(char *payload, int payloadLen){
   }
 }
 
-unsigned char * uappCalcHmac(uint8_t *data, uint32_t len) {
+unsigned char *uappCalcHmac(uint8_t *data, uint32_t len) {
   memcpy(&uhcp.pkt, data, len);
   uhcp.pkt_size=len;
   uhsign_param_t *uhcp_ptr = &uhcp;
@@ -55,27 +55,28 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
   ph=nfq_get_msg_packet_hdr(nfa);
   id=ntohl(ph->packet_id);
 
-  //testing
   unsigned char *rawData;
   int len = nfq_get_payload(nfa, &rawData);
   struct pkt_buff *pkBuff=pktb_alloc(AF_INET, rawData, len, 0x0); /* create buffer with extra space for hash value */
-  struct iphdr* ip=nfq_ip_get_hdr(pkBuff);
+  struct iphdr *ip=nfq_ip_get_hdr(pkBuff);
   nfq_ip_set_transport_header(pkBuff, ip);
   if(ip->protocol == IPPROTO_TCP) {
     struct tcphdr *tcp = nfq_tcp_get_hdr(pkBuff);    
     unsigned int payloadLen = nfq_tcp_get_payload_len(tcp, pkBuff);
     payloadLen -= 4*tcp->th_off;
-    if(payloadLen>DIGEST_SIZE){
+    if(payloadLen>0){
       /* received hash */
+      unsigned char digest_len=0;
       unsigned char oldHash[DIGEST_SIZE];
       char *payload = nfq_tcp_get_payload(tcp, pkBuff);
-      memcpy(oldHash, payload+payloadLen-DIGEST_SIZE+2, DIGEST_SIZE);
-      /* Remove first 16 data Bytes */
-      //memmove(payload, payload, payloadLen-DIGEST_SIZE);
+      memcpy(&digest_len, payload+payloadLen-1, 1);
+      if(digest_len>DIGEST_SIZE)
+        return nfq_set_verdict(qh, id, NF_DROP, 0, NULL);	
+      memcpy(oldHash, payload+payloadLen-1-digest_len, digest_len);      
       
-      /* Set final 16 byes (tag) to 0 */
-      memset(payload+payloadLen-DIGEST_SIZE, 0x00, DIGEST_SIZE);
-      pktb_trim(pkBuff, pktb_len(pkBuff)-DIGEST_SIZE);
+      /* Set hash to 0 */
+      memset(payload+payloadLen-1-digest_len, 0x00, (digest_len+1));
+      pktb_trim(pkBuff, pktb_len(pkBuff)-(digest_len+1));
       ip->tot_len=htons(pktb_len(pkBuff));
       nfq_tcp_compute_checksum_ipv4(tcp,ip);
       nfq_ip_set_checksum(ip);
@@ -84,7 +85,7 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg, struct nfq_data *
       //hash = newCalcHmac(key, payload, payloadLen-DIGEST_SIZE);      
       hash = uappCalcHmac(pktb_data(pkBuff), pktb_len(pkBuff));
       if(hash!=NULL){
-	if(compare(hash, oldHash, DIGEST_SIZE-2)==0) {
+	if(compare(hash, oldHash, digest_len)==0) {
 	  return nfq_set_verdict(qh, id, NF_ACCEPT, pktb_len(pkBuff), pktb_data(pkBuff));
 	}
       }else {

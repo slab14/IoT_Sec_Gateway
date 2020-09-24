@@ -62,6 +62,8 @@ get_kernel_headers(){
     sudo ln -sf /usr/src/linux /lib/modules/$(uname -r)/build
     sudo ln -sf /usr/src/linux /lib/modules/$(uname -r)/source
     cd /usr/src/linux
+    export KERNEL=kernel7
+    sudo make bcm2709_Defconfig
     sudo make modules
     sudo make modules_install
     sudo rm /usr/scr/linux-source.tar.gz
