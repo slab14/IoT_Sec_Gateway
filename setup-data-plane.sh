@@ -177,7 +177,7 @@ get_controller() {
     export M2=$M2_HOME
     export MAVEN_OPTS='-Xmx1048m -Xms256m'
     export PATH=$M2:$PATH
-    mvn clean install -Pq -DskipTests -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true -Dfindbugs.skip=true
+    mvn clean install -Pq -DskipTests -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true
     cd ~
 }
 
