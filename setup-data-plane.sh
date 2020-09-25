@@ -16,7 +16,7 @@ WIFI_IP=192.168.0.1
 update() {
     echo "Updating apt-get..."
     sudo apt-get update -qq
-    sudo apt-get install -yqq maven jq libxslt1.1 dpkg
+    sudo apt-get install -yqq maven jq libxslt1.1 dpkg tar
     cd ~
     mkdir -p java11_deb
     cd java11_deb
@@ -24,6 +24,11 @@ update() {
     wget https://download.bell-sw.com/java/11.0.7+10/bellsoft-jre11.0.7+10-linux-arm32-vfp-hflt.deb
     sudo dpkg -i bellsoft-jdk11.0.7+10-linux-arm32-vfp-hflt.deb
     sudo dpkg -i bellsoft-jre11.0.7+10-linux-arm32-vfp-hflt.deb
+    cd ~
+    mkdir -p mvn3
+    cd mvn3
+    wget https://mirrors.ocf.berkeley.edu/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+    sudo tar xzvf apache-maven-3.6.3-bin.tar.gz -C /usr/share/maven/
     cd ~
     echo "Update complete"
 }
@@ -172,7 +177,7 @@ get_controller() {
     export M2=$M2_HOME
     export MAVEN_OPTS='-Xmx1048m -Xms256m'
     export PATH=$M2:$PATH
-    mvn clean install -Pq -DskipTests -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true
+    mvn clean install -Pq -DskipTests -Dcheckstyle.skip=true -Dmaven.javadoc.skip=true -Dfindbugs.skip=true
     cd ~
 }
 
