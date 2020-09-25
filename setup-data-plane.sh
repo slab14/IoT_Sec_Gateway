@@ -87,6 +87,7 @@ install_ovs_fromGit() {
     cd ovs
     git checkout rpi-hyp
     ./boot.sh
+    sudo cp lib/libuhcall.a /usr/lib/.
     ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc --with-linux=/lib/modules/$(uname -r)/build
     make -j4
     sudo make install
