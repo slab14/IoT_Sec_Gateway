@@ -79,8 +79,7 @@ install_ovs_fromGit() {
 	 graphviz automake python-dev python3-pip \
 	 build-essential pkg-config \
          libssl-dev gdb
-    sudo pip3 -qq install --upgrade pip
-    pip -qq install --user six pyftpdlib tftpy flake8 sparse
+    pip -qq install --user six pyftpdlib tftpy flake8
 
     #Clone repository, build, and install
     cd ~
@@ -89,7 +88,7 @@ install_ovs_fromGit() {
     git checkout rpi-hyp
     ./boot.sh
     ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc --with-linux=/lib/modules/$(uname -r)/build
-    make
+    make -j4
     sudo make install
     sudo make modules_install
     sudo modprobe -v openvswitch
@@ -186,7 +185,7 @@ get_wifi_ap_tools() {
     cd openssl
     git checkout OpenSSL_1_0_2u
     ./config --prefix=/usr shared
-    make && sudo make install_sw
+    make -j4 && sudo make install_sw
     cd ~
     #get hostapd
     cd ~
@@ -201,7 +200,7 @@ get_wifi_ap_tools() {
     sed -i 's/^#CONFIG_LIBNL32=y/CONFIG_LIBNL32=y/g' .config
     # allow higher throughput
     sed -i 's/^#CONFIG_IEEE80211N=y/CONFIG_IEEE80211N=y/g' .config
-    make && sudo make install
+    make -j4 && sudo make install
     cd ~
 }
 
