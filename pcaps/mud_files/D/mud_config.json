@@ -1,0 +1,14 @@
+{
+    "defaultGatewayConfig": {
+        "macAddress" : "14:cc:20:51:33:ea",
+        "ipAddress": "192.168.1.1",
+        "ipv6Address": "fe80:0:0:0:16cc:20ff:fe51:33ea"
+    },
+
+    "deviceConfig":{
+        "device":"00:04:63:64:d3:07",
+        "deviceName": "dremel"
+    },
+
+    "pcapLocation": "/users/slab/IoT_Sec_Gateway/pcaps/D.pcapng"
+}
