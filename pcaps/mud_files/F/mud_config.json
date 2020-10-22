@@ -1,0 +1,14 @@
+{
+    "defaultGatewayConfig": {
+        "macAddress" : "08:00:7f:0a:00:57",
+        "ipAddress": "198.168.0.1",
+        "ipv6Address": "fe80:0:0:0:391c:29ee:5819:6041"
+    },
+
+    "deviceConfig":{
+        "device":"ec:3d:fd:e5:32:fc",
+        "deviceName": "F"
+    },
+
+    "pcapLocation": "/Users/mattmcc/Code/sec_gate/IoT_Sec_Gateway/pcaps/F.pcapng"
+}
