@@ -427,6 +427,11 @@ Initial state: {self.initial}
         self.SERVER_PORT=port
 
 
+def readPort(fPort):
+    with open(fPort, 'r') as f:
+        line = f.readline().rstrip()
+    return int(line)
+        
 def readModel(fModel, protofile):
     """This function reads the model file and generate a FSM class out of it.""" 
     states = []
@@ -477,7 +482,8 @@ def main():
 
     F = readModel(args.model, args.proto)
     print(F)
-    F.setServerPort(args.port)
+#    F.setServerPort(args.port)
+    F.setServerPort(readPort(args.port))
     F.setGroupName(args.name)    
     F.generateAllRules(args.rules)
 

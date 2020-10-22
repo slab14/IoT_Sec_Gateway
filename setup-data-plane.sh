@@ -108,7 +108,7 @@ setup_remote_ovsdb_server() {
 }
 
 setup_remote_docker() {
-    sudo sed -i 's/fd\:\/\// fd\:\/\/ \-H tcp\:\/\/0\.0\.0\.0\:'"$DOCKER_PORT"'/g' /lib/systemd/system/docker.service
+    sudo sed -i 's/fd\:\/\// fd\:\/\/ \-H tcp\:\/\/127\.0\.0\.1\:'"$DOCKER_PORT"'/g' /lib/systemd/system/docker.service
     sudo systemctl daemon-reload
     sudo service docker restart
 }

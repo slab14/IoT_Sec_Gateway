@@ -1,0 +1,198 @@
+{
+    "n": 4,
+    "devices": [
+	{
+	    "name" : "device0",
+	    "inMAC": "90:e2:ba:b3:bb:3c",
+	    "outMAC": "*",
+	    "states": ["normal", "attack"],
+	    "transition": ["snort:alert"],
+	    "protections": [
+		{
+		    "state": "normal",
+		    "chain": "P",
+		    "addFiles": [],		    
+		    "images": ["snort_base"],
+		    "sha1": ["*"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_cont1",
+			    "ip": "",
+			    "hostFS": "/mnt/snort/log",
+			    "contFS": "/var/log/snort/",
+			    "archives": [
+				{
+				    "tar": "/mnt/rules_a.tar",
+				    "path": "/etc/snort/rules"
+				},
+				{
+				    "tar": "/mnt/config.tar",
+				    "path": "/etc/snort"
+				}
+			    ]
+			}
+		    ]
+		},
+		{
+		    "state": "normal",
+		    "chain": "P",
+		    "addFiles": [],		    
+		    "images": ["snort_base"],
+		    "sha1": ["*"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_cont1",
+			    "ip": "",
+			    "hostFS": "/mnt/snort/log",
+			    "contFS": "/var/log/snort/",
+			    "archives": [
+				{
+				    "tar": "/mnt/rules_b.tar",
+				    "path": "/etc/snort/rules"
+				},
+				{
+				    "tar": "/mnt/config.tar",
+				    "path": "/etc/snort"
+				}
+			    ]
+			}
+		    ]
+		}
+	    ]
+	},
+	{
+	    "name" : "device1",
+	    "inMAC": "90:e2:ba:24:d1:30",
+	    "outMAC": "90:e2:ba:24:d0:bc",
+	    "states": ["normal"],
+	    "transition": [""],
+	    "protections": [
+		{
+		    "state": "normal",	    
+		    "chain": "P-A",
+		    "addFiles": [],		    
+		    "images": ["snort_direct_block_v2", "squid_proxy"],
+		    "sha1": ["*","*"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_cont2",
+			    "ip": "",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [{}]		    
+			},
+			{
+			    "contName": "squid_http_cont2",
+			    "ip": "10.10.2.100",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [{}]		    
+			}		
+		    ]
+		}
+	    ]
+	},
+	{
+	    "name" : "TestNode0",
+	    "inMAC": "3c:fd:fe:b0:ef:bf",
+	    "outMAC": "*",
+	    "states": ["normal", "scared", "panic"],
+	    "transition": ["snort:ICMP", "snort:Hello World"],
+	    "protections": [
+		{
+		    "state": "normal",	    
+		    "chain": "P",
+		    "addFiles": [],
+		    "images": ["snort_base"],
+		    "sha1": ["bd2d7062206424740a185125251768ea9b97e644"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_demo_cont",
+			    "ip": "",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [
+				{
+				    "tar": "/etc/sec_gate/testNode0/rules_a.tar",
+				    "path": "/etc/snort/rules"
+				}
+			    ]
+			}
+		    ]
+		},
+		{
+		    "state": "scared",	    
+		    "chain": "P",
+		    "addFiles": [],		    
+		    "images": ["snort_base"],
+		    "sha1": ["bd2d7062206424740a185125251768ea9b97e644"],		    
+		    "imageOpts": [
+			{
+			    "contName": "snort_demo_cont",
+			    "ip": "",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [
+				{
+				    "tar": "/etc/sec_gate/testNode0/rules_b.tar",
+				    "path": "/etc/snort/rules"
+				}
+			    ]			    
+			}
+		    ]
+		},
+		{
+		    "state": "panic",	    
+		    "chain": "P",
+		    "addFiles": [],		    
+		    "images": ["snort_base"],
+		    "sha1": ["bd2d7062206424740a185125251768ea9b97e644"],		    
+		    "imageOpts": [
+			{
+			    "contName": "snort_demo_cont",
+			    "ip": "",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [
+				{
+				    "tar": "/etc/sec_gate/testNode0/rules_c.tar",
+				    "path": "/etc/snort/rules"
+				}
+			    ]			    
+			}
+		    ]
+		}				
+	    ]
+	},
+	{
+	    "name" : "TestRadio",
+	    "inMAC": "3c:fd:fe:b0:ef:b4",
+	    "outMAC": "*",
+	    "states": ["normal"],
+	    "transition": ["snort:Hello World"],
+	    "protections": [
+		{
+		    "state": "normal",	    
+		    "chain": "R",
+		    "addFiles": ["/etc/sec_gate/radio/model.txt","/etc/sec_gate/radio/proto.txt", "/etc/sec_gate_radio/port.txt"],
+		    "images": ["snort_base"],
+		    "sha1": ["*"],
+		    "imageOpts": [
+			{
+			    "contName": "snort_demo_radio_cont",
+			    "ip": "",
+			    "hostFS": "",
+			    "contFS": "",
+			    "archives": [
+				{
+				    "tar": "/etc/sec_gate/radio/radio_rules.tar",
+				    "path": "/etc/snort/rules"
+				}
+			    ]
+			}
+		    ]
+		}
+	    ]
+	}		
+    ]
+}
