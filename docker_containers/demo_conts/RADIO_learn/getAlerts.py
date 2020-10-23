@@ -11,12 +11,14 @@ fileModel='/send/model.txt'
 fileProto='/send/proto.txt'
 
 def getData(fileModel, fileProto):
-    data='MODEL:'
+    data=''
     with open(fileModel, 'r') as f:
         data+=f.read()
-    data+='PROTO:'
+    data+=','
     with open(fileProto, 'r') as f:
         data+=f.read()
+    data+=',80,'
+    # get port
     with open("/ID", 'r') as f:
         protectionID=f.read().rstrip()
     return (protectionID, data)

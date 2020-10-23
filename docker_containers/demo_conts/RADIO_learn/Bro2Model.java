@@ -101,14 +101,14 @@ public class Bro2Model {
 		if(fromKey.equals("(empty)")) { fromKey=" "; }		
 		if(type.equals("http")){
 		    String[] lastURI=splitted[10].split("/");
-		    toKey=splitted[9]+",/"+lastURI[lastURI.length-1]+",";
+		    toKey=splitted[9]+";/"+lastURI[lastURI.length-1]+";";
 		    if(splitted[11].equals("(empty)")) {
 			toKeyLen=splitted[10].length()+5;
 			toKeyOff=splitted[10].indexOf(lastURI[lastURI.length-1])+3;
 		    }else{
 			toKey+=addEscapes(splitted[11]);
 		    }
-		    fromKey=splitted[14]+","+splitted[15]+",";
+		    fromKey=splitted[14]+";"+splitted[15]+";";
 		    if(splitted[16].equals("(empty)")) {
 			fromKeyLen=fromKey.length();
 			fromKeyOff=9;
@@ -163,8 +163,8 @@ public class Bro2Model {
 	    traces.add(seq);
 	    for(String s: seq){
 		writer.append(s);		
-		System.out.print(s+",");		
-		writer.append(",");
+		System.out.print(s+";");		
+		writer.append(";");
 	    }
 	    writer.append(""+0+"\n");
 	    System.out.print("\n");
@@ -179,11 +179,11 @@ public class Bro2Model {
 	    String mult = tdataMap.get(tMap.get(alpha))[0];
 	    if(content.contains("\\x")) {
 		if(type.equals("http")){
-		    String[] parts=content.split(",");
+		    String[] parts=content.split(";");
 		    if(parts[2].contains("\\x")) {
 			parts[2]=convertStringToHex(parts[2])+"rawbytes";
 		    }
-		    content=parts[0]+","+parts[1]+","+parts[2];
+		    content=parts[0]+";"+parts[1]+";"+parts[2];
 		} else {
 		    content=convertStringToHex(content)+"rawbytes";
 		}
@@ -199,7 +199,7 @@ public class Bro2Model {
 			f.append(tMap.get(alpha)+" - "+"content:\""+content+"\"; - "+Integer.toString(sizeData[0])+" - "+Integer.toString(sizeData[1])+" - "+mult+" - "+Integer.toString(sizeData[4])+"\n");
 		    }
 		} else {
-		    String[] parts=content.split(",");
+		    String[] parts=content.split(";");
 		    String rule="";
 		    for(String part: parts) {
 			if(part.contains("/[")) {
@@ -220,11 +220,11 @@ public class Bro2Model {
 	    String mult = tdataMap.get(tMap.get(bets))[1];
 	    if(content.contains("\\x")) {
 		if(type.equals("http")){
-		    String[] parts=content.split(",");
+		    String[] parts=content.split(";");
 		    if(parts[2].contains("\\x")) {
 			parts[2]=convertStringToHex(parts[2])+"rawbytes";
 		    }
-		    content=parts[0]+","+parts[1]+","+parts[2];
+		    content=parts[0]+";"+parts[1]+";"+parts[2];
 		} else {
 		    content=convertStringToHex(content)+"rawbytes";
 		}		
@@ -240,7 +240,7 @@ public class Bro2Model {
 			f.append(tMap.get(bets)+" - "+"content:\""+content.trim()+"\"; - "+Integer.toString(sizeData[2])+" - "+Integer.toString(sizeData[3])+" - "+mult+" - "+Integer.toString(sizeData[5])+"\n");
 		    }
 		}else {
-		    String[] parts=content.split(",");
+		    String[] parts=content.split(";");
 		    String rule="";
 		    for(String part: parts) {
 			if(part.contains("/[")){
@@ -305,8 +305,8 @@ public class Bro2Model {
 	    traces.add(seq);
 	    for(String s: seq){
 		writer.append(s);		
-		System.out.print(s+",");		
-		writer.append(",");
+		System.out.print(s+";");		
+		writer.append(";");
 	    }
 	    writer.append(""+0+"\n");
 	    System.out.print("\n");
@@ -325,7 +325,7 @@ public class Bro2Model {
 	    String[] parts = oMap.get(bets).split("/");
 	    int min = Collections.min(outMsgLens.get(bets));
 	    int max = Collections.max(outMsgLens.get(bets));	    
-	    String len = Integer.toString(min)+","+Integer.toString(max);
+	    String len = Integer.toString(min)+";"+Integer.toString(max);
 	    f.append(bets+" - "+"content:\""+parts[0]+"\";content:\""+parts[1]+"\"; - "+len+"\n");
 	}
 	f.flush();
@@ -464,7 +464,7 @@ public class Bro2Model {
 					if (postLoopTransition.equals(secondLoopTransition)) {continue;}
 					String nextState = fsm.delta.get(loopState).get(postLoopTransition);
 					if(!fsm.delta.get(state).containsKey(postLoopTransition)){
-					    transitions2add.add(state+","+postLoopTransition+","+nextState);
+					    transitions2add.add(state+";"+postLoopTransition+";"+nextState);
 					}
 					fsm.delta.get(preLoopState).replace(preLoopTransition, state);
 					fsm.stateMap.remove(loopState);
@@ -503,7 +503,7 @@ public class Bro2Model {
 		    }
 		}
 		for(String toAdd: transitions2add){
-		    String[] add = toAdd.split(",");
+		    String[] add = toAdd.split(";");
 		    if(!fsm.delta.get(add[0]).containsKey(add[1])){
 			fsm.delta.get(add[0]).put(add[1], add[2]);
 		    } else {
@@ -702,7 +702,7 @@ public class Bro2Model {
 	    FileWriter writer = new FileWriter("model.txt");
 	    writer.append("states\n");
 	    String outStr="";
-	    for (String statestr : fsm.stateMap.keySet()){outStr+=statestr+","; }
+	    for (String statestr : fsm.stateMap.keySet()){outStr+=statestr+";"; }
 	    outStr=outStr.substring(0, outStr.length()-1);
 	    writer.append(outStr+"\n");
 	    writer.append("#initial\n");
@@ -714,7 +714,7 @@ public class Bro2Model {
 		for (String x : fsm.delta.get(sstate).keySet()){
 		    if (!alphabet.contains(x)){
 			alphabet.add(x);
-			outStr+=x+",";
+			outStr+=x+";";
 		    }
 		}
 	    }
@@ -725,7 +725,7 @@ public class Bro2Model {
 	    for (String sstate : fsm.delta.keySet() ){
 		for (String x : fsm.delta.get(sstate).keySet()){
 		    String dstate = fsm.delta.get(sstate).get(x);
-		    outStr+=sstate+">"+x+">"+dstate+",";
+		    outStr+=sstate+">"+x+">"+dstate+";";
 		}
 	    }
 	    outStr=outStr.substring(0, outStr.length()-1);

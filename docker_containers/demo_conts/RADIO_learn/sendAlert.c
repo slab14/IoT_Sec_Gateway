@@ -77,7 +77,7 @@ int sendEncryptedAlert(char * alertData, int alertLen){
   // assign IP, PORT
   bzero(&servaddr, sizeof(servaddr));
   servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = inet_addr("128.105.144.72");
+  servaddr.sin_addr.s_addr = inet_addr("128.105.145.82");
   servaddr.sin_port = htons(9696);
 
   // connect the client socket to server socket

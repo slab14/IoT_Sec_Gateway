@@ -14,20 +14,20 @@ mv *.pcapng bro/.
 
 javac radio/Bro2Model.java
 
-#while true; do
-#    grep -q '^1$' "/sys/class/net/eth1/carrier" &&
-#	grep -q '^1$' "/sys/class/net/eth2/carrier" &&
-#	break
-#    sleep 1
-#done
+while true; do
+    grep -q '^1$' "/sys/class/net/eth1/carrier" &&
+	grep -q '^1$' "/sys/class/net/eth2/carrier" &&
+	break
+    sleep 1
+done
 
-#brctl addbr bridge0
-#ifconfig eth1 down
-#ifconfig eth2 down
-#brctl addif bridge0 eth1 eth2
-#ifconfig eth1 up
-#ifconfig eth2 up
-#ifconfig bridge0 up
+brctl addbr bridge0
+ifconfig eth1 down
+ifconfig eth2 down
+brctl addif bridge0 eth1 eth2
+ifconfig eth1 up
+ifconfig eth2 up
+ifconfig bridge0 up
 
 
 # setup alert path to controller
@@ -48,7 +48,7 @@ echo $iot_IP > IOT_IP
 
 
 ## simulate pcap capture
-
+#tcpdump -i bridge0 -w capture.pcap
 
 
 ## Analyze pcap with bro/zeek
