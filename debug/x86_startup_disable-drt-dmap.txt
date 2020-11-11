@@ -1,0 +1,532 @@
+
+eXtensible Modular Hypervisor Framework (XMHF) 4.1
+Build revision: sometimes-even-the-wisest-of-man-and-machines-can-be-in-error
+XMHF boot-loader: initializing, total modules=2
+XMHF boot-loader: mod_0: start=0x1a200000, end=0x1a200200
+XMHF boot-loader: mod_1: start=0x1a201000, end=0x1a20de40
+INIT(early): detected an Intel CPU
+Checking whether MBI module 1 is SINIT...
+	 ACM info_table version mismatch (4)
+YES! SINIT found @ 0x1a201000, 52800 bytes
+
+Finding SMP info. via ACPI...
+ACPI RSDP at 0x000f0490
+ACPI RSDT at 0xd87ed028
+	len=0x00000070, headerlen=0x00000024, numentries=19
+ACPI MADT at 0xd87f8c78
+	len=0x00000072, record-length=70 bytes
+rec type=0x00, length=8 bytes, flags=0x00000001, id=0x00
+rec type=0x00, length=8 bytes, flags=0x00000001, id=0x02
+rec type=0x00, length=8 bytes, flags=0x00000001, id=0x04
+rec type=0x00, length=8 bytes, flags=0x00000001, id=0x06
+rec type=0x01, length=12 bytes, flags=0xfec00000, id=0x00
+rec type=0x02, length=10 bytes, flags=0x00000002, id=0x00
+rec type=0x02, length=10 bytes, flags=0x00000009, id=0x09
+rec type=0x04, length=6 bytes, flags=0x00000100, id=0x05xmhf-bootloader: cstartup:963
+
+original system E820 map follows:
+
+0x0000000000000000, size=0x0000000000091800 (1)
+0x0000000000091800, size=0x000000000000e800 (2)
+0x00000000000e0000, size=0x0000000000020000 (2)
+0x0000000000100000, size=0x00000000d1a7c000 (1)
+0x00000000d1b7c000, size=0x0000000000007000 (4)
+0x00000000d1b83000, size=0x000000000043c000 (1)
+0x00000000d1fbf000, size=0x0000000000498000 (2)
+0x00000000d2457000, size=0x0000000005293000 (1)
+0x00000000d76ea000, size=0x0000000000116000 (2)
+0x00000000d7800000, size=0x000000000075f000 (1)
+0x00000000d7f5f000, size=0x00000000000a1000 (2)
+0x00000000d8000000, size=0x00000000007ae000 (1)
+0x00000000d87ae000, size=0x0000000000052000 (3)
+0x00000000d8800000, size=0x000000000171d000 (1)
+0x00000000d9f1d000, size=0x00000000000e3000 (4)
+0x00000000da000000, size=0x0000000001a11000 (1)
+0x00000000dba11000, size=0x00000000001ef000 (2)
+0x00000000dd000000, size=0x0000000002200000 (2)
+0x00000000f8000000, size=0x0000000004000000 (2)
+0x00000000fec00000, size=0x0000000000001000 (2)
+0x00000000fed00000, size=0x0000000000004000 (2)
+0x00000000fed1c000, size=0x0000000000004000 (2)
+0x00000000fee00000, size=0x0000000000001000 (2)
+0x00000000ff000000, size=0x0000000001000000 (2)
+0x0000000100000000, size=0x000000011ee00000 (1)
+proceeding to revise E820...
+E820 revision complete.
+revised system E820 map follows:
+
+0x0000000000000000, size=0x0000000000091800 (1)
+0x0000000000091800, size=0x000000000000e800 (2)
+0x00000000000e0000, size=0x0000000000020000 (2)
+0x0000000000100000, size=0x0000000006100000 (1)
+0x0000000006200000, size=0x000000001d200000 (2)
+0x0000000023400000, size=0x00000000ae77c000 (1)
+0x00000000d1b7c000, size=0x0000000000007000 (4)
+0x00000000d1b83000, size=0x000000000043c000 (1)
+0x00000000d1fbf000, size=0x0000000000498000 (2)
+0x00000000d2457000, size=0x0000000005293000 (1)
+0x00000000d76ea000, size=0x0000000000116000 (2)
+0x00000000d7800000, size=0x000000000075f000 (1)
+0x00000000d7f5f000, size=0x00000000000a1000 (2)
+0x00000000d8000000, size=0x00000000007ae000 (1)
+0x00000000d87ae000, size=0x0000000000052000 (3)
+0x00000000d8800000, size=0x000000000171d000 (1)
+0x00000000d9f1d000, size=0x00000000000e3000 (4)
+0x00000000da000000, size=0x0000000001a11000 (1)
+0x00000000dba11000, size=0x00000000001ef000 (2)
+0x00000000dd000000, size=0x0000000002200000 (2)
+0x00000000f8000000, size=0x0000000004000000 (2)
+0x00000000fec00000, size=0x0000000000001000 (2)
+0x00000000fed00000, size=0x0000000000004000 (2)
+0x00000000fed1c000, size=0x0000000000004000 (2)
+0x00000000fee00000, size=0x0000000000001000 (2)
+0x00000000ff000000, size=0x0000000001000000 (2)
+0x0000000100000000, size=0x000000011ee00000 (1)xmhf-bootloader: XMHF binary base=06200000, reserved size=1d200000 bytes
+xmhf-bootloader: xslbootinfo=07600000, magic=f00ddead
+xmhf-bootloader: cstartup:1090
+
+setupvcpus: cpustacks range 0x01e19000-0x02219000 in 0x00004000 chunks
+setupvcpus: vcpubuffers range 0x01e12fb8-0x01e13fb8 in 0x00000010 chunks
+CPU #0: vcpu_vaddr_ptr=0x01e12fb8, esp=0x01e1d000
+CPU #1: vcpu_vaddr_ptr=0x01e12fc8, esp=0x01e21000
+CPU #2: vcpu_vaddr_ptr=0x01e12fd8, esp=0x01e25000
+CPU #3: vcpu_vaddr_ptr=0x01e12fe8, esp=0x01e29000
+Sending INIT IPI to all APs...Done.
+Sending SIPI-0...
+AP(0x02): Waiting for DRTM establishment...
+AP(0x04): Waiting for DRTM establishment...
+AP(0x06): Waiting for DRTM establishment...Done.
+Sending SIPI-1...Done.
+APs should be awake!
+BSP(0x00): Rallying APs...
+BSP(0x00): APs ready, doing DRTM...
+LAPIC base and status=0xfee00900
+Sending INIT IPI to all APs...
+Done.
+
+INIT(early): sent INIT IPI to APs
+****** NO DRTM startup ******
+
+slbase=0x07400000, sl_entry_point_offset=0x00000000
+SL entry point to transfer control to: 0x07400000EFER=0000000000000800
+CR4=00000678
+CR3=09413000
+gp_s1_hub: alive and starting...
+    xcbootinfo at = 0x07600000
+	numE820Entries=27
+	system memory map buffer at 0x07600010
+	numCPUEntries=4
+	cpuinfo buffer at 0x07600514
+	XMHF size= 488636416 bytes
+	OS bootmodule at 0x1a200000, size=512 bytes
+	cmdline = "/xmhf-x86-vmx-x86pc.bin.gz serial=115200,8n1,0x3f8"
+SL: runtime at 0x06200000; size=0x1d200000 bytes
+SL: XMHF_BOOTINFO at 0x07600000, magic=0xf00ddead
+
+Number of E820 entries = 27
+0x0000000000000000, size=0x0000000000091800 (1)
+0x0000000000091800, size=0x000000000000e800 (2)
+0x00000000000e0000, size=0x0000000000020000 (2)
+0x0000000000100000, size=0x0000000006100000 (1)
+0x0000000006200000, size=0x000000001d200000 (2)
+0x0000000023400000, size=0x00000000ae77c000 (1)
+0x00000000d1b7c000, size=0x0000000000007000 (4)
+0x00000000d1b83000, size=0x000000000043c000 (1)
+0x00000000d1fbf000, size=0x0000000000498000 (2)
+0x00000000d2457000, size=0x0000000005293000 (1)
+0x00000000d76ea000, size=0x0000000000116000 (2)
+0x00000000d7800000, size=0x000000000075f000 (1)
+0x00000000d7f5f000, size=0x00000000000a1000 (2)
+0x00000000d8000000, size=0x00000000007ae000 (1)
+0x00000000d87ae000, size=0x0000000000052000 (3)
+0x00000000d8800000, size=0x000000000171d000 (1)
+0x00000000d9f1d000, size=0x00000000000e3000 (4)
+0x00000000da000000, size=0x0000000001a11000 (1)
+0x00000000dba11000, size=0x00000000001ef000 (2)
+0x00000000dd000000, size=0x0000000002200000 (2)
+0x00000000f8000000, size=0x0000000004000000 (2)
+0x00000000fec00000, size=0x0000000000001000 (2)
+0x00000000fed00000, size=0x0000000000004000 (2)
+0x00000000fed1c000, size=0x0000000000004000 (2)
+0x00000000fee00000, size=0x0000000000001000 (2)
+0x00000000ff000000, size=0x0000000001000000 (2)
+0x0000000100000000, size=0x000000011ee00000 (1)slab 0: dumping slab header
+	slabtype=00000010
+	slab_inuse=true
+	slab_callcaps=00000906
+	incl_devices_count=1
+        vendor_id=ffff, device_id=0
+	excl_devices_count=0
+  slab_code(06200000-06400000)
+  slab_data(06400000-06800000)
+  slab_stack(06800000-07200000)
+  slab_dmadata(07200000-07400000)
+  slab_entrystub=06200000
+slab 1: dumping slab header
+	slabtype=00000020
+	slab_inuse=true
+	slab_callcaps=00000000
+	incl_devices_count=4
+        vendor_id=ffff, device_id=0
+        vendor_id=ffff, device_id=2
+        vendor_id=ffff, device_id=1
+        vendor_id=ffff, device_id=3
+	excl_devices_count=0
+  slab_code(07400000-07600000)
+  slab_data(07600000-0ae00000)
+  slab_stack(0ae00000-0bc00000)
+  slab_dmadata(0bc00000-0be00000)
+  slab_entrystub=07400000
+slab 2: dumping slab header
+	slabtype=00000020
+	slab_inuse=true
+	slab_callcaps=00000002
+	incl_devices_count=0
+	excl_devices_count=0
+  slab_code(0be00000-0c000000)
+  slab_data(0c000000-0c200000)
+  slab_stack(0c200000-0c800000)
+  slab_dmadata(0c800000-0ca00000)
+  slab_entrystub=0be00000
+slab 3: dumping slab header
+	slabtype=00000020
+	slab_inuse=true
+	slab_callcaps=00000012
+	incl_devices_count=0
+	excl_devices_count=0
+  slab_code(0ca00000-0cc00000)
+  slab_data(0cc00000-0ce00000)
+  slab_stack(0ce00000-0d400000)
+  slab_dmadata(0d400000-0d600000)
+  slab_entrystub=0ca00000
+slab 4: dumping slab header
+	slabtype=00000020
+	slab_inuse=true
+	slab_callcaps=00000002
+	incl_devices_count=0
+	excl_devices_count=0
+  slab_code(0d600000-0d800000)
+  slab_data(0d800000-0da00000)
+  slab_stack(0da00000-0e000000)
+  slab_dmadata(0e000000-0e200000)
+  slab_entrystub=0d600000
+slab 5: dumping slab header
+	slabtype=00000020
+	slab_inuse=true
+	slab_callcaps=00001000
+	incl_devices_count=0
+	excl_devices_count=0
+  slab_code(0e200000-0e400000)
+  slab_data(0e400000-0e600000)
+  slab_stack(0e600000-0ec00000)
+  slab_dmadata(0ec00000-0ee00000)
+  slab_entrystub=0e200000
+slab 6: dumping slab header
+	slabtype=00000020
+	slab_inuse=true
+	slab_callcaps=00007014
+	incl_devices_count=0
+	excl_devices_count=0
+  slab_code(0ee00000-0f000000)
+  slab_data(0f000000-0f200000)
+  slab_stack(0f200000-0f800000)
+  slab_dmadata(0f800000-0fa00000)
+  slab_entrystub=0ee00000
+slab 7: dumping slab header
+	slabtype=00000020
+	slab_inuse=true
+	slab_callcaps=00000010
+	incl_devices_count=0
+	excl_devices_count=0
+  slab_code(0fa00000-0fc00000)
+  slab_data(0fc00000-0fe00000)
+  slab_stack(0fe00000-10400000)
+  slab_dmadata(10400000-10600000)
+  slab_entrystub=0fa00000
+slab 8: dumping slab header
+	slabtype=00000020
+	slab_inuse=true
+	slab_callcaps=00003012
+	incl_devices_count=0
+	excl_devices_count=0
+  slab_code(10600000-10800000)
+  slab_data(10800000-14a00000)
+  slab_stack(14a00000-15000000)
+  slab_dmadata(15000000-15200000)
+  slab_entrystub=10600000
+slab 9: dumping slab header
+	slabtype=00000020
+	slab_inuse=true
+	slab_callcaps=00000012
+	incl_devices_count=0
+	excl_devices_count=0
+  slab_code(15200000-15400000)
+  slab_data(15400000-15600000)
+  slab_stack(15600000-15c00000)
+  slab_dmadata(15c00000-15e00000)
+  slab_entrystub=15200000
+slab 10: dumping slab header
+	slabtype=00000020
+	slab_inuse=true
+	slab_callcaps=00000000
+	incl_devices_count=0
+	excl_devices_count=0
+  slab_code(15e00000-16000000)
+  slab_data(16000000-16200000)
+  slab_stack(16200000-16800000)
+  slab_dmadata(16800000-16a00000)
+  slab_entrystub=15e00000
+slab 11: dumping slab header
+	slabtype=00000020
+	slab_inuse=true
+	slab_callcaps=00000000
+	incl_devices_count=0
+	excl_devices_count=0
+  slab_code(16a00000-16c00000)
+  slab_data(16c00000-17600000)
+  slab_stack(17600000-17c00000)
+  slab_dmadata(17c00000-17e00000)
+  slab_entrystub=16a00000
+slab 12: dumping slab header
+	slabtype=00000020
+	slab_inuse=true
+	slab_callcaps=00000014
+	incl_devices_count=0
+	excl_devices_count=0
+  slab_code(17e00000-18000000)
+  slab_data(18000000-18200000)
+  slab_stack(18200000-18800000)
+  slab_dmadata(18800000-18a00000)
+  slab_entrystub=17e00000
+slab 13: dumping slab header
+	slabtype=00000020
+	slab_inuse=true
+	slab_callcaps=00000014
+	incl_devices_count=0
+	excl_devices_count=0
+  slab_code(18a00000-18c00000)
+  slab_data(18c00000-18e00000)
+  slab_stack(18e00000-19400000)
+  slab_dmadata(19400000-19600000)
+  slab_entrystub=18a00000
+slab 14: dumping slab header
+	slabtype=00000030
+	slab_inuse=true
+	slab_callcaps=00000014
+	incl_devices_count=0
+	excl_devices_count=0
+  slab_code(19600000-19800000)
+  slab_data(19800000-19a00000)
+  slab_stack(19a00000-1a000000)
+  slab_dmadata(1a000000-1a200000)
+  slab_entrystub=19600000
+slab 15: dumping slab header
+	slabtype=00000070
+	slab_inuse=true
+	slab_callcaps=00000004
+	incl_devices_count=1
+        vendor_id=ffff, device_id=ffff
+	excl_devices_count=0
+  slab_code(00000000-06200000)
+  slab_data(23400000-ffffffff)
+  slab_stack(00000000-00000000)
+  slab_dmadata(00000000-00000000)
+  slab_entrystub=00000000
+SL: txt_heap = 0xdbf20000
+SL: os_mle_data = 0x0ae04d48, size=616 bytes
+SL: Validated MTRRs
+SL: Restored MTRRs
+rdsp.signature=2052545020445352
+rdsp.checksum=30
+rdsp.oemid=44 45 4c 4c 20 20
+rdsp.revision=02
+rdsp.rsdtaddress=d87ed028
+rdsp.length=00000024
+rdsp.xsdtaddress=00000000d87ed0a0
+rdsp.xchecksum=16
+rdsp.rsvd0=44 45 4c
+gp_s1_scaniommu:131 RSDT at d87ed028, len=112 bytes, hdrlen=36 bytes
+rsdt.signature=0000008354445352
+rsdt.length=00000070
+rsdt.revision=01
+rsdt.checksum=d3
+rsdt.oemid=44 45 4c 4c 20 20
+rsdt.oemtableid=0020202033584243
+rsdt.oemrevision=01072009
+rsdt.creatorid=5446534d
+rsdt.creatorrevision=00010013
+gp_s1_scaniommu:159 RSDT entry list at d87ed04c, len=19dmar.signature=0000003052414d44
+dmar.length=000000b8
+dmar.revision=01
+dmar.checksum=e7
+dmar.oemid=49 4e 54 45 4c 20
+dmar.oemtableid=0000000020575348
+dmar.oemrevision=00000001
+dmar.creatorid=4c544e49
+dmar.creatorrevision=00000001
+dmar.hostaddresswidth=26
+dmar.flags=01
+dmar.rsvd0=49 4e 54 45 4c 20 48 53 57 20
+gp_s1_scaniommu:208 DMAR at d87fe038gp_s1_scaniommu:239 total DRHDs detected= 2 units
+gp_s1_scaniommu: DMAR Devices:
+	Device 0 type=0000, length=0018, flags=00, rsvdz0=00
+	Device 0 on PCI seg 0000; base=0x00000000fed90000
+		cap=0x00c0000020660462
+		ecap=0x0000000000f0101a
+	iotlb_regaddr=fed90108, iva_regaddr=fed90100
+	Device 1 type=0000, length=0020, flags=01, rsvdz0=00
+	Device 1 on PCI seg 0000; base=0x00000000fed91000
+		cap=0x00d2008020660462
+		ecap=0x0000000000f010da
+	iotlb_regaddr=fed91108, iva_regaddr=fed91100
+gp_s1_scaniommu: Vt-d: maxhandle = 2, dmar table addr=0xd87fe038
+gp_s1_iommuinit: Setting up DRHD unit 0...
+gp_s1_iommuinit: DRHD unit 0 - 4-level page-walk
+gp_s1_iommuinit: DRHD unit 0 - ND capability = 2
+gp_s1_iommuinit: Successfully setup DRHD unit 0
+gp_s1_iommuinit: Setting up DRHD unit 1...
+gp_s1_iommuinit: DRHD unit 1 - 4-level page-walk
+gp_s1_iommuinit: DRHD unit 1 - ND capability = 2
+gp_s1_iommuinit: Successfully setup DRHD unit 1
+gp_s1_iommuinit: final page-walk level=4
+Device idx=0, ffff:ffff:0 (vid:did=ffff:0, type=2)...
+  MEM region: fee00000 - fee01000
+Device idx=1, ffff:ffff:0 (vid:did=ffff:1, type=3)...
+  MEM region: fed40000 - fed41000
+Device idx=2, ffff:ffff:0 (vid:did=ffff:2, type=4)...
+  MEM region: fed20000 - fed21000
+  MEM region: fed30000 - fed31000
+Device idx=3, ffff:ffff:0 (vid:did=ffff:4, type=6)...
+  IO region: 3f8 - 400
+Device idx=4, ffff:ffff:0 (vid:did=ffff:3, type=5)...
+  MEM region: fed90000 - fed91000
+Device idx=5, ffff:ffff:1 (vid:did=ffff:3, type=5)...
+  MEM region: fed91000 - fed92000
+Device idx=6, 0:0:0 (vid:did=8086:c00, type=0)...
+Device idx=7, 0:2:0 (vid:did=8086:412, type=0)...
+  MEM region: f7800000 - f7c00000
+  MEM region: e0000000 - f0000000
+  IO region: f000 - f040
+Device idx=8, 0:3:0 (vid:did=8086:c0c, type=0)...
+  MEM region: f7c34000 - f7c38000
+Device idx=9, 0:14:0 (vid:did=8086:8c31, type=0)...
+  MEM region: f7c20000 - f7c30000
+Device idx=10, 0:16:0 (vid:did=8086:8c3a, type=0)...
+  MEM region: f7c40000 - f7c40010
+Device idx=11, 0:16:3 (vid:did=8086:8c3d, type=0)...
+  IO region: f0e0 - f0e8
+  MEM region: f7c3e000 - f7c3f000
+Device idx=12, 0:19:0 (vid:did=8086:153a, type=0)...
+  MEM region: f7c00000 - f7c20000
+  MEM region: f7c3d000 - f7c3e000
+  IO region: f080 - f0a0
+Device idx=13, 0:1a:0 (vid:did=8086:8c2d, type=0)...
+  MEM region: f7c3c000 - f7c3c400
+Device idx=14, 0:1b:0 (vid:did=8086:8c20, type=0)...
+  MEM region: f7c30000 - f7c34000
+Device idx=15, 0:1d:0 (vid:did=8086:8c26, type=0)...
+  MEM region: f7c3b000 - f7c3b400
+Device idx=16, 0:1f:0 (vid:did=8086:8c4e, type=0)...
+Device idx=17, 0:1f:2 (vid:did=8086:2822, type=0)...
+  IO region: f0d0 - f0d8
+  IO region: f0c0 - f0c4
+  IO region: f0b0 - f0b8
+  IO region: f0a0 - f0a4
+  IO region: f060 - f080
+  MEM region: f7c3a000 - f7c3a800
+Device idx=18, 0:1f:3 (vid:did=8086:8c22, type=0)...
+  MEM region: f7c39000 - f7c39100
+  IO region: f040 - f060
+gp_s2_sdminitdevmap: numentries_sysdev_mmioregions=19
+gp_s2_sdminitdevmap: slab 0...
+     device idx=0
+     device idx=3
+gp_s2_sdminitdevmap: slab 1...
+     device idx=0
+     device idx=2
+     device idx=1
+     device idx=4
+     device idx=5
+     device idx=3
+gp_s2_sdminitdevmap: slab 2...
+     device idx=3
+gp_s2_sdminitdevmap: slab 3...
+     device idx=3
+gp_s2_sdminitdevmap: slab 4...
+     device idx=3
+gp_s2_sdminitdevmap: slab 5...
+     device idx=3
+gp_s2_sdminitdevmap: slab 6...
+     device idx=3
+gp_s2_sdminitdevmap: slab 7...
+     device idx=3
+gp_s2_sdminitdevmap: slab 8...
+     device idx=3
+gp_s2_sdminitdevmap: slab 9...
+     device idx=3
+gp_s2_sdminitdevmap: slab 10...
+     device idx=3
+gp_s2_sdminitdevmap: slab 11...
+     device idx=3
+gp_s2_sdminitdevmap: slab 12...
+     device idx=3
+gp_s2_sdminitdevmap: slab 13...
+     device idx=3
+gp_s2_sdminitdevmap: slab 14...
+     device idx=3
+gp_s2_sdminitdevmap: slab 15...
+     device idx=0
+     device idx=1
+     device idx=2
+     device idx=3
+     device idx=4
+     device idx=5
+     device idx=6
+     device idx=7
+     device idx=8
+     device idx=9
+     device idx=10
+     device idx=11
+     device idx=12
+     device idx=13
+     device idx=14
+     device idx=15
+     device idx=16
+     device idx=17
+     device idx=18
+     device idx=3
+gp_s2_sda: proceeding to setup rich-guest DMA tables for uobj 15...
+gp_s2_sdasetupdevpgtbl_rg: _slabdevpgtbl_pml4t[15] at 0x09528000
+gp_s2_sda: rich-guest DMA tables setup for uobj 15
+gp_s2_sda: initialized slab device page tables
+gp_s2_sdabinddevice: CET, 4-lvl[0][0]: h=0x0000000000000f02, l=0x0000000009528001
+Allocated device 0:0:0 (vid:did=8086:c00, type=0) to slab 15...
+gp_s2_sdabinddevice: CET, 4-lvl[0][16]: h=0x0000000000000f02, l=0x0000000009528001
+Allocated device 0:2:0 (vid:did=8086:412, type=0) to slab 15...
+gp_s2_sdabinddevice: CET, 4-lvl[0][24]: h=0x0000000000000f02, l=0x0000000009528001
+Allocated device 0:3:0 (vid:did=8086:c0c, type=0) to slab 15...
+gp_s2_sdabinddevice: CET, 4-lvl[0][160]: h=0x0000000000000f02, l=0x0000000009528001
+Allocated device 0:14:0 (vid:did=8086:8c31, type=0) to slab 15...
+gp_s2_sdabinddevice: CET, 4-lvl[0][176]: h=0x0000000000000f02, l=0x0000000009528001
+Allocated device 0:16:0 (vid:did=8086:8c3a, type=0) to slab 15...
+gp_s2_sdabinddevice: CET, 4-lvl[0][179]: h=0x0000000000000f02, l=0x0000000009528001
+Allocated device 0:16:3 (vid:did=8086:8c3d, type=0) to slab 15...
+gp_s2_sdabinddevice: CET, 4-lvl[0][200]: h=0x0000000000000f02, l=0x0000000009528001
+Allocated device 0:19:0 (vid:did=8086:153a, type=0) to slab 15...
+gp_s2_sdabinddevice: CET, 4-lvl[0][208]: h=0x0000000000000f02, l=0x0000000009528001
+Allocated device 0:1a:0 (vid:did=8086:8c2d, type=0) to slab 15...
+gp_s2_sdabinddevice: CET, 4-lvl[0][216]: h=0x0000000000000f02, l=0x0000000009528001
+Allocated device 0:1b:0 (vid:did=8086:8c20, type=0) to slab 15...
+gp_s2_sdabinddevice: CET, 4-lvl[0][232]: h=0x0000000000000f02, l=0x0000000009528001
+Allocated device 0:1d:0 (vid:did=8086:8c26, type=0) to slab 15...
+gp_s2_sdabinddevice: CET, 4-lvl[0][248]: h=0x0000000000000f02, l=0x0000000009528001
+Allocated device 0:1f:0 (vid:did=8086:8c4e, type=0) to slab 15...
+gp_s2_sdabinddevice: CET, 4-lvl[0][250]: h=0x0000000000000f02, l=0x0000000009528001
+Allocated device 0:1f:2 (vid:did=8086:2822, type=0) to slab 15...
+gp_s2_sdabinddevice: CET, 4-lvl[0][251]: h=0x0000000000000f02, l=0x0000000009528001
+Allocated device 0:1f:3 (vid:did=8086:8c22, type=0) to slab 15...
+
+IA32_MTRRCAP: 0000000000000d0a VCNT=10, FIX=1, WC=1, SMRR=1
+gp_s2_gathersysmemtypes: gathered MTRR details, number of entries=98gp_s2_setupiotbl: set up iotbl for uV{U,T}_PROG slab with id 14
+gp_s2_setupiotbl: set up iotbl for rich-guest with id 15
+gp_s2_setupiotbl: setup unverified slab legacy I/O permission tables
