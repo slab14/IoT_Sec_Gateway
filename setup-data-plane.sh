@@ -182,7 +182,7 @@ setup_remote_docker
 get_controller
     
 # Setup
-disable_gro
-setup_bridge
-configure_ovs_switch
+#disable_gro
+#setup_bridge
+#configure_ovs_switch
 echo "Dataplane Ready"
