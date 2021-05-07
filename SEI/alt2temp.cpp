@@ -1,15 +1,15 @@
 #include <stdio.h>
 
+/*
+ * From P&FQ Toolbox                                                                      
+ * Calculate temperature in R
+ * (accurate up to 60,000 feet)                                 
+ *     Input:
+ *        h : Pressure alt (ft)                                                  
+ *     Output:
+ *        T : Temp (R) 
+*/
 float alt2temp(float h){
-  /*
-    From P&FQ Toolbox                                                                      
-    Calculate temperature in R
-    (accurate up to 60,000 feet)                                 
-        Input:
-          h : Pressure alt (ft)                                                  
-        Output:
-          T : Temp (R) 
-  */
   float T;
   float To = 518.69;
   if (h > 36089) {
