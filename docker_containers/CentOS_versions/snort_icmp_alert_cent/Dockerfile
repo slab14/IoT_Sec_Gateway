@@ -64,7 +64,7 @@ RUN cd ~/snort_src && \
 
 # -DAQ
 RUN cd ~/snort_src && \
-    wget https://www.snort.org/downloads/snort/daq-${DAQ_VER}.tar.gz && \
+    wget https://www.snort.org/downloads/archive/snort/daq-${DAQ_VER}.tar.gz && \
     tar -xvzf daq-${DAQ_VER}.tar.gz && \
     cd daq-${DAQ_VER} && \
     ./configure && make && make install 
@@ -74,7 +74,7 @@ RUN ldconfig
 
 # Install SNORT
 RUN cd ~/snort_src && \
-    wget https://www.snort.org/downloads/snort/snort-${SNORT_VER}.tar.gz && \
+    wget https://www.snort.org/downloads/archive/snort/snort-${SNORT_VER}.tar.gz && \
     tar -xvzf snort-${SNORT_VER}.tar.gz && \
     cd snort-${SNORT_VER} && \
     ./configure --enable-sourcefire && make && make install 

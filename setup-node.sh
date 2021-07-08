@@ -25,7 +25,7 @@ install_iperf() {
 install_python_packages() {
     echo "Installing Python..."
     sudo apt-get install -yqq python python-dev python-pip
-    sudo pip -qq install --upgrade pip
+    sudo pip -qq install --upgrade "pip < 21.0"
     sudo pip -qq install ipaddress subprocess32
     echo "Python Install Complete"
 }
@@ -55,7 +55,8 @@ install_ovs() {
 install_ovs_fromGit() {
     #Install Build Dependencies
     sudo apt-get update -qq
-    sudo apt-get install -yqq make gcc libssl1.0.2 libssl1.0-dev \
+    #sudo apt-get install -yqq make gcc libssl1.0.2 libssl1.0-dev \
+    sudo apt-get install -yqq make gcc libssl1.0.0 libssl-dev \
 	 libcap-ng0 libcap-ng-dev python python-pip autoconf \
 	 libtool wget netcat curl clang sparse flake8 \
 	 graphviz autoconf automake libtool python-dev

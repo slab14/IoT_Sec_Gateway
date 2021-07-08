@@ -11,6 +11,7 @@ DOCKER_PORT=4243
 
 update() {
     echo "Updating apt-get..."
+    sudo add-apt-repository -y ppa:openjdk-r/ppa
     sudo apt-get update -qq
     sudo apt-get install -yqq openjdk-11-jre openjdk-11-jdk maven jq
     echo "Update complete"
@@ -53,7 +54,7 @@ install_ovs_fromGit() {
 	 graphviz automake python-dev python3-pip \
 	 graphviz build-essential pkg-config \
          libssl-dev gdb linux-headers-`uname -r`
-    sudo pip3 -qq install --upgrade pip
+    sudo pip3 -qq install --upgrade "pip < 21.0"
     pip -qq install --user six pyftpdlib tftpy flake8 sparse
 
     #Clone repository, build, and install
