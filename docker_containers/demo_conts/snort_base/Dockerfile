@@ -12,7 +12,8 @@ RUN apt-get update && \
 			 autoconf libnetfilter-queue-dev libnghttp2-dev \
 			 python python-pip libsqlite3-dev uuid-dev ethtool \
 			 iptables libnetfilter-queue1 bridge-utils iproute2 \
-			 net-tools tcpdump && \
+			 net-tools tcpdump llvm-8* && \
+    pip install --upgrade "pip < 21.0" && \
     apt-get clean && rm -rf /var/lib/apt/lists/* && \
     mkdir -p ~/snort_src && cd ~/snort_src && \
 # Install additional dependencies

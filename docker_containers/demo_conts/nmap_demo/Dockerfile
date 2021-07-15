@@ -10,7 +10,8 @@ RUN apt-get update && \
 	    openssl zlib1g-dev libwlocate-dev cmake libtool \
 	    autoconf libnetfilter-queue-dev libnghttp2-dev \
 	    python python-pip libsqlite3-dev uuid-dev ethtool \
-	    iptables libnetfilter-queue1
+	    iptables libnetfilter-queue1 && \
+    pip install --upgrade "pip < 21.0" 
 	    
 #RUN pip install watchdog
 

@@ -3,8 +3,8 @@
 #borrowed form Jeff Helt
 
 BRIDGE_NAME=br0
-CLIENT_SIDE_IP=192.1.1.1
-SERVER_SIDE_IP=10.1.1.1
+CLIENT_SIDE_IP=192.1.1.3
+SERVER_SIDE_IP=10.1.1.3
 
 OVS_PORT=6677
 DOCKER_PORT=4243
@@ -13,13 +13,15 @@ update() {
     echo "Updating apt-get..."
     sudo add-apt-repository -y ppa:openjdk-r/ppa
     sudo apt-get update -qq
-    sudo apt-get install -yqq openjdk-11-jre openjdk-11-jdk maven jq
+    #sudo apt-get install -yqq openjdk-11-jre openjdk-11-jdk maven jq
+    sudo apt-get install -yqq openjdk-11-jre openjdk-11-jdk jq
     echo "Update complete"
 }
 
 install_docker() {
     echo "Installing Docker..."
     sudo apt-get update -qq
+    sudo pip3 -qq install --upgrade "pip < 21.0"
     sudo apt-get install -yqq docker-compose 
     sudo apt-get install -yqq apt-transport-https ca-certificates \
 	 curl software-properties-common
@@ -40,7 +42,7 @@ build_docker_containers(){
     sudo docker build -t="snort_demoa" docker_containers/demo_conts/snort_demoA
     sudo docker build -t="snort_demob" docker_containers/demo_conts/snort_demoB
     sudo docker build -t="snort_base" docker_containers/demo_conts/snort_base
-    sudo docker build -t="nmap_base" docker_containers/demo_conts/nmap_base    
+    sudo docker build -t="nmap_demo" docker_containers/demo_conts/nmap_demo
     echo "Docker containers built"
 }
 
@@ -53,24 +55,28 @@ install_ovs_fromGit() {
 	 libtool wget netcat curl clang sparse flake8 \
 	 graphviz automake python-dev python3-pip \
 	 graphviz build-essential pkg-config \
-         libssl-dev gdb linux-headers-`uname -r`
-    sudo pip3 -qq install --upgrade "pip < 21.0"
+         libssl-dev gdb linux-headers-`uname -r` llvm-8*
+    LLVMFILES=/usr/bin/llvm-*
+    for f in $LLVMFILES; do link=${f::-2}; echo "linking" $f "to" $link; sudo ln -f -s $f $link; done;
     pip -qq install --user six pyftpdlib tftpy flake8 sparse
 
+    # XXX: installing from apt-get to try and remove errors
+    sudo apt-get install -y openvswitch-*
+
     #Clone repository, build, and install
-    cd ~
-    git clone https://github.com/slab14/ovs.git
-    cd ovs
-    git checkout feature-kernsign
-    ./boot.sh
-    ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc --with-linux=/lib/modules/$(uname -r)/build
-    make
-    sudo make install
-    sudo rmmod openvswitch
-    sudo rm /lib/modules/$(uname -r)/extra/openvswitch.ko
-    sudo make modules_install
-    sudo modprobe -v openvswitch
-    cd ~
+    #cd ~
+    #git clone https://github.com/slab14/ovs.git
+    #cd ovs
+    #git checkout feature-kernsign
+    #./boot.sh
+    #./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc --with-linux=/lib/modules/$(uname -r)/build
+    #make
+    #sudo make install
+    #sudo rmmod openvswitch
+    #sudo rm /lib/modules/$(uname -r)/extra/openvswitch.ko
+    #sudo make modules_install
+    #sudo modprobe -v openvswitch
+    #cd ~
 
     # Install ovs-docker-remote dependencies
     sudo apt-get install -yqq jq curl uuid-runtime
@@ -80,14 +86,19 @@ install_ovs_fromGit() {
 }
 
 setup_maven() {
-    export JAVA_HOME=`type -p javac|xargs readlink -f|xargs dirname|xargs dirname|sed '/s/8/11'`
+    cd ~
+    sudo mkdir -p /usr/share/maven/
+    wget https://archive.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz -O apache-maven-3.5.2-bin.tar.gz
+    tar zxvf apache-maven-3.5.2-bin.tar.gz
+    sudo cp -r apache-maven-3.5.2/* /usr/share/maven/
+    export JAVA_HOME=`type -p javac|xargs readlink -f|xargs dirname|xargs dirname`
     export PATH=$PATH:$JAVA_HOME/bin/
     mkdir -p ~/.m2
     cp /usr/share/maven/conf/settings.xml ~/.m2/settings.xml
     cp -n ~/.m2/settings.xml{,.orig}
     wget -q -O - https://raw.githubusercontent.com/opendaylight/odlparent/6.0.x/settings.xml > ~/.m2/settings.xml
     export M2_HOME=/usr/share/maven/
-    export M2=$M2_HOME
+    export M2=$M2_HOME/bin/
     export MAVEN_OPTS='-Xmx1048m -XX:MaxPermSize=512m -Xms256m'
     export PATH=$M2:$PATH
 }
@@ -151,6 +162,7 @@ get_controller() {
     sudo cp IoT_Sec_Gateway/policies/cloudlab-NewPolicy20.json /etc/sec_gate/policies/cloudlab-NewPolicy20.json
     sudo mkdir -p /etc/sec_gate/testNode0
     sudo cp IoT_Sec_Gateway/docker_containers/demo_conts/snort_base/rules_* /etc/sec_gate/testNode0/
+    sudo rm -rf l2switch
     git clone https://github.com/slab14/l2switch.git
     cd l2switch/
     git checkout slab-update
@@ -176,14 +188,14 @@ install_docker
 build_docker_containers
 build_docker_containers
 install_ovs_fromGit
-install_python_packages
+#install_python_packages
 setup_maven
 setup_remote_ovsdb_server
 setup_remote_docker
 get_controller
     
 # Setup
-#disable_gro
-#setup_bridge
-#configure_ovs_switch
+disable_gro
+setup_bridge
+configure_ovs_switch
 echo "Dataplane Ready"
