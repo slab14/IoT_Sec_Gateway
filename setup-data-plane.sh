@@ -11,6 +11,8 @@ DOCKER_PORT=4243
 
 update() {
     echo "Updating apt-get..."
+    sudo apt-get update -qq
+    sudo apt-get install -y software-properties-common
     sudo add-apt-repository -y ppa:openjdk-r/ppa
     sudo apt-get update -qq
     #sudo apt-get install -yqq openjdk-11-jre openjdk-11-jdk maven jq
