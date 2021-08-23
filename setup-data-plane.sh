@@ -9,6 +9,16 @@ SERVER_SIDE_IP=10.1.1.3
 OVS_PORT=6677
 DOCKER_PORT=4243
 
+export DEBIAN_FRONTEND=noninteractive
+
+install_certs() {
+    cd ~
+    wget https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz    
+    tar zxf openjdk-11+28_linux-x64_bin.tar.gz
+    sudo mkdir /etc/ssl/certs/java
+    sudo cp jdk-11/lib/security/cacerts /etc/ssl/certs/java
+}
+
 update() {
     echo "Updating apt-get..."
     sudo apt-get update -qq
@@ -16,7 +26,7 @@ update() {
     sudo add-apt-repository -y ppa:openjdk-r/ppa
     sudo apt-get update -qq
     #sudo apt-get install -yqq openjdk-11-jre openjdk-11-jdk maven jq
-    sudo apt-get install -yqq openjdk-11-jre openjdk-11-jdk jq
+    sudo apt-get install -yqq openjdk-11-jre openjdk-11-jdk jq python3-pip
     echo "Update complete"
 }
 
@@ -55,9 +65,9 @@ install_ovs_fromGit() {
     sudo apt-get install -yqq make gcc \
 	 libcap-ng0 libcap-ng-dev python python-pip autoconf \
 	 libtool wget netcat curl clang sparse flake8 \
-	 graphviz automake python-dev python3-pip \
-	 graphviz build-essential pkg-config \
-         libssl-dev gdb linux-headers-`uname -r` llvm-8*
+	 graphviz automake python-dev \
+	 build-essential pkg-config \
+     libssl-dev gdb linux-headers-`uname -r` llvm-8*
     LLVMFILES=/usr/bin/llvm-*
     for f in $LLVMFILES; do link=${f::-2}; echo "linking" $f "to" $link; sudo ln -f -s $f $link; done;
     pip -qq install --user six pyftpdlib tftpy flake8 sparse
@@ -90,7 +100,9 @@ install_ovs_fromGit() {
 setup_maven() {
     cd ~
     sudo mkdir -p /usr/share/maven/
-    wget https://archive.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz -O apache-maven-3.5.2-bin.tar.gz
+    if [ ! -f apache-maven-3.5.2-bin.tar.gz ]; then
+        wget https://archive.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz -O apache-maven-3.5.2-bin.tar.gz
+    fi
     tar zxvf apache-maven-3.5.2-bin.tar.gz
     sudo cp -r apache-maven-3.5.2/* /usr/share/maven/
     export JAVA_HOME=`type -p javac|xargs readlink -f|xargs dirname|xargs dirname`
@@ -185,12 +197,12 @@ load_policies(){
 
 # Install packages
 echo "Beginning Dataplane Setup..."
+install_certs
 update
 install_docker
 build_docker_containers
 build_docker_containers
 install_ovs_fromGit
-#install_python_packages
 setup_maven
 setup_remote_ovsdb_server
 setup_remote_docker
