@@ -13,9 +13,11 @@ export DEBIAN_FRONTEND=noninteractive
 
 install_certs() {
     cd ~
-    wget https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz    
+    if [ ! -f openjdk-11+28_linux-x64_bin.tar.gz ]; then
+        wget https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz
+    fi
     tar zxf openjdk-11+28_linux-x64_bin.tar.gz
-    sudo mkdir /etc/ssl/certs/java
+    sudo mkdir -p /etc/ssl/certs/java
     sudo cp jdk-11/lib/security/cacerts /etc/ssl/certs/java
 }
 
@@ -51,6 +53,7 @@ install_docker() {
 
 build_docker_containers(){
     echo "Building Snort ICMP Packet Warning Container"
+    cd IoT_Sec_Gateway
     sudo docker build -t="snort_demoa" docker_containers/demo_conts/snort_demoA
     sudo docker build -t="snort_demob" docker_containers/demo_conts/snort_demoB
     sudo docker build -t="snort_base" docker_containers/demo_conts/snort_base
